@@ -26,7 +26,8 @@
     "noUncheckedIndexedAccess": true,
     "rootDir": "./src",
     "paths": {
-      "@commands/*": ["./src/commands/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@tasks/*": ["./src/tasks/*"],
       "@src/*": ["./src/*"]
     }
   },
