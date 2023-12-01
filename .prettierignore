@@ -1,0 +1,6 @@
+.vscode/
+coverage/
+dist/
+private/
+package-lock.json
+LICENSE

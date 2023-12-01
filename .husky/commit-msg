@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx --no cspell -- --no-summary --no-progress --language-id commit-msg $1

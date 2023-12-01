@@ -1,0 +1,22 @@
+{
+  "version": "0.2",
+  "words": [
+    "CODEOWNERS",
+    "corepack",
+    "nvmrc",
+    "outdir",
+    "Positionals",
+    "predemo",
+    "typecheck",
+    "unstub",
+    "vitest",
+    "webdeveric"
+  ],
+  "ignorePaths": ["node_modules/**", ".vscode/*.json", "./private", "pnpm-lock.yaml", ".github/CODEOWNERS"],
+  "languageSettings": [
+    {
+      "languageId": "commit-msg",
+      "ignoreRegExpList": ["/^#.*/gm"]
+    }
+  ]
+}

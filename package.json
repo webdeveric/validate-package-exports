@@ -1,0 +1,69 @@
+{
+  "name": "validate-package-exports",
+  "version": "0.0.0",
+  "description": "Validate your package.json exports",
+  "keywords": [],
+  "license": "MIT",
+  "author": {
+    "email": "eric@webdeveric.com",
+    "name": "Eric King",
+    "url": "http://webdeveric.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webdeveric/validate-package-exports.git"
+  },
+  "bugs": {
+    "url": "https://github.com/webdeveric/validate-package-exports/issues"
+  },
+  "homepage": "https://github.com/webdeveric/validate-package-exports/#readme",
+  "bin": {
+    "validate-package-exports": "./dist/cli.mjs"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "pnpm@8.11.0",
+  "scripts": {
+    "predemo": "pnpm build:dev",
+    "demo": "./dist/cli.mjs --info --debug",
+    "format": "prettier --write .",
+    "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
+    "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
+    "typecheck": "tsc --noEmit && tsc -p ./tsconfig.project-files.json",
+    "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
+    "lint": "eslint ./src ./*.{mjs,mts} --ext .ts",
+    "test": "vitest -c vitest.config.mts",
+    "coverage": "vitest run  -c vitest.config.mts --coverage",
+    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage && pnpm build",
+    "prepare": "husky install"
+  },
+  "sideEffects": false,
+  "prettier": "@webdeveric/prettier-config",
+  "dependencies": {
+    "@webdeveric/utils": "^0.29.1",
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "@types/node": "^18.18.13",
+    "@vitest/coverage-v8": "^0.34.6",
+    "@webdeveric/eslint-config-ts": "^0.7.1",
+    "@webdeveric/prettier-config": "^0.2.0",
+    "cross-env": "^7.0.3",
+    "cspell": "^8.0.0",
+    "esbuild": "^0.19.8",
+    "esbuild-plugin-clean": "^1.0.1",
+    "esbuild-plugin-environment": "^0.3.0",
+    "esbuild-plugin-node-externals": "^1.0.1",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2",
+    "vitest": "^0.34.6"
+  }
+}
