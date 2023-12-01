@@ -1,3 +1,5 @@
+import type { Task } from './task.js';
+import type { TaskQueue } from './TaskQueue.js';
 import type { UnknownRecord } from '@webdeveric/utils/types/records';
 
 export enum ExitCodes {
@@ -88,3 +90,17 @@ export type PackageJson = {
   man?: PackageMan;
   directories?: PackageDirectories;
 };
+
+export type TaskResult<Context extends UnknownRecord = UnknownRecord> = {
+  name: string;
+  success: boolean;
+  context?: Context;
+};
+
+export type TaskRunContext = {
+  queue: TaskQueue;
+};
+
+export type TaskFn = (context: TaskRunContext) => TaskResult | Promise<TaskResult>;
+
+export type AnyTask = Task | TaskFn;
