@@ -4,7 +4,6 @@ import { comment } from '@webdeveric/utils/comment';
 import { build } from 'esbuild';
 import { clean } from 'esbuild-plugin-clean';
 import { environmentPlugin } from 'esbuild-plugin-environment';
-import { nodeExternals } from 'esbuild-plugin-node-externals';
 
 import pkg from './package.json' assert { type: 'json' };
 
@@ -20,6 +19,7 @@ try {
     },
     target: `node${process.versions.node}`,
     minify: process.env.NODE_ENV === 'production',
+    packages: 'external',
     banner: {
       js: comment(
         `
@@ -38,7 +38,6 @@ try {
       clean({
         patterns: ['./dist/*'],
       }),
-      nodeExternals(),
       environmentPlugin(['npm_package_engines_node']),
     ],
   });
