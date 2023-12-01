@@ -19,8 +19,8 @@ import {
   isRelativePath,
   isSubpathExports,
   isSubpathPattern,
-} from './type-predicate.js';
-import { importJson } from './utils.js';
+} from '@src/type-predicate.js';
+import { importJson } from '@src/utils.js';
 
 describe('isPackageType()', () => {
   it('Returns true for valid input', () => {

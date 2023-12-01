@@ -1,8 +1,7 @@
 import { AssertionError } from 'node:assert';
 
-import { isPackageJson } from './type-predicate.js';
-
-import type { PackageJson } from './types.js';
+import { isPackageJson } from '@src/type-predicate.js';
+import type { PackageJson } from '@src/types.js';
 
 export function assertIsPackageJson(input: unknown): asserts input is PackageJson {
   if (!isPackageJson(input)) {

@@ -1,5 +1,6 @@
-import type { Task } from './task.js';
-import type { TaskQueue } from './TaskQueue.js';
+import type { Task } from '@lib/Task.js';
+import type { TaskQueue } from '@lib/TaskQueue.js';
+
 import type { UnknownRecord } from '@webdeveric/utils/types/records';
 
 export enum ExitCodes {

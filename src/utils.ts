@@ -1,8 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
-import { assertIsPackageJson } from './type-assertion.js';
-
-import type { PackageJson } from './types.js';
+import { assertIsPackageJson } from '@src/type-assertion.js';
+import type { PackageJson } from '@src/types.js';
 
 export function getNodeMajorVersion(): number {
   return Number(process.versions.node.split('.').at(0));
@@ -34,7 +33,7 @@ export async function importJson<Type = unknown>(path: string): Promise<Type> {
 }
 
 export async function importPackageJson(path: string): Promise<PackageJson> {
-  const data = await importJson(path);
+  const data = await readJson(path);
 
   assertIsPackageJson(data);
 

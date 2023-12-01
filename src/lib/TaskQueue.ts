@@ -1,9 +1,8 @@
 import { cpus } from 'node:os';
 import { Readable } from 'node:stream';
 
-import { Task } from './task.js';
-
-import type { AnyTask, TaskResult } from './types.js';
+import { Task } from '@lib/Task.js';
+import type { AnyTask, TaskResult } from '@src/types.js';
 
 export type TaskQueueOptions = {
   concurrency?: number;

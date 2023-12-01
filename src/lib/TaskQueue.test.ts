@@ -2,10 +2,9 @@ import { cpus } from 'node:os';
 
 import { describe, it, expect, vi } from 'vitest';
 
-import { SleepTask } from './SleepTask.js';
-import { TaskQueue } from './TaskQueue.js';
-
-import type { TaskRunContext } from './types.js';
+import { TaskQueue } from '@lib/TaskQueue.js';
+import type { TaskRunContext } from '@src/types.js';
+import { SleepTask } from '@tasks/SleepTask.js';
 
 describe('TaskQueue', () => {
   describe('Options', () => {

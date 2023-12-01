@@ -1,8 +1,7 @@
 import { createRequire } from 'node:module';
 
-import { Task } from './task.js';
-
-import type { PackageType, TaskResult } from './types.js';
+import { Task } from '@lib/Task.js';
+import type { PackageType, TaskResult } from '@src/types.js';
 
 const require = createRequire(import.meta.url);
 

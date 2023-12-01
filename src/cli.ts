@@ -5,8 +5,9 @@
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 
-import { CliError } from './CliError.js';
-import { ExitCodes } from './types.js';
+import { CliError } from '@lib/CliError.js';
+import { ExitCodes } from '@src/types.js';
+
 import { ValidatePackageExports } from './ValidatePackageExports.js';
 
 try {

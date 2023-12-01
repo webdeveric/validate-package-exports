@@ -1,4 +1,4 @@
-import type { ExitCodes } from './types.js';
+import type { ExitCodes } from '@src/types.js';
 
 export class CliError extends Error {
   code: ExitCodes;

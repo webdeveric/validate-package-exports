@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
-import { CliError } from './CliError.js';
-import { ExitCodes } from './types.js';
+import { CliError } from '@lib/CliError.js';
+import { ExitCodes } from '@src/types.js';
 
 describe('CliError', () => {
   it('Is an Error', () => {

@@ -2,10 +2,9 @@ import assert from 'node:assert';
 import { Console } from 'node:console';
 import { dirname, resolve } from 'node:path';
 
-import { ImportModuleTask } from './ImportModuleTask.js';
-import { importPackageJson } from './utils.js';
-
-import type { MaybeUndefined, ValidatePackageExportsOptions } from './types.js';
+import type { MaybeUndefined, ValidatePackageExportsOptions } from '@src/types.js';
+import { importPackageJson } from '@src/utils.js';
+import { ImportModuleTask } from '@tasks/ImportModuleTask.js';
 
 export class ValidatePackageExports {
   options: ValidatePackageExportsOptions;

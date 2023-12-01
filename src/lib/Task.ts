@@ -1,4 +1,4 @@
-import type { TaskRunContext, TaskResult } from './types.js';
+import type { TaskRunContext, TaskResult } from '@src/types.js';
 
 export abstract class Task {
   abstract name: string;

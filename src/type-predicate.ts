@@ -17,7 +17,7 @@ import type {
   RelativePath,
   SubpathExports,
   SubpathPattern,
-} from './types.js';
+} from '@src/types.js';
 
 export function isPackageType(input: unknown): input is PackageType {
   return input === 'commonjs' || input === 'module';
