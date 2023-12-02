@@ -1,6 +1,4 @@
-#!/usr/bin/env node
-
-// node -e 'import * as utils from "@webdeveric/utils"; console.log(utils)' --input-type=module
+#!/usr/bin/env -S node --experimental-import-meta-resolve
 
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
