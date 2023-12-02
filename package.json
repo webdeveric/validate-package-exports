@@ -2,7 +2,12 @@
   "name": "validate-package-exports",
   "version": "0.0.0",
   "description": "Validate your package.json exports",
-  "keywords": [],
+  "keywords": [
+    "validate",
+    "package",
+    "package.json",
+    "exports"
+  ],
   "license": "MIT",
   "author": {
     "email": "eric@webdeveric.com",
@@ -17,17 +22,17 @@
     "url": "https://github.com/webdeveric/validate-package-exports/issues"
   },
   "homepage": "https://github.com/webdeveric/validate-package-exports/#readme",
+  "type": "module",
   "bin": {
     "validate-package-exports": "./dist/cli.mjs"
   },
-  "type": "module",
   "engines": {
     "node": ">=18.0.0"
   },
   "packageManager": "pnpm@8.11.0",
   "scripts": {
     "predemo": "pnpm build:dev",
-    "demo": "./dist/cli.mjs --info --debug",
+    "demo": "./dist/cli.mjs",
     "format": "prettier --write .",
     "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
@@ -56,7 +61,7 @@
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.3.0",
     "eslint": "^8.55.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.0",
     "husky": "^8.0.3",
