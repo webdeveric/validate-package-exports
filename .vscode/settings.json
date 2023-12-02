@@ -30,5 +30,9 @@
   "javascript.suggest.completeJSDocs": true,
   "javascript.suggest.jsdoc.generateReturns": true,
   "typescript.suggest.completeJSDocs": false,
-  "typescript.suggest.jsdoc.generateReturns": false
+  "typescript.suggest.jsdoc.generateReturns": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always",
+    "source.organizeImports": "always"
+  }
 }
