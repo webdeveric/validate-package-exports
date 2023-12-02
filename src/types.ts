@@ -84,6 +84,7 @@ export type PackageJson = {
   type?: PackageType;
   main?: string;
   module?: string;
+  browser?: string;
   types?: string;
   exports?: PackageExports;
   bin?: PackageBin;

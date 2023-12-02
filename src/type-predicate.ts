@@ -108,6 +108,7 @@ export function isPackageJson(input: unknown): input is PackageJson {
     isString(input.version) &&
     isOptionalString(input.main) &&
     isOptionalString(input.module) &&
+    isOptionalString(input.browser) &&
     isOptionalString(input.types) &&
     isOptionalPackageMan(input.man) &&
     isOptionalPackageDirectories(input.directories) &&
