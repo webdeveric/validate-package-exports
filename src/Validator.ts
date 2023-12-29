@@ -1,22 +1,17 @@
 import assert from 'node:assert';
-import { Console } from 'node:console';
 import { dirname, resolve } from 'node:path';
 
 import type { MaybeUndefined, ValidatePackageExportsOptions } from '@src/types.js';
 import { importPackageJson } from '@src/utils.js';
-import { ImportModuleTask } from '@tasks/ImportModuleTask.js';
 
-export class ValidatePackageExports {
+export class Validator {
   options: ValidatePackageExportsOptions;
 
   packageDirectory: string;
 
   protected readonly console: Console;
 
-  constructor(
-    options: MaybeUndefined<ValidatePackageExportsOptions> = {},
-    console = new Console({ stdout: process.stdout, stderr: process.stderr }),
-  ) {
+  constructor(options: MaybeUndefined<ValidatePackageExportsOptions> = {}, console: Console) {
     assert(options.package, 'package not specified');
 
     this.options = {
@@ -42,6 +37,10 @@ export class ValidatePackageExports {
     }
   }
 
+  log(...args: Parameters<Console['log']>): void {
+    this.console.log(...args);
+  }
+
   dir(...args: Parameters<Console['dir']>): void {
     this.console.dir(...args);
   }
@@ -64,9 +63,36 @@ export class ValidatePackageExports {
 
     this.debug({
       options: this.options,
+      npmEnvVars: this.npmEnvVars,
       packageJson,
     });
 
-    new ImportModuleTask(packageJson.name, packageJson.type ?? 'commonjs');
+    const tasks = new Set();
+
+    // async function* getResults(): AsyncGenerator<TaskResult> {
+    //   yield 1;
+    //   yield 2;
+    // }
+
+    if (packageJson.bin) {
+      tasks.add(() => {
+        this.console.log(packageJson.bin);
+      });
+    }
+
+    // const queue = new TaskQueue({
+    //   context: {
+    //     packageJson,
+    //     packageDirectory: this.packageDirectory,
+
+    //   },
+    // });
+
+    // queue.add(new ValidateBinTask());
+    // // queue.add(new ImportModuleTask());
+
+    // const taskResults = await queue.run();
+
+    // this.info({ taskResults });
   }
 }
