@@ -1,25 +1,35 @@
 import { cpus } from 'node:os';
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { TaskQueue } from '@lib/TaskQueue.js';
-import type { TaskRunContext } from '@src/types.js';
+import { TaskQueue, type TaskQueueOptions } from '@lib/TaskQueue.js';
+import { TaskStatus, type TaskRunContext } from '@src/types.js';
 import { SleepTask } from '@tasks/SleepTask.js';
 
 describe('TaskQueue', () => {
+  const context: TaskQueueOptions['context'] = {
+    packageDirectory: '.',
+    packageJson: {
+      name: 'demo',
+      version: '0.0.0',
+    },
+  };
+
   describe('Options', () => {
     it('concurrency', () => {
       expect(
         new TaskQueue({
           concurrency: 10,
+          context,
         }).concurrency,
       ).toEqual(10);
 
-      expect(new TaskQueue().concurrency).toEqual(cpus().length);
+      expect(new TaskQueue({ context }).concurrency).toEqual(cpus().length);
     });
     it('tasks', () => {
       const queue = new TaskQueue({
-        tasks: [new SleepTask(0), () => ({ name: 'task1', success: true })],
+        context,
+        tasks: [new SleepTask(0), () => ({ name: 'task1', status: TaskStatus.Pass })],
       });
 
       expect(queue.size).toEqual(2);
@@ -29,7 +39,15 @@ describe('TaskQueue', () => {
   it('add() / delete()', () => {
     const task = new SleepTask(0);
 
-    const queue = new TaskQueue();
+    const queue = new TaskQueue({
+      context: {
+        packageDirectory: '',
+        packageJson: {
+          name: 'test',
+          version: '0.0.0',
+        },
+      },
+    });
 
     queue.add(task);
 
@@ -43,20 +61,27 @@ describe('TaskQueue', () => {
   it('Runs Tasks', async () => {
     const queue = new TaskQueue({
       concurrency: 2,
-      tasks: [new SleepTask(0), () => ({ name: 'task1', success: true })],
+      context: {
+        packageDirectory: 'test',
+        packageJson: {
+          name: 'test',
+          version: '0.0.0',
+        },
+      },
+      tasks: [new SleepTask(0), () => ({ name: 'task1', status: TaskStatus.Pass })],
     });
 
     await expect(queue.run()).resolves.toEqual([
       {
         name: 'sleep',
-        success: true,
+        status: TaskStatus.Pass,
         context: {
           ms: 0,
         },
       },
       {
         name: 'task1',
-        success: true,
+        status: TaskStatus.Pass,
       },
     ]);
   });
@@ -67,12 +92,13 @@ describe('TaskQueue', () => {
 
       return {
         name: 'test',
-        success: false,
+        status: TaskStatus.Fail,
       };
     });
     const fn2 = vi.fn();
 
     const queue = new TaskQueue({
+      context,
       tasks: [fn1, fn2],
     });
 
@@ -83,13 +109,14 @@ describe('TaskQueue', () => {
   it('Tasks can add other tasks to the queue', async () => {
     const queue = new TaskQueue({
       concurrency: 10,
+      context,
       tasks: [
         function demo(context) {
           context.queue.add(new SleepTask(1));
 
           return {
             name: demo.name,
-            success: true,
+            status: TaskStatus.Pass,
           };
         },
       ],
@@ -98,11 +125,11 @@ describe('TaskQueue', () => {
     await expect(queue.run()).resolves.toEqual([
       {
         name: 'demo',
-        success: true,
+        status: TaskStatus.Pass,
       },
       {
         name: 'sleep',
-        success: true,
+        status: TaskStatus.Pass,
         context: {
           ms: 1,
         },
