@@ -1,7 +1,7 @@
 import { setTimeout } from 'node:timers/promises';
 
 import { Task } from '@lib/Task.js';
-import type { TaskResult } from '@src/types.js';
+import { TaskStatus, type TaskResult } from '@src/types.js';
 
 export class SleepTask extends Task {
   name = 'sleep';
@@ -15,7 +15,7 @@ export class SleepTask extends Task {
 
     return {
       name: this.name,
-      success: true,
+      status: TaskStatus.Pass,
       context: {
         ms: this.ms,
       },

@@ -1,31 +1,27 @@
 import { createRequire } from 'node:module';
 
 import { Task } from '@lib/Task.js';
-import type { PackageType, TaskResult } from '@src/types.js';
-
-const require = createRequire(import.meta.url);
+import { TaskStatus, type TaskResult, type TaskRunContext } from '@src/types.js';
 
 export class ImportModuleTask extends Task {
   name = 'import-module';
 
-  constructor(
-    protected readonly moduleName: string,
-    protected readonly type: PackageType,
-  ) {
-    super();
-  }
-
-  async run(): Promise<TaskResult> {
-    console.group(`Validating ${this.moduleName}`);
+  async run(context: TaskRunContext): Promise<TaskResult> {
+    const require = createRequire(import.meta.url);
 
     const checks = new Map();
 
-    checks.set(`require('${this.moduleName}');`, () => {
-      require(this.moduleName);
+    checks.set(`require('${context.packageJson.name}');`, () => {
+      console.log(require.resolve(context.packageJson.name));
+      // require(context.packageJson.name);
     });
 
-    checks.set(`import('${this.moduleName}');`, async () => {
-      await import(this.moduleName);
+    checks.set(`import('${context.packageJson.name}');`, async () => {
+      const resolved = await import.meta.resolve?.(context.packageJson.name);
+
+      console.log(`import resolved = ${resolved}`);
+
+      // await import(context.packageJson.name);
     });
 
     for (const [loadModule, fn] of checks) {
@@ -38,8 +34,8 @@ export class ImportModuleTask extends Task {
         console.error(error);
 
         return {
-          name: this.moduleName,
-          success: false,
+          name: context.packageJson.name,
+          status: TaskStatus.Fail,
         };
       }
     }
@@ -47,8 +43,8 @@ export class ImportModuleTask extends Task {
     console.groupEnd();
 
     return {
-      name: this.moduleName,
-      success: true,
+      name: context.packageJson.name,
+      status: TaskStatus.Pass,
     };
   }
 }
