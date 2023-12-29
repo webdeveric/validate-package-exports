@@ -4,8 +4,8 @@ import type { TaskQueue } from '@lib/TaskQueue.js';
 import type { UnknownRecord } from '@webdeveric/utils/types/records';
 
 export enum ExitCodes {
-  OK = 0,
-  DoingItWrong = 1,
+  Ok = 0,
+  NotOk = 1,
 }
 
 export type ValidatePackageExportsOptions = {
@@ -20,9 +20,9 @@ export type MaybeUndefined<Type> = Type extends UnknownRecord
     }
   : Type | undefined;
 
-export type BinRecord = Record<string, string>;
+export type BinRecord = Record<string, RelativePath>;
 
-export type PackageBin = string | BinRecord;
+export type PackageBin = RelativePath | BinRecord;
 
 export type PackageType = 'commonjs' | 'module';
 
@@ -93,13 +93,25 @@ export type PackageJson = {
   directories?: PackageDirectories;
 };
 
+export enum TaskStatus {
+  Pass = 'pass',
+  Fail = 'fail',
+  Warn = 'warn',
+  NoOp = 'noop',
+}
+
 export type TaskResult<Context extends UnknownRecord = UnknownRecord> = {
   name: string;
-  success: boolean;
+  status: TaskStatus;
   context?: Context;
+  debug?: string;
+  error?: string;
+  success?: string;
 };
 
 export type TaskRunContext = {
+  packageJson: PackageJson;
+  packageDirectory: string;
   queue: TaskQueue;
 };
 
