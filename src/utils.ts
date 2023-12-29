@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { access, constants, readFile, stat } from 'node:fs/promises';
 
 import { assertIsPackageJson } from '@src/type-assertion.js';
 import type { PackageJson } from '@src/types.js';
@@ -11,6 +11,24 @@ export async function readJson(path: string): Promise<unknown> {
   const contents = await readFile(path, 'utf-8');
 
   return JSON.parse(contents);
+}
+
+export async function isDirectory(path: string): Promise<boolean> {
+  return (await stat(path)).isDirectory();
+}
+
+export async function isFile(path: string): Promise<boolean> {
+  return (await stat(path)).isFile();
+}
+
+export async function isReadable(path: string): Promise<boolean> {
+  try {
+    await access(path, constants.F_OK);
+
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**
