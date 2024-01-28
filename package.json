@@ -57,7 +57,7 @@
     "@webdeveric/prettier-config": "^0.2.0",
     "cross-env": "^7.0.3",
     "cspell": "^8.3.2",
-    "esbuild": "^0.19.12",
+    "esbuild": "^0.20.0",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.3.0",
     "eslint": "^8.56.0",
