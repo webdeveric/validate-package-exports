@@ -1,4 +1,5 @@
 import assert from 'node:assert';
+import { availableParallelism } from 'node:os';
 import { dirname, resolve } from 'node:path';
 
 import type { MaybeUndefined, ValidatePackageExportsOptions } from '@src/types.js';
@@ -16,6 +17,8 @@ export class Validator {
 
     this.options = {
       package: resolve(options.package),
+      bail: options.bail ?? false,
+      concurrency: options.concurrency ?? availableParallelism(),
       info: options.info ?? false,
       debug: options.debug ?? false,
     };
