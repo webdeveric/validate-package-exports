@@ -10,6 +10,8 @@ export enum ExitCodes {
 
 export type ValidatePackageExportsOptions = {
   package: string;
+  bail: boolean;
+  concurrency: number;
   info: boolean;
   debug: boolean;
 };
