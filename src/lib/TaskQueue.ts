@@ -1,4 +1,4 @@
-import { cpus } from 'node:os';
+import { availableParallelism } from 'node:os';
 import { Readable } from 'node:stream';
 
 import { Task } from '@lib/Task.js';
@@ -22,7 +22,7 @@ export class TaskQueue {
   constructor(options: TaskQueueOptions) {
     this.#tasks = new Set<AnyTask>(options?.tasks);
     this.#controller = new AbortController();
-    this.#concurrency = options?.concurrency || cpus().length;
+    this.#concurrency = options?.concurrency || availableParallelism();
     this.#context = {
       ...options.context,
       queue: this,

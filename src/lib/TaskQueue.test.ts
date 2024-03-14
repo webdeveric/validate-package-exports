@@ -1,4 +1,4 @@
-import { cpus } from 'node:os';
+import { availableParallelism } from 'node:os';
 
 import { describe, expect, it, vi } from 'vitest';
 
@@ -24,7 +24,7 @@ describe('TaskQueue', () => {
         }).concurrency,
       ).toEqual(10);
 
-      expect(new TaskQueue({ context }).concurrency).toEqual(cpus().length);
+      expect(new TaskQueue({ context }).concurrency).toEqual(availableParallelism());
     });
     it('tasks', () => {
       const queue = new TaskQueue({
