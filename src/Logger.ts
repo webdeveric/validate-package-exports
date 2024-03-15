@@ -1,24 +1,12 @@
-import assert from 'node:assert';
 import { Console, type ConsoleConstructorOptions } from 'node:console';
 
-/**
- * @see https://datatracker.ietf.org/doc/html/rfc5424#page-11
- */
-export enum LogLevel {
-  Emergency,
-  Alert,
-  Critical,
-  Error,
-  Warning,
-  Notice,
-  Informational,
-  Debug,
-}
+import { LogLevel, type LogLevelName } from './types.js';
+import { parseLogLevel } from './utils/parseLogLevel.js';
 
 export class Logger extends Console {
   #logLevel: LogLevel;
 
-  constructor(options: Partial<ConsoleConstructorOptions> = {}, logLevel: LogLevel = LogLevel.Warning) {
+  constructor(options: Partial<ConsoleConstructorOptions> = {}, logLevel?: LogLevel | LogLevelName | string) {
     super({
       stdout: process.stdout,
       stderr: process.stderr,
@@ -28,17 +16,19 @@ export class Logger extends Console {
       ...options,
     });
 
-    this.#logLevel = logLevel;
+    this.#logLevel = parseLogLevel(logLevel);
   }
 
   get logLevel(): LogLevel {
     return this.#logLevel;
   }
 
-  set logLevel(logLevel: LogLevel) {
-    assert(Object.values(LogLevel).includes(logLevel), 'Invalid log level');
+  set logLevel(logLevel: LogLevel | LogLevelName) {
+    this.#logLevel = parseLogLevel(logLevel);
+  }
 
-    this.#logLevel = logLevel;
+  willLog(logLevel: LogLevel): boolean {
+    return this.#logLevel >= logLevel;
   }
 
   override error(...args: Parameters<Console['info']>): void {
@@ -54,7 +44,7 @@ export class Logger extends Console {
   }
 
   override info(...args: Parameters<Console['info']>): void {
-    if (this.#logLevel >= LogLevel.Informational) {
+    if (this.#logLevel >= LogLevel.Info) {
       super.info(...args);
     }
   }

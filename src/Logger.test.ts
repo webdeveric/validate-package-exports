@@ -3,7 +3,8 @@ import { PassThrough } from 'node:stream';
 
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { Logger, LogLevel } from './Logger.js';
+import { Logger } from './Logger.js';
+import { LogLevel } from './types.js';
 
 describe('Logger', () => {
   const options = {
@@ -21,19 +22,23 @@ describe('Logger', () => {
     });
 
     it('Can get/set the logLevel', () => {
-      const logger = new Logger(options, LogLevel.Informational);
+      const logger = new Logger(options, LogLevel.Info);
 
-      expect(logger.logLevel).toEqual(LogLevel.Informational);
+      expect(logger.logLevel).toEqual(LogLevel.Info);
 
       logger.logLevel = LogLevel.Alert;
 
       expect(logger.logLevel).toEqual(LogLevel.Alert);
     });
 
-    it('Throws when being set to an invalid value', () => {
-      expect(() => {
-        new Logger(options).logLevel = Number.NaN;
-      }).toThrow();
+    it('Ues default value when being set to an invalid value', () => {
+      const logger = new Logger(options, Number.NaN);
+
+      expect(logger.logLevel).toEqual(LogLevel.Warning);
+
+      logger.logLevel = 12345 as LogLevel;
+
+      expect(logger.logLevel).toEqual(LogLevel.Warning);
     });
   });
 
@@ -94,7 +99,7 @@ describe('Logger', () => {
 
       expect(outputs).toHaveLength(0);
 
-      logger.logLevel = LogLevel.Informational;
+      logger.logLevel = LogLevel.Info;
 
       logger.info('test');
 
@@ -102,7 +107,7 @@ describe('Logger', () => {
     });
 
     it('debug() is only used when level >= LogLevel.Debug', () => {
-      logger.logLevel = LogLevel.Informational;
+      logger.logLevel = LogLevel.Info;
 
       logger.debug('test');
 
