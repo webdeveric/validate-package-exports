@@ -1,23 +1,35 @@
 import { isObject, isOptionalString, isString, isStringArray, isStringRecord } from '@webdeveric/utils/type-predicate';
 import { createStringMatchingPredicate, everyItem, maybeUndefined } from '@webdeveric/utils/type-predicate-factory';
 
-import type {
-  AnyExportsEntry,
-  ConditionalExport,
-  CustomCondition,
-  ExportsEntry,
-  ExportsEntryPath,
-  ManFile,
-  PackageBin,
-  PackageDirectories,
-  PackageExports,
-  PackageJson,
-  PackageMan,
-  PackageType,
-  RelativePath,
-  SubpathExports,
-  SubpathPattern,
+import {
+  logLevelMapping,
+  type AnyExportsEntry,
+  type ConditionalExport,
+  type CustomCondition,
+  type ExportsEntry,
+  type ExportsEntryPath,
+  type LogLevel,
+  type LogLevelName,
+  type ManFile,
+  type PackageBin,
+  type PackageDirectories,
+  type PackageExports,
+  type PackageJson,
+  type PackageMan,
+  type PackageType,
+  type RelativePath,
+  type SubpathExports,
+  type SubpathPattern,
 } from '@src/types.js';
+
+export function isLogLevelName(input: unknown): input is LogLevelName {
+  return Object.keys(logLevelMapping).includes(String(input));
+}
+
+export function isLogLevel(input: unknown): input is LogLevel {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return Object.values<any>(logLevelMapping).includes(input);
+}
 
 export function isPackageType(input: unknown): input is PackageType {
   return input === 'commonjs' || input === 'module';

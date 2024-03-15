@@ -8,12 +8,37 @@ export enum ExitCodes {
   NotOk = 1,
 }
 
+export type LogLevelName = 'emergency' | 'alert' | 'critical' | 'error' | 'warning' | 'notice' | 'info' | 'debug';
+
+/**
+ * @see https://datatracker.ietf.org/doc/html/rfc5424#page-11
+ */
+export const enum LogLevel {
+  Emergency,
+  Alert,
+  Critical,
+  Error,
+  Warning,
+  Notice,
+  Info,
+  Debug,
+}
+
+export const logLevelMapping: Record<LogLevelName, LogLevel> = {
+  emergency: LogLevel.Emergency,
+  alert: LogLevel.Alert,
+  critical: LogLevel.Critical,
+  error: LogLevel.Error,
+  warning: LogLevel.Warning,
+  notice: LogLevel.Notice,
+  info: LogLevel.Info,
+  debug: LogLevel.Debug,
+};
+
 export type ValidatePackageExportsOptions = {
   package: string;
   bail: boolean;
   concurrency: number;
-  info: boolean;
-  debug: boolean;
 };
 
 export type MaybeUndefined<Type> = Type extends UnknownRecord
