@@ -10,9 +10,9 @@ export class Validator {
 
   packageDirectory: string;
 
-  protected readonly console: Console;
+  protected readonly logger: Console;
 
-  constructor(options: MaybeUndefined<ValidatePackageExportsOptions> = {}, console: Console) {
+  constructor(options: MaybeUndefined<ValidatePackageExportsOptions> = {}, logger: Console) {
     assert(options.package, 'package not specified');
 
     this.options = {
@@ -25,27 +25,27 @@ export class Validator {
 
     this.packageDirectory = dirname(this.options.package);
 
-    this.console = console;
+    this.logger = logger;
   }
 
   info(...args: Parameters<Console['info']>): void {
     if (this.options.info) {
-      this.console.info(...args);
+      this.logger.info(...args);
     }
   }
 
   debug(...args: Parameters<Console['debug']>): void {
     if (this.options.debug) {
-      this.console.debug(...args);
+      this.logger.debug(...args);
     }
   }
 
   log(...args: Parameters<Console['log']>): void {
-    this.console.log(...args);
+    this.logger.log(...args);
   }
 
   dir(...args: Parameters<Console['dir']>): void {
-    this.console.dir(...args);
+    this.logger.dir(...args);
   }
 
   get npmEnvVars(): Record<`npm_${string}`, string> {
@@ -64,11 +64,13 @@ export class Validator {
 
     this.info(`packageDirectory: ${this.packageDirectory}`);
 
-    this.debug({
-      options: this.options,
-      npmEnvVars: this.npmEnvVars,
-      packageJson,
-    });
+    if (this.options.debug) {
+      this.dir({
+        options: this.options,
+        npmEnvVars: this.npmEnvVars,
+        packageJson,
+      });
+    }
 
     const tasks = new Set();
 
@@ -79,7 +81,7 @@ export class Validator {
 
     if (packageJson.bin) {
       tasks.add(() => {
-        this.console.log(packageJson.bin);
+        this.logger.log(packageJson.bin);
       });
     }
 
