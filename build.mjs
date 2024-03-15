@@ -14,6 +14,7 @@ try {
     platform: 'node',
     bundle: true,
     format: 'esm',
+    splitting: true,
     outExtension: {
       '.js': '.mjs',
     },
