@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import { availableParallelism } from 'node:os';
 import { dirname, resolve } from 'node:path';
 
-import type { MaybeUndefined, ValidatePackageExportsOptions } from '@src/types.js';
+import { LogLevel, type MaybeUndefined, type ValidatePackageExportsOptions } from '@src/types.js';
 import { importPackageJson } from '@src/utils.js';
 
 import type { Logger } from './Logger.js';
@@ -21,8 +21,6 @@ export class Validator {
       package: resolve(options.package),
       bail: options.bail ?? false,
       concurrency: options.concurrency ?? availableParallelism(),
-      info: options.info ?? false,
-      debug: options.debug ?? false,
     };
 
     this.packageDirectory = dirname(this.options.package);
@@ -30,26 +28,17 @@ export class Validator {
     this.logger = logger;
   }
 
-  get npmEnvVars(): Record<`npm_${string}`, string> {
-    return Object.fromEntries(
-      Object.entries(process.env)
-        .filter(
-          (entry): entry is [key: `npm_${string}`, value: string] =>
-            entry[0].startsWith('npm_') && typeof entry[1] === 'string',
-        )
-        .sort((left, right) => left[0].localeCompare(right[0])),
-    );
-  }
-
   async run(): Promise<void> {
     const packageJson = await importPackageJson(this.options.package);
 
     this.logger.info(`packageDirectory: ${this.packageDirectory}`);
 
-    if (this.options.debug) {
-      this.logger.dir({
+    if (this.logger.willLog(LogLevel.Debug)) {
+      const { getNpmEnvVars } = await import('./utils/getNpmEnvVars.js');
+
+      this.logger.debug({
         options: this.options,
-        npmEnvVars: this.npmEnvVars,
+        npmEnvVars: getNpmEnvVars(),
         packageJson,
       });
     }

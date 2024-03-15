@@ -4,19 +4,11 @@ import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 
 import { CliError } from '@lib/CliError.js';
-import { ExitCodes } from '@src/types.js';
+import { ExitCodes, type LogLevelName } from '@src/types.js';
 
 import { Logger } from './Logger.js';
 import { parseConcurrency } from './utils/parseConcurrency.js';
 import { Validator } from './Validator.js';
-
-const logger = new Logger({
-  stdout: process.stdout,
-  stderr: process.stderr,
-  inspectOptions: {
-    depth: null,
-  },
-});
 
 try {
   const args = parseArgs({
@@ -38,15 +30,10 @@ try {
         type: 'string',
         short: 'c',
       },
-      info: {
-        type: 'boolean',
-        short: 'i',
-        default: false,
-      },
-      debug: {
-        type: 'boolean',
-        short: 'd',
-        default: process.env.RUNNER_DEBUG === '1',
+      logLevel: {
+        type: 'string',
+        short: 'l',
+        default: (process.env.RUNNER_DEBUG === '1' ? 'debug' : 'warning') satisfies LogLevelName,
       },
     },
   });
@@ -56,14 +43,21 @@ try {
       package: String(args.values.package),
       concurrency: parseConcurrency(args.values.concurrency),
       bail: Boolean(args.values.bail),
-      info: Boolean(args.values.info),
-      debug: Boolean(args.values.debug),
     },
-    logger,
+    new Logger(
+      {
+        stdout: process.stdout,
+        stderr: process.stderr,
+        inspectOptions: {
+          depth: null,
+        },
+      },
+      args.values.logLevel,
+    ),
   ).run();
 } catch (error) {
   if (error instanceof Error) {
-    logger.error(error.message);
+    console.error(error.message);
   }
 
   process.exitCode = error instanceof CliError ? error.code : ExitCodes.NotOk;
