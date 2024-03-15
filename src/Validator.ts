@@ -5,14 +5,16 @@ import { dirname, resolve } from 'node:path';
 import type { MaybeUndefined, ValidatePackageExportsOptions } from '@src/types.js';
 import { importPackageJson } from '@src/utils.js';
 
+import type { Logger } from './Logger.js';
+
 export class Validator {
   options: ValidatePackageExportsOptions;
 
   packageDirectory: string;
 
-  protected readonly logger: Console;
+  protected readonly logger: Logger;
 
-  constructor(options: MaybeUndefined<ValidatePackageExportsOptions> = {}, logger: Console) {
+  constructor(options: MaybeUndefined<ValidatePackageExportsOptions> = {}, logger: Logger) {
     assert(options.package, 'package not specified');
 
     this.options = {
@@ -26,26 +28,6 @@ export class Validator {
     this.packageDirectory = dirname(this.options.package);
 
     this.logger = logger;
-  }
-
-  info(...args: Parameters<Console['info']>): void {
-    if (this.options.info) {
-      this.logger.info(...args);
-    }
-  }
-
-  debug(...args: Parameters<Console['debug']>): void {
-    if (this.options.debug) {
-      this.logger.debug(...args);
-    }
-  }
-
-  log(...args: Parameters<Console['log']>): void {
-    this.logger.log(...args);
-  }
-
-  dir(...args: Parameters<Console['dir']>): void {
-    this.logger.dir(...args);
   }
 
   get npmEnvVars(): Record<`npm_${string}`, string> {
@@ -62,10 +44,10 @@ export class Validator {
   async run(): Promise<void> {
     const packageJson = await importPackageJson(this.options.package);
 
-    this.info(`packageDirectory: ${this.packageDirectory}`);
+    this.logger.info(`packageDirectory: ${this.packageDirectory}`);
 
     if (this.options.debug) {
-      this.dir({
+      this.logger.dir({
         options: this.options,
         npmEnvVars: this.npmEnvVars,
         packageJson,

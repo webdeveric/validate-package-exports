@@ -1,16 +1,16 @@
 #!/usr/bin/env -S node --experimental-import-meta-resolve
 
-import { Console } from 'node:console';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 
 import { CliError } from '@lib/CliError.js';
 import { ExitCodes } from '@src/types.js';
 
+import { Logger } from './Logger.js';
 import { parseConcurrency } from './utils/parseConcurrency.js';
 import { Validator } from './Validator.js';
 
-const logger = new Console({
+const logger = new Logger({
   stdout: process.stdout,
   stderr: process.stderr,
   inspectOptions: {
