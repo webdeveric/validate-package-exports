@@ -1,12 +1,10 @@
 {
-  "eslint.alwaysShowStatus": true,
   "eslint.format.enable": true,
   "eslint.validate": [
     "javascript",
     "typescript"
   ],
   "eslint.lintTask.enable": true,
-  "eslint.packageManager": "npm",
   "editor.bracketPairColorization.enabled": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
@@ -32,7 +30,6 @@
   "typescript.suggest.completeJSDocs": false,
   "typescript.suggest.jsdoc.generateReturns": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll": "always",
-    "source.organizeImports": "always"
+    "source.fixAll": "always"
   }
 }
