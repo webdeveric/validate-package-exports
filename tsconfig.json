@@ -27,7 +27,7 @@
     "rootDir": "./src",
     "paths": {
       "@lib/*": ["./src/lib/*"],
-      "@tasks/*": ["./src/tasks/*"],
+      "@utils/*": ["./src/utils/*"],
       "@src/*": ["./src/*"]
     }
   },
