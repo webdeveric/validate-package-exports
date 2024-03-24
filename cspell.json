@@ -8,12 +8,20 @@
     "outdir",
     "Positionals",
     "predemo",
+    "realpath",
     "typecheck",
     "unstub",
     "vitest",
     "webdeveric"
   ],
-  "ignorePaths": ["node_modules/**", ".vscode/*.json", "./private", "pnpm-lock.yaml", ".github/CODEOWNERS"],
+  "ignorePaths": [
+    "./package.json",
+    "./private",
+    ".github/CODEOWNERS",
+    ".vscode/*.json",
+    "node_modules/**",
+    "pnpm-lock.yaml"
+  ],
   "languageSettings": [
     {
       "languageId": "commit-msg",
