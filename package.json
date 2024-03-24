@@ -29,7 +29,7 @@
   "engines": {
     "node": ">=18.11.0"
   },
-  "packageManager": "pnpm@8.15.4+sha256.cea6d0bdf2de3a0549582da3983c70c92ffc577ff4410cbf190817ddc35137c2",
+  "packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
   "scripts": {
     "predemo": "pnpm build:dev",
     "demo": "./dist/cli.mjs",
@@ -47,11 +47,10 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@webdeveric/utils": "^0.29.1",
-    "glob": "^10.3.10"
+    "@webdeveric/utils": "^0.29.1"
   },
   "devDependencies": {
-    "@types/node": "^18.19.24",
+    "@types/node": "^20.11.30",
     "@vitest/coverage-v8": "^1.4.0",
     "@webdeveric/eslint-config-ts": "^0.7.1",
     "@webdeveric/prettier-config": "^0.2.0",
@@ -67,7 +66,7 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.2",
+    "typescript": "^5.4.3",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.4.0"
   }
