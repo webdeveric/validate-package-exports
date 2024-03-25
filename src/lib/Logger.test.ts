@@ -3,8 +3,9 @@ import { PassThrough } from 'node:stream';
 
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { LogLevel } from '@src/types.js';
+
 import { Logger } from './Logger.js';
-import { LogLevel } from './types.js';
 
 describe('Logger', () => {
   const options = {
