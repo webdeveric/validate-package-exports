@@ -1,3 +1,5 @@
+import { relative } from 'node:path';
+
 import { ResultCode, type EntryPoint, type Result } from '@src/types.js';
 
 import { isFile } from './isFile.js';
@@ -11,7 +13,7 @@ export async function checkFileExists(entryPoint: EntryPoint): Promise<Result> {
     return {
       name: 'file-exists',
       code: ResultCode.Success,
-      message: entryPoint.resolvedPath,
+      message: relative(process.cwd(), entryPoint.resolvedPath),
       entryPoint,
     };
   } catch (error) {
@@ -19,7 +21,7 @@ export async function checkFileExists(entryPoint: EntryPoint): Promise<Result> {
       name: 'file-exists',
       code: ResultCode.Error,
       entryPoint,
-      message: entryPoint.resolvedPath,
+      message: relative(process.cwd(), entryPoint.resolvedPath),
       error: error instanceof Error ? error : new Error(String(error)),
     };
   }

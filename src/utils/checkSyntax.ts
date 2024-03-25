@@ -1,3 +1,5 @@
+import { relative } from 'node:path';
+
 import { type Result, ResultCode, type EntryPoint } from '@src/types.js';
 
 import { asyncExec } from './asyncExec.js';
@@ -11,7 +13,7 @@ export async function checkSyntax(entryPoint: EntryPoint, options: ExecOptions):
     return {
       code: ResultCode.Success,
       entryPoint,
-      message: entryPoint.resolvedPath,
+      message: relative(process.cwd(), entryPoint.resolvedPath),
       name: 'check-syntax',
     };
   } catch (error) {
@@ -19,7 +21,7 @@ export async function checkSyntax(entryPoint: EntryPoint, options: ExecOptions):
       code: ResultCode.Error,
       entryPoint,
       error: error instanceof Error ? error : new Error(String(error)),
-      message: entryPoint.resolvedPath,
+      message: relative(process.cwd(), entryPoint.resolvedPath),
       name: 'check-syntax',
     };
   }
