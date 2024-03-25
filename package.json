@@ -36,7 +36,7 @@
     "format": "prettier --write .",
     "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
-    "postbuild": "./dist/cli.mjs --check --verify",
+    "postbuild": "node dist/cli.mjs --check --verify",
     "typecheck": "tsc --noEmit && tsc -p ./tsconfig.project-files.json",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
     "lint": "eslint ./src ./*.{mjs,mts} --ext .ts",
