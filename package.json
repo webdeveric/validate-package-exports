@@ -26,6 +26,9 @@
   "bin": {
     "validate-package-exports": "./dist/cli.mjs"
   },
+  "files": [
+    "./dist"
+  ],
   "engines": {
     "node": ">=18.11.0"
   },
@@ -42,7 +45,8 @@
     "lint": "eslint ./src ./*.{mjs,mts} --ext .ts",
     "test": "vitest -c vitest.config.mts",
     "coverage": "vitest run  -c vitest.config.mts --coverage",
-    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage && pnpm build",
+    "prepack": "pnpm build",
+    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage",
     "prepare": "husky"
   },
   "sideEffects": false,
