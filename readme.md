@@ -7,7 +7,15 @@ Validate your `package.json` exports actually exist, have valid syntax, and can 
 ## Install
 
 ```shell
+pnpm add validate-package-exports -D
+```
+
+```shell
 npm i validate-package-exports -D
+```
+
+```shell
+yarn add validate-package-exports -D
 ```
 
 ## Options
