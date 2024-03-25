@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { isObject, isOptionalString, isString, isStringArray, isStringRecord } from '@webdeveric/utils/type-predicate';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { createStringMatchingPredicate, everyItem, maybeUndefined } from '@webdeveric/utils/type-predicate-factory';
 
 import {

@@ -20,7 +20,6 @@ try {
     },
     target: `node${process.versions.node}`,
     minify: process.env.NODE_ENV === 'production',
-    packages: 'external',
     banner: {
       js: comment(
         `
