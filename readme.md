@@ -2,6 +2,8 @@
 
 [![Node.js CI](https://github.com/webdeveric/validate-package-exports/actions/workflows/node.js.yml/badge.svg)](https://github.com/webdeveric/validate-package-exports/actions/workflows/node.js.yml)
 
+Validate your `package.json` exports actually exist, have valid syntax, and can be imported or required without issues.
+
 ## Install
 
 ```shell
