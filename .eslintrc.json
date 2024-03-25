@@ -57,7 +57,7 @@
         "newlines-between": "always",
         "pathGroups": [
           {
-            "pattern": "@{src,tasks,lib}/**",
+            "pattern": "@{src,utils,lib}/**",
             "group": "internal",
             "position": "after"
           }
