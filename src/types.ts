@@ -1,11 +1,9 @@
-import type { Task } from '@lib/Task.js';
-import type { TaskQueue } from '@lib/TaskQueue.js';
-
 import type { UnknownRecord } from '@webdeveric/utils/types/records';
 
-export enum ExitCodes {
+export enum ExitCode {
   Ok = 0,
-  NotOk = 1,
+  Error,
+  UnableToVerify,
 }
 
 export type LogLevelName = 'emergency' | 'alert' | 'critical' | 'error' | 'warning' | 'notice' | 'info' | 'debug';
@@ -38,6 +36,8 @@ export const logLevelMapping: Record<LogLevelName, LogLevel> = {
 export type ValidatePackageExportsOptions = {
   package: string;
   bail: boolean;
+  check: boolean;
+  verify: boolean;
   concurrency: number;
 };
 
@@ -47,7 +47,7 @@ export type MaybeUndefined<Type> = Type extends UnknownRecord
     }
   : Type | undefined;
 
-export type BinRecord = Record<string, RelativePath>;
+export type BinRecord = Record<string, RelativePath | string>;
 
 export type PackageBin = RelativePath | BinRecord;
 
@@ -89,8 +89,6 @@ export type ConditionalExport = {
   [custom: CustomCondition]: AnyExportsEntry;
 };
 
-export type ExportValue = ExportsEntryPath | ConditionalExport;
-
 export type ExportsEntry = ExportsEntryPath | ConditionalExport;
 
 export type AnyExportsEntry = ExportsEntry | ExportsEntry[];
@@ -102,6 +100,10 @@ export type SubpathExports = {
 
 export type PackageExports = AnyExportsEntry | SubpathExports | ConditionalExport;
 
+export type PackageBrowserRecord = Record<string, string | boolean>;
+
+export type PackageBrowser = string | PackageBrowserRecord;
+
 // https://json.schemastore.org/package.json
 // https://cdn.jsdelivr.net/gh/SchemaStore/schemastore/src/schemas/json/package.json
 // https://docs.npmjs.com/cli/v10/configuring-npm/package-json
@@ -111,8 +113,9 @@ export type PackageJson = {
   type?: PackageType;
   main?: string;
   module?: string;
-  browser?: string;
+  browser?: PackageBrowser;
   types?: string;
+  typings?: string;
   exports?: PackageExports;
   bin?: PackageBin;
   files?: string[]; // can be globs too
@@ -120,28 +123,47 @@ export type PackageJson = {
   directories?: PackageDirectories;
 };
 
-export enum TaskStatus {
-  Pass = 'pass',
-  Fail = 'fail',
-  Warn = 'warn',
-  NoOp = 'noop',
+export type ItemPath = (string | number)[];
+
+export type EntryPoint = {
+  // bin scripts will not have this
+  moduleName: string | undefined; // This is string used with `require` or `import`.
+  type: PackageType;
+  fileName: string;
+  relativePath: string;
+  directory: string;
+  resolvedPath: string;
+  subpath: string | undefined;
+  condition: string | undefined;
+  itemPath: ItemPath;
+};
+
+export type ResolvedEntryPoint = EntryPoint & {
+  realResolvedPath: string;
+  realDirectory: string;
+};
+
+export type ResultName = 'check-syntax' | 'file-exists' | 'require' | 'import';
+
+export const enum ResultCode {
+  Success,
+  Error,
+  Skip,
 }
 
-export type TaskResult<Context extends UnknownRecord = UnknownRecord> = {
-  name: string;
-  status: TaskStatus;
-  context?: Context;
-  debug?: string;
-  error?: string;
-  success?: string;
+export type GoodResult = {
+  code: ResultCode.Success | ResultCode.Skip;
+  entryPoint: EntryPoint;
+  message: string;
+  name: ResultName;
 };
 
-export type TaskRunContext = {
-  packageJson: PackageJson;
-  packageDirectory: string;
-  queue: TaskQueue;
+export type BadResult = {
+  code: ResultCode.Error;
+  entryPoint: EntryPoint;
+  error: Error;
+  message: string;
+  name: ResultName;
 };
 
-export type TaskFn = (context: TaskRunContext) => TaskResult | Promise<TaskResult>;
-
-export type AnyTask = Task | TaskFn;
+export type Result = GoodResult | BadResult;
