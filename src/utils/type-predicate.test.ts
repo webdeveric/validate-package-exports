@@ -1,5 +1,9 @@
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
+import { readJson } from '@utils/readJson.js';
 import {
   isAnyExportsEntry,
   isConditionalExport,
@@ -19,8 +23,7 @@ import {
   isRelativePath,
   isSubpathExports,
   isSubpathPattern,
-} from '@src/type-predicate.js';
-import { importJson } from '@src/utils.js';
+} from '@utils/type-predicate.js';
 
 describe('isPackageType()', () => {
   it('Returns true for valid input', () => {
@@ -97,6 +100,7 @@ describe('PackageBin()', () => {
 
 describe('isRelativePath()', () => {
   it('Returns true for valid input', () => {
+    expect(isRelativePath('./path/*')).toBeTruthy();
     expect(isRelativePath('./path/to/bin.js')).toBeTruthy();
     expect(isRelativePath('/abs/path/to/bin.js')).toBeFalsy();
     expect(isRelativePath(undefined)).toBeFalsy();
@@ -105,6 +109,7 @@ describe('isRelativePath()', () => {
 
 describe('isSubpathPattern()', () => {
   it('Returns true for valid input', () => {
+    expect(isSubpathPattern('./path/*')).toBeTruthy();
     expect(isSubpathPattern('./path/*.js')).toBeTruthy();
     expect(isSubpathPattern('./path/to/file.js')).toBeFalsy();
     expect(isSubpathPattern(undefined)).toBeFalsy();
@@ -244,7 +249,13 @@ describe('isPackageJson()', () => {
   });
 
   it('Validates own package.json', async () => {
-    const packageJson = await importJson('../package.json');
+    const packageJson = await readJson(resolve(import.meta.dirname, '../../package.json'));
+
+    expect(isPackageJson(packageJson)).toBeTruthy();
+  });
+
+  it('Validates 3rd party package.json', async () => {
+    const packageJson = await readJson(createRequire(import.meta.url).resolve('typescript/package.json'));
 
     expect(isPackageJson(packageJson)).toBeTruthy();
   });

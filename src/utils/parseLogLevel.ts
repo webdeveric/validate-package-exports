@@ -1,5 +1,5 @@
-import { isLogLevel, isLogLevelName } from '@src/type-predicate.js';
 import { LogLevel, logLevelMapping } from '@src/types.js';
+import { isLogLevel, isLogLevelName } from '@utils/type-predicate.js';
 
 export function parseLogLevel(input: unknown): LogLevel {
   if (typeof input === 'undefined') {

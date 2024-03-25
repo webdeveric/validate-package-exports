@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { assertIsPackageJson } from '@src/type-assertion.js';
+import { assertIsPackageJson } from '@utils/type-assertion.js';
 
 describe('assertIsPackageJson()', () => {
   it('Throws when given invalid input', () => {

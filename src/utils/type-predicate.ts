@@ -12,6 +12,8 @@ import {
   type LogLevelName,
   type ManFile,
   type PackageBin,
+  type PackageBrowser,
+  type PackageBrowserRecord,
   type PackageDirectories,
   type PackageExports,
   type PackageJson,
@@ -62,7 +64,11 @@ export function isPackageBin(input: unknown): input is PackageBin {
   return isString(input) || isStringRecord(input);
 }
 
-export const isRelativePath = createStringMatchingPredicate<RelativePath>(/^\.\/.+/);
+// export const isRelativePath = createStringMatchingPredicate<RelativePath>(/^\.\/.+/);
+
+export function isRelativePath(input: unknown): input is RelativePath {
+  return typeof input === 'string' && input.startsWith('./');
+}
 
 export const subpathPattern = /^(?<before>\.\/[^*]*)\*(?<after>[^*]*)$/;
 
@@ -110,6 +116,21 @@ export function isPackageExports(input: unknown): input is PackageExports {
   return isAnyExportsEntry(input) || isSubpathExports(input);
 }
 
+export const isPackageBrowserRecord = (input: unknown): input is PackageBrowserRecord => {
+  return (
+    isObject(input) &&
+    Object.entries(input).every(
+      entry => typeof entry[0] === 'string' && (typeof entry[1] === 'string' || typeof entry[1] === 'boolean'),
+    )
+  );
+};
+
+export function isPackageBrowser(input: unknown): input is PackageBrowser {
+  return isString(input) || isPackageBrowserRecord(input);
+}
+
+export const isOptionalPackageBrowser = maybeUndefined(isPackageBrowser);
+
 /**
  * @see https://docs.npmjs.com/cli/v10/configuring-npm/package-json
  */
@@ -120,7 +141,7 @@ export function isPackageJson(input: unknown): input is PackageJson {
     isString(input.version) &&
     isOptionalString(input.main) &&
     isOptionalString(input.module) &&
-    isOptionalString(input.browser) &&
+    isOptionalPackageBrowser(input.browser) &&
     isOptionalString(input.types) &&
     isOptionalPackageMan(input.man) &&
     isOptionalPackageDirectories(input.directories) &&
