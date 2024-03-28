@@ -1,13 +1,13 @@
 import { opendir } from 'node:fs/promises';
 
-import type { EntryPoint, PackageJson } from '@src/types.js';
+import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { createEntryPoint } from './createEntryPoint.js';
 import { resolveDirent } from './resolveDirent.js';
 
 export async function* getEntryPointsFromBinDirectory(
   packageJson: PackageJson,
-  packageDirectory: string,
+  packageContext: PackageContext,
 ): AsyncGenerator<EntryPoint> {
   if (typeof packageJson.directories?.bin === 'string') {
     const binDir = await opendir(packageJson.directories.bin);
@@ -18,9 +18,7 @@ export async function* getEntryPointsFromBinDirectory(
           condition: undefined,
           itemPath: ['directories', 'bin'],
           modulePath: resolveDirent(item),
-          packageDirectory,
-          packageName: packageJson.name,
-          packageType: packageJson.type,
+          packageContext,
           subpath: undefined,
         });
       }

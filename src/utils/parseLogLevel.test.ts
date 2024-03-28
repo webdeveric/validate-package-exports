@@ -6,14 +6,14 @@ import { parseLogLevel } from './parseLogLevel.js';
 
 describe('parseLogLevel()', () => {
   it('Returns a LogLevel', () => {
-    expect(parseLogLevel('warning')).toEqual(LogLevel.Warning);
-    expect(parseLogLevel(LogLevel.Warning)).toEqual(LogLevel.Warning);
+    expect(parseLogLevel('info')).toEqual(LogLevel.Info);
+    expect(parseLogLevel(LogLevel.Info, LogLevel.Warning)).toEqual(LogLevel.Info);
   });
 
   it.each(['bad input', Number.MAX_SAFE_INTEGER, undefined, true, false, null, [], {}])(
     'Returns default value when given "%s"',
     value => {
-      expect(parseLogLevel(value)).toEqual(LogLevel.Warning);
+      expect(parseLogLevel(value, LogLevel.Alert)).toEqual(LogLevel.Alert);
     },
   );
 });

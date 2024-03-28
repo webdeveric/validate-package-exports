@@ -1,6 +1,7 @@
 import { relative } from 'node:path';
 
-import { type Result, ResultCode, type EntryPoint } from '@src/types.js';
+import { Result, ResultCode } from '@lib/Result.js';
+import type { EntryPoint } from '@src/types.js';
 
 import { asyncExec } from './asyncExec.js';
 
@@ -10,19 +11,19 @@ export async function checkSyntax(entryPoint: EntryPoint, options: ExecOptions):
   try {
     await asyncExec(`node --check ${entryPoint.resolvedPath}`, options);
 
-    return {
+    return new Result({
       code: ResultCode.Success,
       entryPoint,
-      message: relative(process.cwd(), entryPoint.resolvedPath),
+      message: `${relative(process.cwd(), entryPoint.resolvedPath)} has valid syntax`,
       name: 'check-syntax',
-    };
+    });
   } catch (error) {
-    return {
+    return new Result({
       code: ResultCode.Error,
       entryPoint,
       error: error instanceof Error ? error : new Error(String(error)),
-      message: relative(process.cwd(), entryPoint.resolvedPath),
+      message: `Could not validate syntax for ${relative(process.cwd(), entryPoint.resolvedPath)}`,
       name: 'check-syntax',
-    };
+    });
   }
 }

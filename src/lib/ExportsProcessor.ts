@@ -1,5 +1,4 @@
 import type {
-  PackageType,
   ExportsEntryPath,
   EntryPoint,
   ExportsEntry,
@@ -8,68 +7,94 @@ import type {
   PackageExports,
   ItemPath,
   AnyExportsEntry,
+  PackageContext,
 } from '@src/types.js';
 import { createEntryPoint } from '@utils/createEntryPoint.js';
 import {
   isConditionalExport,
   isExportsEntryPath,
   isExportsEntryArray,
-  isExportsEntry,
   isSubpathExports,
 } from '@utils/type-predicate.js';
 
 export type ProcessExportsContext = {
-  packageType: PackageType;
-  packageName: string;
-  packageDirectory: string;
   condition?: string | undefined;
   subpath?: string;
   itemPath: ItemPath;
 };
 
 export class ExportsProcessor {
-  processExportsEntryPath(exportsEntryPath: ExportsEntryPath, context: ProcessExportsContext): EntryPoint[] {
+  processExportsEntryPath(
+    exportsEntryPath: ExportsEntryPath,
+    exportsContext: ProcessExportsContext,
+    packageContext: PackageContext,
+  ): EntryPoint[] {
     return exportsEntryPath === null
       ? []
       : [
           createEntryPoint({
             modulePath: exportsEntryPath,
             subpath: '.',
-            ...context,
+            ...exportsContext,
+            packageContext,
           }),
         ];
   }
 
-  processExportsEntry(exportsEntry: ExportsEntry, context: ProcessExportsContext): EntryPoint[] {
+  processExportsEntry(
+    exportsEntry: ExportsEntry,
+    exportsContext: ProcessExportsContext,
+    packageContext: PackageContext,
+  ): EntryPoint[] {
     return isConditionalExport(exportsEntry)
-      ? this.processConditionalExports(exportsEntry, context)
-      : this.processExportsEntryPath(exportsEntry, context);
+      ? this.processConditionalExports(exportsEntry, exportsContext, packageContext)
+      : this.processExportsEntryPath(exportsEntry, exportsContext, packageContext);
   }
 
-  processExportsEntryArray(exportsEntries: ExportsEntry[], context: ProcessExportsContext): EntryPoint[] {
+  processExportsEntryArray(
+    exportsEntries: ExportsEntry[],
+    exportsContext: ProcessExportsContext,
+    packageContext: PackageContext,
+  ): EntryPoint[] {
     return exportsEntries
       .map((entry, index) => {
-        return this.processExportsEntry(entry, {
-          ...context,
-          itemPath: [...context.itemPath, index],
-        });
+        return this.processExportsEntry(
+          entry,
+          {
+            ...exportsContext,
+            itemPath: [...exportsContext.itemPath, index],
+          },
+          packageContext,
+        );
       })
       .flat();
   }
 
-  processSubpathExports(subpathExports: SubpathExports, context: ProcessExportsContext): EntryPoint[] {
+  processSubpathExports(
+    subpathExports: SubpathExports,
+    exportsContext: ProcessExportsContext,
+    packageContext: PackageContext,
+  ): EntryPoint[] {
     return Object.entries(subpathExports)
       .map(([subpath, exportsEntry]) => {
-        return this.process(exportsEntry, {
-          ...context,
-          subpath,
-          itemPath: [...context.itemPath, subpath],
-        });
+        return this.process(
+          exportsEntry,
+          {
+            ...exportsContext,
+            subpath,
+            itemPath: [...exportsContext.itemPath, subpath],
+          },
+          packageContext,
+        );
       })
       .flat();
   }
 
-  processConditionalExports(conditionalExport: ConditionalExport, context: ProcessExportsContext): EntryPoint[] {
+  processConditionalExports(
+    conditionalExport: ConditionalExport,
+    exportsContext: ProcessExportsContext,
+    packageContext: PackageContext,
+  ): EntryPoint[] {
     const getCondition = (
       conditionName: string,
       exportsEntry: AnyExportsEntry,
@@ -92,25 +117,33 @@ export class ExportsProcessor {
 
     return Object.entries(conditionalExport)
       .map(([conditionName, exportsEntry]) => {
-        const itemPath = [...context.itemPath, conditionName];
+        const itemPath = [...exportsContext.itemPath, conditionName];
 
-        return this.process(exportsEntry, {
-          ...context,
-          condition: getCondition(conditionName, exportsEntry, itemPath),
-          itemPath,
-        });
+        return this.process(
+          exportsEntry,
+          {
+            ...exportsContext,
+            condition: getCondition(conditionName, exportsEntry, itemPath),
+            itemPath,
+          },
+          packageContext,
+        );
       })
       .flat();
   }
 
-  process(exports: PackageExports | undefined, context: ProcessExportsContext): EntryPoint[] {
+  process(
+    exports: PackageExports | undefined,
+    exportsContext: ProcessExportsContext,
+    packageContext: PackageContext,
+  ): EntryPoint[] {
     /*
       "exports": "./some-path.js"
 
       "exports": null
     */
     if (isExportsEntryPath(exports)) {
-      return this.processExportsEntryPath(exports, context);
+      return this.processExportsEntryPath(exports, exportsContext, packageContext);
     }
 
     /*
@@ -121,11 +154,7 @@ export class ExportsProcessor {
       ]
     */
     if (isExportsEntryArray(exports)) {
-      return this.processExportsEntryArray(exports, context);
-    }
-
-    if (isExportsEntry(exports)) {
-      return this.processExportsEntry(exports, context);
+      return this.processExportsEntryArray(exports, exportsContext, packageContext);
     }
 
     /*
@@ -134,7 +163,7 @@ export class ExportsProcessor {
       }
     */
     if (isSubpathExports(exports)) {
-      return this.processSubpathExports(exports, context);
+      return this.processSubpathExports(exports, exportsContext, packageContext);
     }
 
     /*
@@ -144,7 +173,7 @@ export class ExportsProcessor {
       }
     */
     if (isConditionalExport(exports)) {
-      return this.processConditionalExports(exports, context);
+      return this.processConditionalExports(exports, exportsContext, packageContext);
     }
 
     return [];

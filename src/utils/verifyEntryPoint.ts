@@ -1,4 +1,5 @@
-import { type EntryPoint, type Result } from '@src/types.js';
+import type { Result } from '@lib/Result.js';
+import type { EntryPoint } from '@src/types.js';
 
 import { checkImport } from './checkImport.js';
 import { checkRequire } from './checkRequire.js';

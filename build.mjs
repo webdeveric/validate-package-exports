@@ -38,7 +38,7 @@ try {
       clean({
         patterns: ['./dist/*'],
       }),
-      environmentPlugin(['npm_package_engines_node']),
+      environmentPlugin(['npm_package_name']),
     ],
   });
 

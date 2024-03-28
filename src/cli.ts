@@ -1,79 +1,75 @@
 #!/usr/bin/env node
 
-import assert from 'node:assert';
-import { join, resolve } from 'node:path';
-import { parseArgs } from 'node:util';
+import { setMaxListeners } from 'node:events';
 
-import { Logger } from '@lib/Logger.js';
+import { ResultCode, type Result } from '@lib/Result.js';
 import { Validator } from '@lib/Validator.js';
-import { ExitCode, type LogLevelName } from '@src/types.js';
-import { parseConcurrency } from '@utils/parseConcurrency.js';
+import { ExitCode } from '@src/types.js';
+import { getCliArguments } from '@utils/getCliArguments.js';
 
 try {
-  const { values } = parseArgs({
-    allowPositionals: false,
-    strict: true,
-    tokens: true,
-    options: {
-      package: {
-        type: 'string',
-        short: 'p',
-        default: join(process.cwd(), 'package.json'),
-      },
-      concurrency: {
-        type: 'string',
-        short: 'c',
-      },
-      // Stop processing at the first error.
-      bail: {
-        type: 'boolean',
-        short: 'b',
-        // Fail quickly if running in a CI service.
-        default: process.env.CI === 'true',
-      },
-      // Run syntax check
-      check: {
-        type: 'boolean',
-        default: false,
-        short: 's',
-      },
-      // Attempt to `import()` or `require()` the module.
-      verify: {
-        type: 'boolean',
-        default: false,
-        short: 'v',
-      },
-      logLevel: {
-        type: 'string',
-        short: 'l',
-        default: (process.env.RUNNER_DEBUG === '1' ? 'debug' : 'info') satisfies LogLevelName,
-      },
-    },
+  const { json, info, packages, ...validatorOptions } = await getCliArguments();
+
+  const results: Result[] = [];
+
+  const handleResult = (result: Result): void => {
+    results.push(result);
+
+    if (!json && (info || result.code === ResultCode.Error)) {
+      console.log(result.toString());
+    }
+  };
+
+  const controller = new AbortController();
+
+  setMaxListeners(100, controller.signal);
+
+  // Create a `Validator` for each `package.json`
+  const validators = packages.map(path => {
+    const validator = new Validator({
+      ...validatorOptions,
+      package: path,
+      controller,
+    });
+
+    validator.on('result', handleResult);
+
+    return validator;
   });
 
-  assert(values.package, 'Package not defined');
+  try {
+    // Sequentially process each `package.json` file.
+    for (const validator of validators) {
+      await validator.run();
+    }
+  } catch (error) {
+    if (error instanceof Error && error.name !== 'AbortError') {
+      throw error;
+    }
+  }
 
-  process.exitCode = await new Validator(
-    {
-      package: resolve(values.package),
-      concurrency: parseConcurrency(values.concurrency),
-      bail: Boolean(values.bail),
-      check: Boolean(values.check),
-      verify: Boolean(values.verify),
-    },
-    new Logger(
-      {
-        stdout: process.stdout,
-        stderr: process.stderr,
-        inspectOptions: {
-          depth: null,
-        },
-      },
-      values.logLevel,
-    ),
-  ).run();
+  // Check if any of the results have an error code.
+  process.exitCode = results.reduce<ExitCode>((code, result) => {
+    if (result.code === ResultCode.Error) {
+      return ExitCode.Error;
+    }
+
+    return code;
+  }, ExitCode.Ok);
+
+  if (json) {
+    process.stdout.write(
+      JSON.stringify(
+        results.filter(result => info || result.code === ResultCode.Error),
+        null,
+        2,
+      ),
+    );
+  }
 } catch (error) {
-  console.dir(error, { depth: null });
+  console.group(process.env.npm_package_name);
+  console.error(error);
+  console.groupEnd();
 
   process.exitCode ??= ExitCode.Error;
 }

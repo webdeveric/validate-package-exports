@@ -1,8 +1,11 @@
-import type { EntryPoint, PackageJson } from '@src/types.js';
+import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { createEntryPoint } from './createEntryPoint.js';
 
-export function* getEntryPointsFromTypes(packageJson: PackageJson, packageDirectory: string): Generator<EntryPoint> {
+export function* getEntryPointsFromTypes(
+  packageJson: PackageJson,
+  packageContext: PackageContext,
+): Generator<EntryPoint> {
   const typesProperty = 'types' in packageJson ? 'types' : 'typings' in packageJson ? 'typings' : undefined;
 
   if (typesProperty) {
@@ -13,9 +16,7 @@ export function* getEntryPointsFromTypes(packageJson: PackageJson, packageDirect
         condition: 'types',
         itemPath: [typesProperty],
         modulePath: types,
-        packageDirectory,
-        packageName: packageJson.name,
-        packageType: packageJson.type,
+        packageContext,
         subpath: undefined,
       });
     }

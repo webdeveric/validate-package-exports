@@ -3,7 +3,6 @@ import type { UnknownRecord } from '@webdeveric/utils/types/records';
 export enum ExitCode {
   Ok = 0,
   Error,
-  UnableToVerify,
 }
 
 export type LogLevelName = 'emergency' | 'alert' | 'critical' | 'error' | 'warning' | 'notice' | 'info' | 'debug';
@@ -33,12 +32,19 @@ export const logLevelMapping: Record<LogLevelName, LogLevel> = {
   debug: LogLevel.Debug,
 };
 
-export type ValidatePackageExportsOptions = {
-  package: string;
+export type CliArguments = {
+  packages: string[];
   bail: boolean;
   check: boolean;
   verify: boolean;
   concurrency: number;
+  json: boolean;
+  info: boolean;
+};
+
+export type ValidatorOptions = Pick<CliArguments, 'bail' | 'check' | 'verify' | 'concurrency'> & {
+  package: string;
+  controller: AbortController;
 };
 
 export type MaybeUndefined<Type> = Type extends UnknownRecord
@@ -125,7 +131,15 @@ export type PackageJson = {
 
 export type ItemPath = (string | number)[];
 
+export type PackageContext = Readonly<{
+  name: string;
+  type: PackageType;
+  path: string;
+  directory: string;
+}>;
+
 export type EntryPoint = {
+  packagePath: PackageContext['path'];
   // bin scripts will not have this
   moduleName: string | undefined; // This is string used with `require` or `import`.
   type: PackageType;
@@ -142,28 +156,3 @@ export type ResolvedEntryPoint = EntryPoint & {
   realResolvedPath: string;
   realDirectory: string;
 };
-
-export type ResultName = 'check-syntax' | 'file-exists' | 'require' | 'import';
-
-export const enum ResultCode {
-  Success,
-  Error,
-  Skip,
-}
-
-export type GoodResult = {
-  code: ResultCode.Success | ResultCode.Skip;
-  entryPoint: EntryPoint;
-  message: string;
-  name: ResultName;
-};
-
-export type BadResult = {
-  code: ResultCode.Error;
-  entryPoint: EntryPoint;
-  error: Error;
-  message: string;
-  name: ResultName;
-};
-
-export type Result = GoodResult | BadResult;
