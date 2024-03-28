@@ -25,8 +25,8 @@ describe('ExportsProcessor', () => {
       const packageContext: PackageContext = {
         name: demoPackageJson.name,
         type: demoPackageJson.type as PackageType,
-        path: '/tmp/package.json',
-        directory: '/tmp',
+        path: resolve('/tmp/package.json'),
+        directory: resolve('/tmp'),
       };
 
       expect(
@@ -52,8 +52,8 @@ describe('ExportsProcessor', () => {
       const packageContext: PackageContext = {
         name: demoPackageJson.name,
         type: demoPackageJson.type,
-        path: '/tmp/package.json',
-        directory: '/tmp',
+        path: resolve('/tmp/package.json'),
+        directory: resolve('/tmp'),
       };
 
       expect(
@@ -87,8 +87,8 @@ describe('ExportsProcessor', () => {
       const packageContext: PackageContext = {
         name: demoPackageJson.name,
         type: demoPackageJson.type,
-        path: '/tmp/package.json',
-        directory: '/tmp',
+        path: resolve('/tmp/package.json'),
+        directory: resolve('/tmp'),
       };
 
       const entryPoints = new ExportsProcessor().process(
@@ -106,7 +106,7 @@ describe('ExportsProcessor', () => {
           type: demoPackageJson.type,
           packageContext,
           moduleName: demoPackageJson.name,
-          relativePath: fixSlash('index.js'),
+          relativePath: 'index.js',
           resolvedPath: resolve('/tmp/index.js'),
           fileName: 'index.js',
           directory: resolve('/tmp'),
@@ -117,7 +117,7 @@ describe('ExportsProcessor', () => {
           type: demoPackageJson.type,
           packageContext,
           moduleName: demoPackageJson.name,
-          relativePath: fixSlash('index.js'),
+          relativePath: 'index.js',
           resolvedPath: resolve('/tmp/index.js'),
           fileName: 'index.js',
           directory: resolve('/tmp'),
@@ -129,7 +129,7 @@ describe('ExportsProcessor', () => {
           type: demoPackageJson.type,
           packageContext,
           moduleName: `${demoPackageJson.name}/package.json`,
-          relativePath: fixSlash('package.json'),
+          relativePath: 'package.json',
           resolvedPath: resolve('/tmp/package.json'),
           fileName: 'package.json',
           directory: resolve('/tmp'),
@@ -155,8 +155,8 @@ describe('ExportsProcessor', () => {
       const packageContext: PackageContext = {
         name: demoPackageJson.name,
         type: demoPackageJson.type,
-        path: '/tmp/package.json',
-        directory: '/tmp',
+        path: resolve('/tmp/package.json'),
+        directory: resolve('/tmp'),
       };
 
       const entryPoints = new ExportsProcessor().process(
@@ -173,9 +173,9 @@ describe('ExportsProcessor', () => {
           packageContext,
           type: 'commonjs',
           fileName: 'index.d.ts',
-          relativePath: 'dist/types/index.d.ts',
-          directory: '/tmp/dist/types',
-          resolvedPath: '/tmp/dist/types/index.d.ts',
+          relativePath: fixSlash('dist/types/index.d.ts'),
+          directory: resolve('/tmp/dist/types'),
+          resolvedPath: resolve('/tmp/dist/types/index.d.ts'),
           subpath: '.',
           condition: 'types',
           itemPath: ['exports', 'types'],
@@ -185,9 +185,9 @@ describe('ExportsProcessor', () => {
           packageContext,
           type: 'commonjs',
           fileName: 'index.js',
-          relativePath: 'dist/cjs/index.js',
-          directory: '/tmp/dist/cjs',
-          resolvedPath: '/tmp/dist/cjs/index.js',
+          relativePath: fixSlash('dist/cjs/index.js'),
+          directory: resolve('/tmp/dist/cjs'),
+          resolvedPath: resolve('/tmp/dist/cjs/index.js'),
           subpath: '.',
           condition: 'require',
           itemPath: ['exports', 'require'],
@@ -197,9 +197,9 @@ describe('ExportsProcessor', () => {
           packageContext,
           type: 'module',
           fileName: 'index.js',
-          relativePath: 'dist/mjs/index.js',
-          directory: '/tmp/dist/mjs',
-          resolvedPath: '/tmp/dist/mjs/index.js',
+          relativePath: fixSlash('dist/mjs/index.js'),
+          directory: resolve('/tmp/dist/mjs'),
+          resolvedPath: resolve('/tmp/dist/mjs/index.js'),
           subpath: '.',
           condition: 'import',
           itemPath: ['exports', 'import'],
@@ -240,8 +240,8 @@ describe('ExportsProcessor', () => {
       const packageContext: PackageContext = {
         name: demoPackageJson.name,
         type: demoPackageJson.type,
-        path: '/tmp/package.json',
-        directory: '/tmp',
+        path: resolve('/tmp/package.json'),
+        directory: resolve('/tmp'),
       };
 
       const entryPoints = new ExportsProcessor().process(
