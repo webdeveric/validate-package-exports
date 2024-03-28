@@ -1,9 +1,12 @@
-import type { EntryPoint, PackageJson } from '@src/types.js';
+import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 import { isPackageBrowserRecord } from '@utils/type-predicate.js';
 
 import { createEntryPoint } from './createEntryPoint.js';
 
-export function* getEntryPointsFromBrowser(packageJson: PackageJson, packageDirectory: string): Generator<EntryPoint> {
+export function* getEntryPointsFromBrowser(
+  packageJson: PackageJson,
+  packageContext: PackageContext,
+): Generator<EntryPoint> {
   if (packageJson.browser) {
     if (isPackageBrowserRecord(packageJson.browser)) {
       const entries = Object.entries(packageJson.browser).filter(
@@ -15,9 +18,7 @@ export function* getEntryPointsFromBrowser(packageJson: PackageJson, packageDire
           condition: undefined,
           itemPath: ['browser', key],
           modulePath: value,
-          packageDirectory,
-          packageName: packageJson.name,
-          packageType: packageJson.type,
+          packageContext,
           subpath: undefined,
         });
       }
@@ -29,9 +30,7 @@ export function* getEntryPointsFromBrowser(packageJson: PackageJson, packageDire
       condition: undefined,
       itemPath: ['browser'],
       modulePath: packageJson.browser,
-      packageDirectory,
-      packageName: packageJson.name,
-      packageType: packageJson.type,
+      packageContext,
       subpath: undefined,
     });
   }

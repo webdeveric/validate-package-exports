@@ -14,7 +14,12 @@ describe('getEntryPointsFromExports()', () => {
             version: '123.456.789',
             exports: null,
           },
-          '/tmp',
+          {
+            name: 'example',
+            type: 'commonjs',
+            path: '/tmp/package.json',
+            directory: '/tmp',
+          },
         ),
       ).toArray();
 
@@ -37,7 +42,12 @@ describe('getEntryPointsFromExports()', () => {
               './package.json': './package.json',
             },
           },
-          '/tmp',
+          {
+            name: 'example',
+            type: 'commonjs',
+            path: '/tmp/package.json',
+            directory: '/tmp',
+          },
         ),
       ).toArray();
 
