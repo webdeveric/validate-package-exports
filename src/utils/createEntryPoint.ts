@@ -25,7 +25,7 @@ export function createEntryPoint({
 
   return {
     moduleName: subpath ? getModuleName(packageContext.name, subpath) : undefined,
-    packageContext,
+    packagePath: packageContext.path,
     type: getModuleType(modulePath, packageContext.type, condition),
     fileName: basename(resolvedPath),
     relativePath: relative(packageContext.directory, resolvedPath),

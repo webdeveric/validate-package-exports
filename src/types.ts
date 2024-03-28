@@ -42,7 +42,10 @@ export type CliArguments = {
   info: boolean;
 };
 
-export type ValidatorOptions = Pick<CliArguments, 'bail' | 'check' | 'verify' | 'concurrency'> & { package: string };
+export type ValidatorOptions = Pick<CliArguments, 'bail' | 'check' | 'verify' | 'concurrency'> & {
+  package: string;
+  controller: AbortController;
+};
 
 export type MaybeUndefined<Type> = Type extends UnknownRecord
   ? {
@@ -136,7 +139,7 @@ export type PackageContext = Readonly<{
 }>;
 
 export type EntryPoint = {
-  packageContext: PackageContext;
+  packagePath: PackageContext['path'];
   // bin scripts will not have this
   moduleName: string | undefined; // This is string used with `require` or `import`.
   type: PackageType;
