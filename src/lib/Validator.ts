@@ -1,4 +1,4 @@
-import { setMaxListeners, EventEmitter } from 'node:events';
+import { EventEmitter } from 'node:events';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 
@@ -29,9 +29,7 @@ export class Validator extends EventEmitter {
 
     this.#exitCode = ExitCode.Ok;
 
-    this.#controller = new AbortController();
-
-    setMaxListeners(100, this.#controller.signal);
+    this.#controller = options.controller;
   }
 
   protected processResult(result: Result): void {

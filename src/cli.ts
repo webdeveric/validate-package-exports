@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { setMaxListeners } from 'node:events';
+
 import { ResultCode, type Result } from '@lib/Result.js';
 import { Validator } from '@lib/Validator.js';
 import { ExitCode } from '@src/types.js';
@@ -18,11 +20,16 @@ try {
     }
   };
 
+  const controller = new AbortController();
+
+  setMaxListeners(100, controller.signal);
+
   // Create a `Validator` for each `package.json`
   const validators = packages.map(path => {
     const validator = new Validator({
       ...validatorOptions,
       package: path,
+      controller,
     });
 
     validator.on('result', handleResult);
@@ -30,9 +37,15 @@ try {
     return validator;
   });
 
-  // Sequentially process each `package.json` file.
-  for (const validator of validators) {
-    await validator.run();
+  try {
+    // Sequentially process each `package.json` file.
+    for (const validator of validators) {
+      await validator.run();
+    }
+  } catch (error) {
+    if (error instanceof Error && error.name !== 'AbortError') {
+      throw error;
+    }
   }
 
   // Check if any of the results have an error code.
