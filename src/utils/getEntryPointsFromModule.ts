@@ -12,7 +12,7 @@ export function* getEntryPointsFromModule(
       itemPath: ['module'],
       modulePath: packageJson.module,
       packageContext,
-      subpath: '.',
+      subpath: undefined,
     });
   }
 }

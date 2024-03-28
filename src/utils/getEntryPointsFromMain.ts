@@ -12,7 +12,7 @@ export function* getEntryPointsFromMain(
       itemPath: ['main'],
       modulePath: packageJson.main,
       packageContext,
-      subpath: '.',
+      subpath: undefined,
     });
   }
 }
