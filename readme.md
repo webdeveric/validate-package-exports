@@ -20,16 +20,24 @@ yarn add validate-package-exports -D
 
 ## Options
 
-| Flag | Description | Default value | Required |
-| --- | --- | --- | --- |
-| `--package` / `-p` | Path to `package.json` file | `[cwd]/package.json` | :white_check_mark: |
-| `--check` / `-s` | Check syntax of JS files | `false` |  |
-| `--verify` / `-v` | Verify a module can be imported or required | `false` |  |
-| `--concurrency` / `-c` | Concurrency | `availableParallelism()` |  |
-| `--bail` / `-b` | Bail | `process.env.CI === 'true'` |  |
-| `--logLevel` / `-l` | Log level | `info` |  |
+| Flag | Description | Default value |
+| --- | --- | --- |
+| `--check` / `-s` | Check syntax of JS files | `false` |
+| `--verify` / `-v` | Verify a module can be imported or required | `false` |
+| `--concurrency` / `-c` | Concurrency | `availableParallelism()` |
+| `--bail` / `-b` | Bail | `process.env.CI === 'true'` |
+| `--info` / `-j` | Show `info` messages.<br>The default behavior is to only show `error`. | `process.env.RUNNER_DEBUG === '1'` |
+| `--json` / `-j` | Use JSON output | `false` |
 
-## Recommended usage
+## Usage
+
+```sh
+validate-package-exports [FILE]... [options]
+```
+
+:information_source: If you do not provide a path to a `package.json`, it will try to find one in the current directory.
+
+### Package scripts examples
 
 ```json
 {
@@ -48,6 +56,12 @@ OR
     "prepublishOnly": "validate-package-exports --check --verify"
   }
 }
+```
+
+### Using `npx`
+
+```shell
+npx --yes validate-package-exports ./path/to/package.json --check --verify
 ```
 
 ## Local development
