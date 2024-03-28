@@ -1,4 +1,5 @@
-import { type EntryPoint, type Result, ResultCode } from '@src/types.js';
+import { Result, ResultCode } from '@lib/Result.js';
+import type { EntryPoint } from '@src/types.js';
 
 import { execRequire } from './execRequire.js';
 
@@ -9,27 +10,27 @@ export async function checkRequire(entryPoint: EntryPoint, options: ExecOptions)
     if (typeof entryPoint.moduleName === 'string') {
       await execRequire(entryPoint.moduleName, options);
 
-      return {
+      return new Result({
         code: ResultCode.Success,
         entryPoint,
-        message: entryPoint.moduleName,
+        message: `"${entryPoint.moduleName}" works with require`,
         name: 'require',
-      };
+      });
     }
 
-    return {
+    return new Result({
       code: ResultCode.Skip,
       entryPoint,
       message: `Require skipped: ${entryPoint.itemPath.join('.')}`,
       name: 'require',
-    };
+    });
   } catch (error) {
-    return {
+    return new Result({
       code: ResultCode.Error,
       entryPoint,
       error: error instanceof Error ? error : new Error(String(error)),
       message: `${entryPoint.moduleName ?? entryPoint.itemPath.join('.')} cannot be required`,
       name: 'require',
-    };
+    });
   }
 }
