@@ -30,7 +30,9 @@ export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<
     return star;
   };
 
-  const dir = await opendir(entryPoint.directory);
+  const dir = await opendir(entryPoint.directory, {
+    recursive: true,
+  });
 
   for await (const item of dir) {
     if (item.isFile() && (typeof suffix == 'undefined' || item.name.endsWith(suffix))) {
