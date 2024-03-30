@@ -48,51 +48,71 @@ export class Validator extends EventEmitter {
     [results].flat().forEach(result => this.processResult(result));
   }
 
-  protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<void> {
-    await Readable.from(entryPoints).forEach(
-      async (entryPoint: EntryPoint) => {
-        const results = await checkFileExists(entryPoint);
+  protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<Result[]> {
+    return await Readable.from(entryPoints)
+      .map(
+        async (entryPoint: EntryPoint) => {
+          const results = await checkFileExists(entryPoint);
 
-        this.processResults(results);
-      },
-      {
+          this.processResults(results);
+
+          return results;
+        },
+        {
+          signal: this.#controller.signal,
+          concurrency: this.options.concurrency,
+        },
+      )
+      .toArray({
         signal: this.#controller.signal,
-        concurrency: this.options.concurrency,
-      },
-    );
+      });
   }
 
-  protected async checkSyntax(entryPoints: EntryPoint[]): Promise<void> {
+  protected async checkSyntax(entryPoints: EntryPoint[]): Promise<Result[]> {
     const jsEntryPoints = entryPoints.filter(entryPoint => /\.[cm]?js$/i.test(entryPoint.resolvedPath));
 
-    await Readable.from(jsEntryPoints).forEach(
-      async (entryPoint: EntryPoint) => {
-        const results = await checkSyntax(entryPoint, { signal: this.#controller.signal });
+    return await Readable.from(jsEntryPoints)
+      .map(
+        async (entryPoint: EntryPoint) => {
+          const results = await checkSyntax(entryPoint, { signal: this.#controller.signal });
 
-        this.processResults(results);
-      },
-      {
+          this.processResults(results);
+
+          return results;
+        },
+        {
+          signal: this.#controller.signal,
+          concurrency: this.options.concurrency,
+        },
+      )
+      .toArray({
         signal: this.#controller.signal,
-        concurrency: this.options.concurrency,
-      },
-    );
+      });
   }
 
-  protected async verifyIncludes(entryPoints: EntryPoint[]): Promise<void> {
-    await Readable.from(entryPoints).forEach(
-      async (entryPoint: EntryPoint) => {
-        const results = await verifyEntryPoint(entryPoint, {
-          cwd: this.packageDirectory,
-          signal: this.#controller.signal,
-        });
+  protected async verifyIncludes(entryPoints: EntryPoint[]): Promise<Result[]> {
+    return (
+      await Readable.from(entryPoints)
+        .map(
+          async (entryPoint: EntryPoint) => {
+            const results = await verifyEntryPoint(entryPoint, {
+              cwd: this.packageDirectory,
+              signal: this.#controller.signal,
+            });
 
-        this.processResults(results);
-      },
-      {
-        signal: this.#controller.signal,
-        concurrency: this.options.concurrency,
-      },
-    );
+            this.processResults(results);
+
+            return results;
+          },
+          {
+            signal: this.#controller.signal,
+            concurrency: this.options.concurrency,
+          },
+        )
+        .toArray({
+          signal: this.#controller.signal,
+        })
+    ).flat();
   }
 
   async run(): Promise<ExitCode> {
@@ -111,18 +131,34 @@ export class Validator extends EventEmitter {
       signal: this.#controller.signal,
     });
 
+    const entryPointsWithErrors = new Set<EntryPoint>();
+
+    const processResults = (results: Result[]): void => {
+      results.forEach(result => {
+        if (result.code === ResultCode.Error) {
+          entryPointsWithErrors.add(result.entryPoint);
+        }
+      });
+    };
+
+    const getNextEntryPoints = (entryPoints: EntryPoint[]): EntryPoint[] => {
+      return entryPoints.filter(entryPoint => !entryPointsWithErrors.has(entryPoint));
+    };
+
     // Always check to see if the file exists.
-    await this.checkFilesExist(entryPoints);
+    processResults(await this.checkFilesExist(entryPoints));
 
     // Optionally run a syntax check.
     if (this.options.check) {
-      await this.checkSyntax(entryPoints);
+      processResults(await this.checkSyntax(getNextEntryPoints(entryPoints)));
     }
 
     // Optionally try to `import`/`require` the module.
     if (this.options.verify) {
-      await this.verifyIncludes(entryPoints);
+      processResults(await this.verifyIncludes(getNextEntryPoints(entryPoints)));
     }
+
+    // TODO: maybe do some reporting using `entryPointsWithErrors`
 
     return this.#exitCode;
   }
