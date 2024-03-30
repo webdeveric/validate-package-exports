@@ -52,7 +52,7 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "devDependencies": {
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.2",
     "@vitest/coverage-v8": "^1.4.0",
     "@webdeveric/eslint-config-ts": "^0.7.1",
     "@webdeveric/prettier-config": "^0.2.0",
