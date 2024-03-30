@@ -8,6 +8,7 @@ export function* getEntryPointsFromModule(
 ): Generator<EntryPoint> {
   if (packageJson.module) {
     yield createEntryPoint({
+      moduleName: packageContext.name,
       condition: undefined,
       itemPath: ['module'],
       modulePath: packageJson.module,
