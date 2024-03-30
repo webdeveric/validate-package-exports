@@ -1,25 +1,11 @@
-import { stat } from 'node:fs/promises';
-import { basename, join, resolve } from 'node:path';
+import { join } from 'node:path';
 import { Readable } from 'node:stream';
 import { parseArgs, type ParseArgsConfig } from 'node:util';
 
 import type { CliArguments } from '@src/types.js';
 
 import { parseConcurrency } from './parseConcurrency.js';
-
-async function resolvePackageJson(input: string): Promise<string> {
-  const stats = await stat(input);
-
-  if (stats.isDirectory()) {
-    return await resolvePackageJson(join(input, 'package.json'));
-  }
-
-  if (stats.isFile() && basename(input) === 'package.json') {
-    return resolve(input);
-  }
-
-  throw new Error(`Unable to resolve package.json from ${input}`);
-}
+import { resolvePackageJson } from './resolvePackageJson.js';
 
 export async function getCliArguments(): Promise<CliArguments> {
   const config = {
