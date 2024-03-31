@@ -1,7 +1,12 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { isObject, isOptionalString, isString, isStringArray, isStringRecord } from '@webdeveric/utils/type-predicate';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { createStringMatchingPredicate, everyItem, maybeUndefined } from '@webdeveric/utils/type-predicate-factory';
+/* eslint-disable import/no-extraneous-dependencies */
+import { isObject } from '@webdeveric/utils/predicate/isObject';
+import { isOptionalString } from '@webdeveric/utils/predicate/isOptionalString';
+import { isString } from '@webdeveric/utils/predicate/isString';
+import { isStringArray } from '@webdeveric/utils/predicate/isStringArray';
+import { isStringRecord } from '@webdeveric/utils/predicate/isStringRecord';
+import { createStringMatchingPredicate } from '@webdeveric/utils/predicate-factory/createStringMatchingPredicate';
+import { everyItem } from '@webdeveric/utils/predicate-factory/everyItem';
+import { maybeUndefined } from '@webdeveric/utils/predicate-factory/maybeUndefined';
 
 import {
   logLevelMapping,
