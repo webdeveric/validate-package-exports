@@ -48,6 +48,16 @@ export async function getCliArguments(): Promise<CliArguments> {
         default: process.env.RUNNER_DEBUG === '1',
         short: 'i',
       },
+      // Turn off `bail`
+      'no-bail': {
+        type: 'boolean',
+        default: false,
+      },
+      // Turn off `info`
+      'no-info': {
+        type: 'boolean',
+        default: false,
+      },
     },
   } satisfies ParseArgsConfig;
 
@@ -57,13 +67,16 @@ export async function getCliArguments(): Promise<CliArguments> {
     .map(packagePath => resolvePackageJson(packagePath))
     .toArray();
 
+  const noBail = values['no-bail'] ?? config.options['no-bail'].default;
+  const noInfo = values['no-info'] ?? config.options['no-info'].default;
+
   return {
     packages,
     concurrency: parseConcurrency(values.concurrency),
-    bail: values.bail ?? config.options.bail.default,
+    bail: noBail ? false : values.bail ?? config.options.bail.default,
     check: values.check ?? config.options.check.default,
     verify: values.verify ?? config.options.verify.default,
     json: values.json ?? config.options.verify.default,
-    info: values.info ?? config.options.info.default,
+    info: noInfo ? false : values.info ?? config.options.info.default,
   };
 }
