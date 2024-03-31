@@ -18,8 +18,8 @@ devDependencies:
     specifier: ^0.2.0
     version: 0.2.0(prettier@3.2.5)
   '@webdeveric/utils':
-    specifier: ^0.29.1
-    version: 0.29.1
+    specifier: ^0.30.0
+    version: 0.30.0
   cross-env:
     specifier: ^7.0.3
     version: 7.0.3
@@ -1122,8 +1122,8 @@ packages:
       prettier: 3.2.5
     dev: true
 
-  /@webdeveric/utils@0.29.1:
-    resolution: {integrity: sha512-vumnX4SmEirO8Do1gBnL8MDnmkvDPhXkwGG4Se//OAVqq4HsaSi6vhBz6F/RFGM9KASAxNBkXuCzHkjsY+oiEQ==}
+  /@webdeveric/utils@0.30.0:
+    resolution: {integrity: sha512-2lM2//bKrRx7tgWgTyJDAUVxocw6vb1H8/pq4mRKxUlZIW6cLIR455joYALuLM7e7wyjC9Tk7dtRz9UT3q8ijg==}
     engines: {node: '>=18.0.0'}
     dependencies:
       lodash.clonedeep: 4.5.0
