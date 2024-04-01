@@ -1,4 +1,7 @@
+import type { Branded } from '@webdeveric/utils/types/branded';
 import type { UnknownRecord } from '@webdeveric/utils/types/records';
+
+export type PackageJsonPath = Branded<string, 'package.json'>;
 
 export enum ExitCode {
   Ok = 0,
@@ -43,7 +46,7 @@ export type CliArguments = {
 };
 
 export type ValidatorOptions = Pick<CliArguments, 'bail' | 'check' | 'verify' | 'concurrency'> & {
-  package: string;
+  package: PackageJsonPath;
   controller: AbortController;
 };
 
