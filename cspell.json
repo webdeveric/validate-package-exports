@@ -4,6 +4,7 @@
     "cli",
     "CODEOWNERS",
     "corepack",
+    "env",
     "nvmrc",
     "outdir",
     "Positionals",

@@ -7,9 +7,9 @@ import { getCliArguments } from './getCliArguments.js';
 describe('getCliArguments()', () => {
   it('Returns CliArguments', () => {
     expect(getCliArguments([])).toEqual({
-      bail: false,
+      bail: process.env.CI === 'true',
       check: false,
-      info: false,
+      info: process.env.RUNNER_DEBUG === '1',
       json: false,
       verify: false,
       concurrency: availableParallelism(),
