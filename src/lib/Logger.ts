@@ -84,7 +84,7 @@ export class Logger extends Console implements LogLevelMethods {
 
   override debug(...args: Parameters<Console['debug']>): void {
     if (this.#logLevel >= LogLevel.Debug) {
-      super.info(...args);
+      super.debug(...args);
     }
   }
 }
