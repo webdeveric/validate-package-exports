@@ -1,14 +1,20 @@
 #!/usr/bin/env node
 
 import { setMaxListeners } from 'node:events';
+import { Readable } from 'node:stream';
 
 import { ResultCode, type Result } from '@lib/Result.js';
 import { Validator } from '@lib/Validator.js';
-import { ExitCode } from '@src/types.js';
+import { ExitCode, type PackageJsonPath } from '@src/types.js';
 import { getCliArguments } from '@utils/getCliArguments.js';
+import { resolvePackageJson } from '@utils/resolvePackageJson.js';
 
 try {
-  const { json, info, packages, ...validatorOptions } = await getCliArguments();
+  const { json, info, packages, ...options } = getCliArguments();
+
+  const resolvedPackages: PackageJsonPath[] = await Readable.from(packages)
+    .map(packagePath => resolvePackageJson(packagePath), { concurrency: options.concurrency })
+    .toArray();
 
   const results: Result[] = [];
 
@@ -25,9 +31,9 @@ try {
   setMaxListeners(100, controller.signal);
 
   // Create a `Validator` for each `package.json`
-  const validators = packages.map(path => {
+  const validators = resolvedPackages.map(path => {
     const validator = new Validator({
-      ...validatorOptions,
+      ...options,
       package: path,
       controller,
     });
