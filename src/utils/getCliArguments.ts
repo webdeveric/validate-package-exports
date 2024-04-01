@@ -1,14 +1,13 @@
-import { join } from 'node:path';
-import { Readable } from 'node:stream';
 import { parseArgs, type ParseArgsConfig } from 'node:util';
 
 import type { CliArguments } from '@src/types.js';
 
 import { parseConcurrency } from './parseConcurrency.js';
-import { resolvePackageJson } from './resolvePackageJson.js';
 
-export async function getCliArguments(): Promise<CliArguments> {
+export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
   const config = {
+    // Allow passing in `args` for testing.
+    args,
     allowPositionals: true,
     strict: true,
     tokens: false,
@@ -63,15 +62,11 @@ export async function getCliArguments(): Promise<CliArguments> {
 
   const { values, positionals } = parseArgs(config);
 
-  const packages = await Readable.from(positionals.length ? positionals : [join(process.cwd(), 'package.json')])
-    .map(packagePath => resolvePackageJson(packagePath))
-    .toArray();
-
   const noBail = values['no-bail'] ?? config.options['no-bail'].default;
   const noInfo = values['no-info'] ?? config.options['no-info'].default;
 
   return {
-    packages,
+    packages: positionals.length ? positionals : ['./package.json'],
     concurrency: parseConcurrency(values.concurrency),
     bail: noBail ? false : values.bail ?? config.options.bail.default,
     check: values.check ?? config.options.check.default,
