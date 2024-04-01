@@ -43,6 +43,12 @@ describe('Logger', () => {
     });
   });
 
+  it('willLog()', () => {
+    expect(new Logger(options, LogLevel.Emergency).willLog(LogLevel.Emergency)).toBeTruthy();
+
+    expect(new Logger(options, LogLevel.Info).willLog(LogLevel.Debug)).toBeFalsy();
+  });
+
   describe('Log level specific methods', () => {
     let logger: Logger;
     let outputs: unknown[];
@@ -65,6 +71,51 @@ describe('Logger', () => {
       });
     });
 
+    it.each([
+      LogLevel.Emergency,
+      LogLevel.Alert,
+      LogLevel.Critical,
+      LogLevel.Error,
+      LogLevel.Warning,
+      LogLevel.Notice,
+      LogLevel.Info,
+      LogLevel.Debug,
+    ])('emergency() logs for LogLevel: %d', logLevel => {
+      logger.logLevel = logLevel;
+
+      logger.emergency('test');
+
+      expect(outputs).toHaveLength(1);
+    });
+
+    it('alert() is only used when level >= LogLevel.Alert', () => {
+      logger.logLevel = LogLevel.Emergency;
+
+      logger.alert('test');
+
+      expect(outputs).toHaveLength(0);
+
+      logger.logLevel = LogLevel.Alert;
+
+      logger.alert('test');
+
+      expect(outputs).toHaveLength(1);
+    });
+
+    it('critical() is only used when level >= LogLevel.Critical', () => {
+      logger.logLevel = LogLevel.Alert;
+
+      logger.critical('test');
+
+      expect(outputs).toHaveLength(0);
+
+      logger.logLevel = LogLevel.Critical;
+
+      logger.critical('test');
+
+      expect(outputs).toHaveLength(1);
+    });
+
     it('error() is only used when level >= LogLevel.Error', () => {
       logger.logLevel = LogLevel.Critical;
 
@@ -79,16 +130,33 @@ describe('Logger', () => {
       expect(outputs).toHaveLength(1);
     });
 
-    it('warn() is only used when level >= LogLevel.Warning', () => {
+    it.each(['warn', 'warning'] satisfies (keyof Logger)[])(
+      'warn() is only used when level >= LogLevel.Warning',
+      method => {
+        logger.logLevel = LogLevel.Critical;
+
+        logger[method]('test');
+
+        expect(outputs).toHaveLength(0);
+
+        logger.logLevel = LogLevel.Warning;
+
+        logger[method]('test');
+
+        expect(outputs).toHaveLength(1);
+      },
+    );
+
+    it('notice() is only used when level >= LogLevel.Notice', () => {
       logger.logLevel = LogLevel.Critical;
 
-      logger.warn('test');
+      logger.notice('test');
 
       expect(outputs).toHaveLength(0);
 
-      logger.logLevel = LogLevel.Warning;
+      logger.logLevel = LogLevel.Notice;
 
-      logger.warn('test');
+      logger.notice('test');
 
       expect(outputs).toHaveLength(1);
     });
