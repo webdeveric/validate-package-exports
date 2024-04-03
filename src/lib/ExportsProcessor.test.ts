@@ -1,14 +1,11 @@
-import { resolve, sep } from 'node:path';
+import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
 import type { EntryPoint, PackageContext, PackageExports, PackageJson, PackageType } from '@src/types.js';
+import { fixSlash } from '@utils/fixSlash.js';
 
 import { ExportsProcessor } from './ExportsProcessor.js';
-
-function fixSlash(input: string): string {
-  return input.replaceAll('/', sep);
-}
 
 describe('ExportsProcessor', () => {
   describe('Gets EntryPoint[] from package.json exports', () => {
