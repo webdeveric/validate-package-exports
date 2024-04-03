@@ -1,9 +1,9 @@
 import { opendir } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { createEntryPoint } from './createEntryPoint.js';
-import { resolveDirent } from './resolveDirent.js';
 
 export async function* getEntryPointsFromBinDirectory(
   packageJson: PackageJson,
@@ -17,7 +17,7 @@ export async function* getEntryPointsFromBinDirectory(
         yield createEntryPoint({
           condition: undefined,
           itemPath: ['directories', 'bin'],
-          modulePath: resolveDirent(item),
+          modulePath: resolve(packageJson.directories.bin, item.name),
           packageContext,
           subpath: undefined,
         });

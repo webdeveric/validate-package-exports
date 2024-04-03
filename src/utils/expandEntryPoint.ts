@@ -1,8 +1,47 @@
 import { opendir } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import type { EntryPoint } from '@src/types.js';
 
-import { resolveDirent } from './resolveDirent.js';
+type ExpandEntryPointContext = {
+  prefix: string | undefined;
+  suffix: string | undefined;
+  prefixPattern: RegExp | undefined;
+  suffixPattern: RegExp | undefined;
+  findStar: (path: string) => string;
+};
+
+function replaceStars(entryPoint: EntryPoint, starValue: string): EntryPoint {
+  const properties = ['moduleName', 'relativePath', 'fileName', 'resolvedPath'] satisfies (keyof EntryPoint)[];
+
+  return properties.reduce((entry, property) => {
+    const value = entry[property];
+
+    if (value) {
+      entry[property] = value.replace('*', starValue);
+    }
+
+    return entry;
+  }, structuredClone(entryPoint));
+}
+
+async function* processDirectory(
+  directory: string,
+  entryPoint: EntryPoint,
+  context: ExpandEntryPointContext,
+): AsyncGenerator<EntryPoint> {
+  const dir = await opendir(directory);
+
+  for await (const item of dir) {
+    const resolvedPath = resolve(directory, item.name);
+
+    if (item.isDirectory()) {
+      yield* processDirectory(resolvedPath, entryPoint, context);
+    } else if (item.isFile() && (typeof context.suffix === 'undefined' || item.name.endsWith(context.suffix))) {
+      yield replaceStars(entryPoint, context.findStar(resolvedPath));
+    }
+  }
+}
 
 export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<EntryPoint> {
   if (!entryPoint.resolvedPath.includes('*')) {
@@ -12,41 +51,26 @@ export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<
   }
 
   const [prefix, suffix] = entryPoint.resolvedPath.split('*');
-  const prefixPattern = prefix ? new RegExp(`^${prefix}`, 'i') : undefined;
-  const suffixPattern = suffix ? new RegExp(`${suffix}$`, 'i') : undefined;
-  const properties = ['moduleName', 'relativePath', 'fileName', 'resolvedPath'] satisfies (keyof EntryPoint)[];
 
-  const findStar = (path: string): string => {
-    let star = path;
+  const context: ExpandEntryPointContext = {
+    prefix,
+    suffix,
+    prefixPattern: prefix ? new RegExp(`^${prefix}`, 'i') : undefined,
+    suffixPattern: suffix ? new RegExp(`${suffix}$`, 'i') : undefined,
+    findStar(path: string): string {
+      let star = path;
 
-    if (prefixPattern) {
-      star = star.replace(prefixPattern, '');
-    }
+      if (this.prefixPattern) {
+        star = star.replace(this.prefixPattern, '');
+      }
 
-    if (suffixPattern) {
-      star = star.replace(suffixPattern, '');
-    }
+      if (this.suffixPattern) {
+        star = star.replace(this.suffixPattern, '');
+      }
 
-    return star;
+      return star;
+    },
   };
 
-  const dir = await opendir(entryPoint.directory, {
-    recursive: true,
-  });
-
-  for await (const item of dir) {
-    if (item.isFile() && (typeof suffix == 'undefined' || item.name.endsWith(suffix))) {
-      const star = findStar(resolveDirent(item));
-
-      yield properties.reduce((entry, property) => {
-        const value = entry[property];
-
-        if (value) {
-          entry[property] = value.replace('*', star);
-        }
-
-        return entry;
-      }, structuredClone(entryPoint));
-    }
-  }
+  yield* processDirectory(entryPoint.directory, entryPoint, context);
 }
