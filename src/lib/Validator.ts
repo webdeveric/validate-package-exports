@@ -128,7 +128,7 @@ export class Validator extends EventEmitter {
         message: willBePacked
           ? `${entryPoint.relativePath} will be packed`
           : `${entryPoint.relativePath} will not be packed`,
-        error: willBePacked ? undefined : new Error('EntryPoint path not found in packlist files'),
+        error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files'),
         entryPoint,
       });
     });
