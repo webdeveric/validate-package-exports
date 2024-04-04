@@ -1,3 +1,5 @@
+import { fixSlash } from './fixSlash.js';
+
 export async function getPacklist(directory: string): Promise<string[]> {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const Arborist = (await import('@npmcli/arborist')).default;
@@ -7,5 +9,5 @@ export async function getPacklist(directory: string): Promise<string[]> {
   const tree = await arborist.loadActual();
   const files = await packlist(tree);
 
-  return files;
+  return files.map(file => fixSlash(file));
 }
