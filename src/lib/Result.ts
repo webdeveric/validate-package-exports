@@ -1,6 +1,6 @@
 import type { EntryPoint } from '@src/types.js';
 
-export type ResultName = 'check-syntax' | 'file-exists' | 'require' | 'import';
+export type ResultName = 'check-syntax' | 'file-exists' | 'require' | 'import' | 'packlist';
 
 export const enum ResultCode {
   Success,
@@ -13,7 +13,7 @@ export type ResultDetails = {
   code: ResultCode;
   message: string;
   entryPoint: EntryPoint;
-  error?: Error;
+  error?: Error | undefined;
 };
 
 export class Result {
