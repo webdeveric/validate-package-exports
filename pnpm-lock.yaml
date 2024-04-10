@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@npmcli/arborist':
-    specifier: ^7.4.1
-    version: 7.4.1
+    specifier: ^7.4.2
+    version: 7.4.2
   '@webdeveric/utils':
     specifier: ^0.30.0
     version: 0.30.0
@@ -794,20 +794,21 @@ packages:
       - supports-color
     dev: false
 
-  /@npmcli/arborist@7.4.1:
-    resolution: {integrity: sha512-5/+bbRol8fvhyebwjqzmwjToAvTOR+k/hzAGFcGlV8k94H1PISNVyOGeSQl6MOMuxPo3BMMYVa39NZp2eNyzUQ==}
+  /@npmcli/arborist@7.4.2:
+    resolution: {integrity: sha512-13flK0DTIhG7VEmPtoKFoi+88hIjuZxuZAvnHUTthIFql1Kc51VlsMRpbJPIcDEZHaHkILwFjHRXtCUYdFWvAQ==}
     engines: {node: ^16.14.0 || >=18.0.0}
     hasBin: true
     dependencies:
       '@isaacs/string-locale-compare': 1.1.0
       '@npmcli/fs': 3.1.0
       '@npmcli/installed-package-contents': 2.0.2
-      '@npmcli/map-workspaces': 3.0.4
+      '@npmcli/map-workspaces': 3.0.6
       '@npmcli/metavuln-calculator': 7.0.0
       '@npmcli/name-from-folder': 2.0.0
       '@npmcli/node-gyp': 3.0.0
       '@npmcli/package-json': 5.0.2
       '@npmcli/query': 3.1.0
+      '@npmcli/redact': 1.1.0
       '@npmcli/run-script': 7.0.4
       bin-links: 4.0.3
       cacache: 18.0.2
@@ -869,8 +870,8 @@ packages:
       npm-normalize-package-bin: 3.0.1
     dev: false
 
-  /@npmcli/map-workspaces@3.0.4:
-    resolution: {integrity: sha512-Z0TbvXkRbacjFFLpVpV0e2mheCh+WzQpcqL+4xp49uNJOxOnIAPZyXtUxZ5Qn3QBTGKA11Exjd9a5411rBrhDg==}
+  /@npmcli/map-workspaces@3.0.6:
+    resolution: {integrity: sha512-tkYs0OYnzQm6iIRdfy+LcLBjcKuQCeE5YLb8KnrIlutJfheNaPvPpgoFEyEFgbjzl5PLZ3IA/BWAwRU0eHuQDA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/name-from-folder': 2.0.0
