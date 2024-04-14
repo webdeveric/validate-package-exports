@@ -26,7 +26,9 @@ yarn add validate-package-exports -D
 | `--verify` / `-v` | Verify a module can be imported or required | `false` |
 | `--concurrency` / `-c` | Concurrency | `availableParallelism()` |
 | `--bail` / `-b` | Stop after the first error | `process.env.CI === 'true'` |
+| `--no-bail` | Turn off `--bail` | `false` |
 | `--info` / `-i` | Show `info` messages.<br>The default behavior is to only show `error`. | `process.env.RUNNER_DEBUG === '1'` |
+| `--no-info` | Turn off `--info` | `false` |
 | `--json` / `-j` | Use JSON output | `false` |
 
 ## Usage
