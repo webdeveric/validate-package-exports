@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=18.14.0"
   },
-  "packageManager": "pnpm@8.15.6+sha256.01c01eeb990e379b31ef19c03e9d06a14afa5250b82e81303f88721c99ff2e6f",
+  "packageManager": "pnpm@8.15.7+sha256.50783dd0fa303852de2dd1557cd4b9f07cb5b018154a6e76d0f40635d6cee019",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
@@ -60,7 +60,7 @@
     "@types/node": "^20.12.7",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^5.6.5",
-    "@vitest/coverage-v8": "^1.4.0",
+    "@vitest/coverage-v8": "^1.5.0",
     "@webdeveric/eslint-config-ts": "^0.7.1",
     "@webdeveric/prettier-config": "^0.2.0",
     "cross-env": "^7.0.3",
@@ -77,6 +77,6 @@
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^1.4.0"
+    "vitest": "^1.5.0"
   }
 }
