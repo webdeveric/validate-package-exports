@@ -74,7 +74,7 @@ try {
   }
 } catch (error) {
   console.group(process.env.npm_package_name);
-  console.error(error);
+  console.dir(error, { depth: null });
   console.groupEnd();
 
   process.exitCode ??= ExitCode.Error;
