@@ -1,9 +1,10 @@
-import { relative, dirname, basename, resolve } from 'node:path';
+import { relative, dirname, basename } from 'node:path';
 
 import type { EntryPoint, ItemPath, PackageContext } from '@src/types.js';
 
 import { getModuleName } from './getModuleName.js';
 import { getModuleType } from './getModuleType.js';
+import { getResolvedPath } from './getResolvedPath.js';
 
 export type CreateEntryPointOptions = {
   moduleName?: string;
@@ -22,7 +23,7 @@ export function createEntryPoint({
   itemPath,
   condition,
 }: CreateEntryPointOptions): EntryPoint {
-  const resolvedPath = resolve(packageContext.directory, modulePath);
+  const resolvedPath = getResolvedPath(modulePath, packageContext);
 
   return {
     moduleName: moduleName ?? (subpath ? getModuleName(packageContext.name, subpath) : undefined),

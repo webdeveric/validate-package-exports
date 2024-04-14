@@ -44,6 +44,8 @@ export function isPackageType(input: unknown): input is PackageType {
   return input === 'commonjs' || input === 'module';
 }
 
+export const isOptionalPackageType = maybeUndefined(isPackageType);
+
 export const isManFile = createStringMatchingPredicate<ManFile>(/\.\d+(\.gz)?$/);
 
 export const isManFileArray = everyItem(isManFile);
@@ -71,7 +73,7 @@ export function isPackageBin(input: unknown): input is PackageBin {
   return isString(input) || isStringRecord(input);
 }
 
-// export const isRelativePath = createStringMatchingPredicate<RelativePath>(/^\.\/.+/);
+export const isOptionalPackageBin = maybeUndefined(isPackageBin);
 
 export function isRelativePath(input: unknown): input is RelativePath {
   return typeof input === 'string' && input.startsWith('./');
@@ -123,6 +125,8 @@ export function isPackageExports(input: unknown): input is PackageExports {
   return isAnyExportsEntry(input) || isSubpathExports(input);
 }
 
+export const isOptionalPackageExports = maybeUndefined(isPackageExports);
+
 export const isPackageBrowserRecord = (input: unknown): input is PackageBrowserRecord => {
   return (
     isObject(input) &&
@@ -138,6 +142,8 @@ export function isPackageBrowser(input: unknown): input is PackageBrowser {
 
 export const isOptionalPackageBrowser = maybeUndefined(isPackageBrowser);
 
+export const isOptionalStringArray = maybeUndefined(isStringArray);
+
 /**
  * @see https://docs.npmjs.com/cli/v10/configuring-npm/package-json
  */
@@ -145,16 +151,16 @@ export function isPackageJson(input: unknown): input is PackageJson {
   return (
     isObject(input) &&
     isString(input.name) &&
-    isString(input.version) &&
+    isOptionalString(input.version) &&
     isOptionalString(input.main) &&
     isOptionalString(input.module) &&
     isOptionalPackageBrowser(input.browser) &&
     isOptionalString(input.types) &&
     isOptionalPackageMan(input.man) &&
     isOptionalPackageDirectories(input.directories) &&
-    maybeUndefined(isPackageType)(input.type) &&
-    maybeUndefined(isPackageExports)(input.exports) &&
-    maybeUndefined(isPackageBin)(input.bin) &&
-    maybeUndefined(isStringArray)(input.files)
+    isOptionalPackageType(input.type) &&
+    isOptionalPackageExports(input.exports) &&
+    isOptionalPackageBin(input.bin) &&
+    isOptionalStringArray(input.files)
   );
 }

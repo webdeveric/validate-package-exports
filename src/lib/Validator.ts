@@ -6,10 +6,11 @@ import { ExitCode, type EntryPoint, type PackageContext, type ValidatorOptions }
 import { checkFileExists } from '@utils/checkFileExists.js';
 import { checkSyntax } from '@utils/checkSyntax.js';
 import { getEntryPoints } from '@utils/getEntryPoints.js';
+import { getPacklist } from '@utils/getPacklist.js';
 import { importPackageJson } from '@utils/importPackageJson.js';
 import { verifyEntryPoint } from '@utils/verifyEntryPoint.js';
 
-import { ResultCode, type Result } from './Result.js';
+import { ResultCode, Result } from './Result.js';
 
 export class Validator extends EventEmitter {
   options: ValidatorOptions;
@@ -115,6 +116,28 @@ export class Validator extends EventEmitter {
     ).flat();
   }
 
+  protected async checkPacklist(entryPoints: EntryPoint[], packageContext: PackageContext): Promise<Result[]> {
+    const files = new Set(await getPacklist(packageContext.directory));
+
+    const results = entryPoints.map((entryPoint): Result => {
+      const willBePacked = files.has(entryPoint.relativePath);
+
+      return new Result({
+        name: 'packlist',
+        code: willBePacked ? ResultCode.Success : ResultCode.Error,
+        message: willBePacked
+          ? `${entryPoint.relativePath} will be packed`
+          : `${entryPoint.relativePath} will not be packed`,
+        error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files'),
+        entryPoint,
+      });
+    });
+
+    this.processResults(results);
+
+    return results;
+  }
+
   async run(): Promise<ExitCode> {
     const packageJson = await importPackageJson(this.options.package);
 
@@ -133,7 +156,7 @@ export class Validator extends EventEmitter {
 
     const entryPointsWithErrors = new Set<EntryPoint>();
 
-    const processResults = (results: Result[]): void => {
+    const recordErrors = (results: Result[]): void => {
       results.forEach(result => {
         if (result.code === ResultCode.Error) {
           entryPointsWithErrors.add(result.entryPoint);
@@ -146,17 +169,19 @@ export class Validator extends EventEmitter {
     };
 
     // Always check to see if the file exists.
-    processResults(await this.checkFilesExist(entryPoints));
+    recordErrors(await this.checkFilesExist(entryPoints));
 
     // Optionally run a syntax check.
     if (this.options.check) {
-      processResults(await this.checkSyntax(getNextEntryPoints(entryPoints)));
+      recordErrors(await this.checkSyntax(getNextEntryPoints(entryPoints)));
     }
 
     // Optionally try to `import`/`require` the module.
     if (this.options.verify) {
-      processResults(await this.verifyIncludes(getNextEntryPoints(entryPoints)));
+      recordErrors(await this.verifyIncludes(getNextEntryPoints(entryPoints)));
     }
+
+    recordErrors(await this.checkPacklist(getNextEntryPoints(entryPoints), packageContext));
 
     // TODO: maybe do some reporting using `entryPointsWithErrors`
 
