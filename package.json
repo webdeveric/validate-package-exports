@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=18.14.0"
   },
-  "packageManager": "pnpm@8.15.7+sha256.50783dd0fa303852de2dd1557cd4b9f07cb5b018154a6e76d0f40635d6cee019",
+  "packageManager": "pnpm@9.1.1+sha256.9551e803dcb7a1839fdf5416153a844060c7bce013218ce823410532504ac10b",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
@@ -52,20 +52,20 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^7.5.0",
-    "@webdeveric/utils": "^0.30.0",
+    "@npmcli/arborist": "^7.5.1",
+    "@webdeveric/utils": "^0.31.0",
     "npm-packlist": "^8.0.2"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.12.11",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^5.6.6",
-    "@vitest/coverage-v8": "^1.5.2",
-    "@webdeveric/eslint-config-ts": "^0.7.1",
+    "@vitest/coverage-v8": "^1.6.0",
+    "@webdeveric/eslint-config-ts": "^0.7.3",
     "@webdeveric/prettier-config": "^0.2.0",
     "cross-env": "^7.0.3",
-    "cspell": "^8.7.0",
-    "esbuild": "^0.20.2",
+    "cspell": "^8.8.1",
+    "esbuild": "^0.21.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.3.0",
     "eslint": "^8.57.0",
@@ -77,6 +77,6 @@
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^1.5.2"
+    "vitest": "^1.6.0"
   }
 }
