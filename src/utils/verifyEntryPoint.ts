@@ -6,11 +6,15 @@ import { checkRequire } from './checkRequire.js';
 
 import type { ExecOptions } from 'node:child_process';
 
-function shouldRequire(entryPoint: EntryPoint): boolean {
+export function shouldRequire(entryPoint: EntryPoint): boolean {
+  if (entryPoint.type === 'module' && entryPoint.itemPath.length === 1 && entryPoint.itemPath[0] === 'main') {
+    return false;
+  }
+
   return typeof entryPoint.condition === 'undefined' || entryPoint.condition === 'require';
 }
 
-function shouldImport(entryPoint: EntryPoint): boolean {
+export function shouldImport(entryPoint: EntryPoint): boolean {
   return typeof entryPoint.condition === 'undefined' || entryPoint.condition === 'import';
 }
 
