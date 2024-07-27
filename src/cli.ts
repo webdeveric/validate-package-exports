@@ -13,7 +13,7 @@ try {
   const { json, info, packages, ...options } = getCliArguments();
 
   const resolvedPackages: PackageJsonPath[] = await Readable.from(packages)
-    .map(packagePath => resolvePackageJson(packagePath), { concurrency: options.concurrency })
+    .map((packagePath) => resolvePackageJson(packagePath), { concurrency: options.concurrency })
     .toArray();
 
   const results: Result[] = [];
@@ -31,7 +31,7 @@ try {
   setMaxListeners(100, controller.signal);
 
   // Create a `Validator` for each `package.json`
-  const validators = resolvedPackages.map(path => {
+  const validators = resolvedPackages.map((path) => {
     const validator = new Validator({
       ...options,
       package: path,
@@ -46,6 +46,7 @@ try {
   try {
     // Sequentially process each `package.json` file.
     for (const validator of validators) {
+      // eslint-disable-next-line no-await-in-loop
       await validator.run();
     }
   } catch (error) {
@@ -66,7 +67,7 @@ try {
   if (json) {
     process.stdout.write(
       JSON.stringify(
-        results.filter(result => info || result.code === ResultCode.Error),
+        results.filter((result) => info || result.code === ResultCode.Error),
         null,
         2,
       ),

@@ -131,7 +131,7 @@ export const isPackageBrowserRecord = (input: unknown): input is PackageBrowserR
   return (
     isObject(input) &&
     Object.entries(input).every(
-      entry => typeof entry[0] === 'string' && (typeof entry[1] === 'string' || typeof entry[1] === 'boolean'),
+      (entry) => typeof entry[0] === 'string' && (typeof entry[1] === 'string' || typeof entry[1] === 'boolean'),
     )
   );
 };

@@ -9,5 +9,5 @@ export async function getPacklist(directory: string): Promise<string[]> {
   const tree = await arborist.loadActual();
   const files = await packlist(tree);
 
-  return files.map(file => fixSlash(file));
+  return files.map((file) => fixSlash(file));
 }

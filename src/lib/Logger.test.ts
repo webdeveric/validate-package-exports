@@ -80,7 +80,7 @@ describe('Logger', () => {
       LogLevel.Notice,
       LogLevel.Info,
       LogLevel.Debug,
-    ])('emergency() logs for LogLevel: %d', logLevel => {
+    ])('emergency() logs for LogLevel: %d', (logLevel) => {
       logger.logLevel = logLevel;
 
       logger.emergency('test');
@@ -132,7 +132,7 @@ describe('Logger', () => {
 
     it.each(['warn', 'warning'] satisfies (keyof Logger)[])(
       'warn() is only used when level >= LogLevel.Warning',
-      method => {
+      (method) => {
         logger.logLevel = LogLevel.Critical;
 
         logger[method]('test');

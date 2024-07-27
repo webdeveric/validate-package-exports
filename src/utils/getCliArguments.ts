@@ -68,10 +68,10 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
   return {
     packages: positionals.length ? positionals : ['./package.json'],
     concurrency: parseConcurrency(values.concurrency),
-    bail: noBail ? false : values.bail ?? config.options.bail.default,
+    bail: noBail ? false : (values.bail ?? config.options.bail.default),
     check: values.check ?? config.options.check.default,
     verify: values.verify ?? config.options.verify.default,
     json: values.json ?? config.options.verify.default,
-    info: noInfo ? false : values.info ?? config.options.info.default,
+    info: noInfo ? false : (values.info ?? config.options.info.default),
   };
 }

@@ -46,7 +46,7 @@ export class Validator extends EventEmitter {
   }
 
   protected processResults(results: Result | Result[]): void {
-    [results].flat().forEach(result => this.processResult(result));
+    [results].flat().forEach((result) => this.processResult(result));
   }
 
   protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<Result[]> {
@@ -70,7 +70,7 @@ export class Validator extends EventEmitter {
   }
 
   protected async checkSyntax(entryPoints: EntryPoint[]): Promise<Result[]> {
-    const jsEntryPoints = entryPoints.filter(entryPoint => /\.[cm]?js$/i.test(entryPoint.resolvedPath));
+    const jsEntryPoints = entryPoints.filter((entryPoint) => /\.[cm]?js$/i.test(entryPoint.resolvedPath));
 
     return await Readable.from(jsEntryPoints)
       .map(
@@ -157,7 +157,7 @@ export class Validator extends EventEmitter {
     const entryPointsWithErrors = new Set<EntryPoint>();
 
     const recordErrors = (results: Result[]): void => {
-      results.forEach(result => {
+      results.forEach((result) => {
         if (result.code === ResultCode.Error) {
           entryPointsWithErrors.add(result.entryPoint);
         }
@@ -165,7 +165,7 @@ export class Validator extends EventEmitter {
     };
 
     const getNextEntryPoints = (entryPoints: EntryPoint[]): EntryPoint[] => {
-      return entryPoints.filter(entryPoint => !entryPointsWithErrors.has(entryPoint));
+      return entryPoints.filter((entryPoint) => !entryPointsWithErrors.has(entryPoint));
     };
 
     // Always check to see if the file exists.

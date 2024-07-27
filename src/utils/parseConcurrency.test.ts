@@ -17,7 +17,7 @@ describe('parseConcurrency()', () => {
 
   it.each(['bad input', undefined, true, false, null, {}, []])(
     'Defaults to availableParallelism() when given "%s"',
-    value => {
+    (value) => {
       const defaultValue = availableParallelism();
 
       expect(parseConcurrency(value)).toEqual(defaultValue);

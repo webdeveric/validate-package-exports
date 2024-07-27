@@ -12,7 +12,7 @@ describe('parseLogLevel()', () => {
 
   it.each(['bad input', Number.MAX_SAFE_INTEGER, undefined, true, false, null, [], {}])(
     'Returns default value when given "%s"',
-    value => {
+    (value) => {
       expect(parseLogLevel(value, LogLevel.Alert)).toEqual(LogLevel.Alert);
     },
   );

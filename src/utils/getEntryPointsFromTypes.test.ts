@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { getEntryPointsFromTypes } from './getEntryPointsFromTypes.js';
 
 describe('getEntryPointsFromTypes()', () => {
-  it.each(['types', 'typings'])('types property %s: yields EntryPoint objects', typesProperty => {
+  it.each(['types', 'typings'])('types property %s: yields EntryPoint objects', (typesProperty) => {
     expect(
       Array.from(
         getEntryPointsFromTypes(
