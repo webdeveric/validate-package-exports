@@ -5,6 +5,7 @@
     "CODEOWNERS",
     "corepack",
     "env",
+    "esm",
     "npmcli",
     "nvmrc",
     "outdir",
