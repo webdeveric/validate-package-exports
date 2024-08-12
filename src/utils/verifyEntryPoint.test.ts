@@ -18,6 +18,21 @@ describe('shouldRequire()', () => {
         itemPath: ['main'],
       }),
     ).toBeFalsy();
+
+    expect(
+      shouldRequire({
+        packagePath: './package.json',
+        moduleName: 'example-package',
+        type: 'module',
+        fileName: 'test.js',
+        relativePath: 'test.js',
+        directory: process.cwd(),
+        resolvedPath: process.cwd(),
+        subpath: '.',
+        condition: undefined,
+        itemPath: ['exports'],
+      }),
+    ).toBeFalsy();
   });
 
   it('Returns a boolean', () => {
@@ -48,6 +63,21 @@ describe('shouldRequire()', () => {
         subpath: '.',
         condition: 'require',
         itemPath: ['exports', '.', 'require'],
+      }),
+    ).toBeTruthy();
+
+    expect(
+      shouldRequire({
+        packagePath: './package.json',
+        moduleName: 'example-package',
+        type: 'commonjs',
+        fileName: 'test.js',
+        relativePath: 'test.js',
+        directory: process.cwd(),
+        resolvedPath: process.cwd(),
+        subpath: '.',
+        condition: undefined,
+        itemPath: ['exports'],
       }),
     ).toBeTruthy();
 

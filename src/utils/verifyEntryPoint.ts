@@ -7,8 +7,12 @@ import { checkRequire } from './checkRequire.js';
 import type { ExecOptions } from 'node:child_process';
 
 export function shouldRequire(entryPoint: EntryPoint): boolean {
-  if (entryPoint.type === 'module' && entryPoint.itemPath.length === 1 && entryPoint.itemPath[0] === 'main') {
-    return false;
+  if (entryPoint.itemPath.length === 1) {
+    const firstPath = entryPoint.itemPath[0];
+
+    if (firstPath === 'main' || firstPath === 'exports') {
+      return entryPoint.type !== 'module';
+    }
   }
 
   return typeof entryPoint.condition === 'undefined' || entryPoint.condition === 'require';
