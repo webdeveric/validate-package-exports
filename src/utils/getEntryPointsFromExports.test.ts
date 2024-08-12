@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { Readable } from 'node:stream';
 
 import { describe, expect, it } from 'vitest';
@@ -51,8 +52,8 @@ describe('getEntryPointsFromExports()', () => {
         type: 'commonjs',
         fileName: 'main.js',
         relativePath: 'main.js',
-        directory: '/tmp',
-        resolvedPath: '/tmp/main.js',
+        directory: resolve('/tmp'),
+        resolvedPath: resolve('/tmp/main.js'),
         subpath: '.',
         condition: undefined,
         itemPath: ['exports'],
