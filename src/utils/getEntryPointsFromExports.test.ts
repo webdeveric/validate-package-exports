@@ -6,7 +6,7 @@ import { getEntryPointsFromExports } from './getEntryPointsFromExports.js';
 
 describe('getEntryPointsFromExports()', () => {
   describe('Gets EntryPoint[] from package.json exports', () => {
-    it('Works with ExportsEntryPath', async () => {
+    it('Works with null ExportsEntryPath', async () => {
       const entryPoints = await Readable.from(
         getEntryPointsFromExports(
           {
@@ -24,6 +24,39 @@ describe('getEntryPointsFromExports()', () => {
       ).toArray();
 
       expect(entryPoints).toHaveLength(0);
+    });
+
+    it('Works with string ExportsEntryPath', async () => {
+      const entryPoints = await Readable.from(
+        getEntryPointsFromExports(
+          {
+            name: 'example',
+            version: '123.456.789',
+            exports: './main.js',
+          },
+          {
+            name: 'example',
+            type: 'commonjs',
+            path: '/tmp/package.json',
+            directory: '/tmp',
+          },
+        ),
+      ).toArray();
+
+      expect(entryPoints).toHaveLength(1);
+
+      expect(entryPoints.at(0)).toEqual({
+        moduleName: 'example',
+        packagePath: '/tmp/package.json',
+        type: 'commonjs',
+        fileName: 'main.js',
+        relativePath: 'main.js',
+        directory: '/tmp',
+        resolvedPath: '/tmp/main.js',
+        subpath: '.',
+        condition: undefined,
+        itemPath: ['exports'],
+      });
     });
 
     it('Works with SubpathExports', async () => {
