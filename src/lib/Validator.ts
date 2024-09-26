@@ -164,8 +164,8 @@ export class Validator extends EventEmitter {
       });
     };
 
-    const getNextEntryPoints = (entryPoints: EntryPoint[]): EntryPoint[] => {
-      return entryPoints.filter((entryPoint) => !entryPointsWithErrors.has(entryPoint));
+    const getNextEntryPoints = (items: EntryPoint[]): EntryPoint[] => {
+      return items.filter((entryPoint) => !entryPointsWithErrors.has(entryPoint));
     };
 
     // Always check to see if the file exists.
