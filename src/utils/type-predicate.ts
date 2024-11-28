@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { isObject } from '@webdeveric/utils/predicate/isObject';
 import { isOptionalString } from '@webdeveric/utils/predicate/isOptionalString';
 import { isString } from '@webdeveric/utils/predicate/isString';

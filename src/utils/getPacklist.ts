@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention, import/no-named-as-default
+// eslint-disable-next-line import/no-named-as-default
 import Arborist from '@npmcli/arborist';
 import packlist from 'npm-packlist';
 
