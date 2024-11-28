@@ -5,11 +5,7 @@ import { build } from 'esbuild';
 import { clean } from 'esbuild-plugin-clean';
 import { environmentPlugin } from 'esbuild-plugin-environment';
 
-const nodeVersion = Number.parseInt(String(process.versions.node.split('.').at(0)));
-
-const { default: pkg } = await import('./package.json', {
-  [nodeVersion < 20 ? 'assert' : 'with']: { type: 'json' },
-});
+import pkg from './package.json' with { type: 'json' };
 
 try {
   const results = await build({
