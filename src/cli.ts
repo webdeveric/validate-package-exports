@@ -56,13 +56,10 @@ try {
   }
 
   // Check if any of the results have an error code.
-  process.exitCode = results.reduce<ExitCode>((code, result) => {
-    if (result.code === ResultCode.Error) {
-      return ExitCode.Error;
-    }
-
-    return code;
-  }, ExitCode.Ok);
+  process.exitCode = results.reduce<ExitCode>(
+    (code, result) => (result.code === ResultCode.Error ? ExitCode.Error : code),
+    ExitCode.Ok,
+  );
 
   if (json) {
     process.stdout.write(
