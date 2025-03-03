@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=20.17.0"
   },
-  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf",
+  "packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
@@ -53,30 +53,35 @@
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
     "@npmcli/arborist": "^9.0.0",
-    "@webdeveric/utils": "^0.42.0",
+    "@webdeveric/utils": "^0.52.0",
     "npm-packlist": "^10.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.17.10",
+    "@types/node": "^20.17.23",
     "@types/npm-packlist": "^7.0.3",
-    "@types/npmcli__arborist": "^5.6.11",
-    "@vitest/coverage-v8": "^2.1.8",
+    "@types/npmcli__arborist": "^6.3.0",
+    "@vitest/coverage-v8": "^3.0.7",
     "@webdeveric/eslint-config-ts": "^0.11.0",
     "@webdeveric/prettier-config": "^0.3.0",
     "cross-env": "^7.0.3",
-    "cspell": "^8.17.1",
-    "esbuild": "^0.24.2",
+    "cspell": "^8.17.5",
+    "esbuild": "^0.25.0",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.4.0",
     "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-import-resolver-typescript": "^3.7.0",
+    "eslint-config-prettier": "^10.0.2",
+    "eslint-import-resolver-typescript": "^3.8.3",
     "eslint-plugin-import": "^2.31.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.11",
-    "prettier": "^3.4.2",
-    "typescript": "^5.7.2",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
