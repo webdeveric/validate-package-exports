@@ -14,6 +14,7 @@
     "postbuild",
     "predemo",
     "realpath",
+    "stringifying",
     "typecheck",
     "unstub",
     "vitest",

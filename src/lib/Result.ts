@@ -1,6 +1,6 @@
 import type { EntryPoint } from '@src/types.js';
 
-export type ResultName = 'check-syntax' | 'file-exists' | 'require' | 'import' | 'packlist';
+export type ResultName = 'package-json' | 'check-syntax' | 'file-exists' | 'require' | 'import' | 'packlist';
 
 export const enum ResultCode {
   Success,
@@ -39,7 +39,9 @@ export class Result {
     const emoji = this.code === ResultCode.Success ? '✅' : this.code === ResultCode.Error ? '❌' : '😐';
 
     if (this.code === ResultCode.Error) {
-      return `${emoji} ${this.name}: ${this.message} (${JSON.stringify(this.entryPoint.itemPath)}) ${this.error ?? ''}`.trim();
+      const itemPath = this.entryPoint.itemPath.length ? ` (${JSON.stringify(this.entryPoint.itemPath)})` : '';
+
+      return `${emoji} ${this.name}: ${this.message}${itemPath} ${this.error ?? ''}`.trim();
     } else {
       return `${emoji} ${this.name}: ${this.message}`;
     }
