@@ -24,7 +24,7 @@ export const enum LogLevel {
   Debug,
 }
 
-export const logLevelMapping: Record<LogLevelName, LogLevel> = {
+export const logLevelMapping = {
   emergency: LogLevel.Emergency,
   alert: LogLevel.Alert,
   critical: LogLevel.Critical,
@@ -33,7 +33,7 @@ export const logLevelMapping: Record<LogLevelName, LogLevel> = {
   notice: LogLevel.Notice,
   info: LogLevel.Info,
   debug: LogLevel.Debug,
-};
+} as const satisfies Record<LogLevelName, LogLevel>;
 
 export type CliArguments = {
   packages: string[];
@@ -118,7 +118,7 @@ export type PackageBrowser = string | PackageBrowserRecord;
 // https://docs.npmjs.com/cli/v10/configuring-npm/package-json
 export type PackageJson = {
   name: string;
-  version: string;
+  version?: string;
   type?: PackageType;
   main?: string;
   module?: string;
@@ -135,9 +135,21 @@ export type PackageJson = {
 export type ItemPath = (string | number)[];
 
 export type PackageContext = Readonly<{
+  /**
+   * The name from `package.json`
+   */
   name: string;
+  /**
+   * The `type` from `package.json`
+   */
   type: PackageType;
+  /**
+   * Path to the `package.json` file
+   */
   path: string;
+  /**
+   * Directory containing the `package.json` file
+   */
   directory: string;
 }>;
 
