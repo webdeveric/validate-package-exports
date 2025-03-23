@@ -2,12 +2,13 @@ import { EventEmitter } from 'node:events';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 
-import { ExitCode, type EntryPoint, type PackageContext, type ValidatorOptions } from '@src/types.js';
+import { ExitCode, type EntryPoint, type PackageContext, type PackageJson, type ValidatorOptions } from '@src/types.js';
 import { checkFileExists } from '@utils/checkFileExists.js';
 import { checkSyntax } from '@utils/checkSyntax.js';
 import { getEntryPoints } from '@utils/getEntryPoints.js';
 import { getPacklist } from '@utils/getPacklist.js';
 import { importPackageJson } from '@utils/importPackageJson.js';
+import { isSubpathExports } from '@utils/type-predicate.js';
 import { verifyEntryPoint } from '@utils/verifyEntryPoint.js';
 
 import { ResultCode, Result } from './Result.js';
@@ -47,6 +48,42 @@ export class Validator extends EventEmitter {
 
   protected processResults(results: Result | Result[]): void {
     [results].flat().forEach((result) => this.processResult(result));
+  }
+
+  protected checkPackageJson(packageJson: PackageJson, context: PackageContext): Result {
+    const entryPoint: EntryPoint = {
+      moduleName: `${context.name}/package.json`,
+      packagePath: context.path,
+      type: context.type,
+      fileName: 'package.json',
+      resolvedPath: context.path,
+      relativePath: 'package.json',
+      subpath: undefined,
+      condition: undefined,
+      directory: context.directory,
+      itemPath: [],
+    };
+
+    const result = new Result(
+      isSubpathExports(packageJson.exports) && !Reflect.has(packageJson.exports, '.')
+        ? {
+            name: 'package-json',
+            code: ResultCode.Error,
+            message: 'package.json exports is missing "." property.',
+            entryPoint,
+            error: new Error('"." is missing from exports.'),
+          }
+        : {
+            name: 'package-json',
+            code: ResultCode.Success,
+            message: 'package.json exports has required property.',
+            entryPoint,
+          },
+    );
+
+    this.processResult(result);
+
+    return result;
   }
 
   protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<Result[]> {
@@ -126,9 +163,9 @@ export class Validator extends EventEmitter {
         name: 'packlist',
         code: willBePacked ? ResultCode.Success : ResultCode.Error,
         message: willBePacked
-          ? `${entryPoint.relativePath} will be packed`
-          : `${entryPoint.relativePath} will not be packed`,
-        error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files'),
+          ? `${entryPoint.relativePath} will be packed.`
+          : `${entryPoint.relativePath} will not be packed.`,
+        error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files.'),
         entryPoint,
       });
     });
@@ -167,6 +204,9 @@ export class Validator extends EventEmitter {
     const getNextEntryPoints = (items: EntryPoint[]): EntryPoint[] => {
       return items.filter((entryPoint) => !entryPointsWithErrors.has(entryPoint));
     };
+
+    // Check the structure of the `package.json` data.
+    recordErrors([this.checkPackageJson(packageJson, packageContext)]);
 
     // Always check to see if the file exists.
     recordErrors(await this.checkFilesExist(entryPoints));
