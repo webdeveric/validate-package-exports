@@ -16,6 +16,7 @@
     "realpath",
     "stringifying",
     "typecheck",
+    "unrs-resolver",
     "unstub",
     "vitest",
     "webdeveric"
