@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/webdeveric/validate-package-exports.git"
+    "url": "git+ssh://git@github.com/webdeveric/validate-package-exports.git"
   },
   "bugs": {
     "url": "https://github.com/webdeveric/validate-package-exports/issues"
