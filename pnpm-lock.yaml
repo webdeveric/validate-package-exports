@@ -25,7 +25,7 @@ importers:
         specifier: ^19.8.1
         version: 19.8.1
       '@types/node':
-        specifier: ^20.17.46
+        specifier: ^20.19.0
         version: 20.19.0
       '@types/npm-packlist':
         specifier: ^7.0.3
