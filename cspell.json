@@ -3,6 +3,8 @@
   "words": [
     "cli",
     "CODEOWNERS",
+    "commitlint",
+    "conventionalcommits",
     "corepack",
     "env",
     "esm",
@@ -28,11 +30,5 @@
     ".vscode/*.json",
     "node_modules/**",
     "pnpm-lock.yaml"
-  ],
-  "languageSettings": [
-    {
-      "languageId": "commit-msg",
-      "ignoreRegExpList": ["/^#.*/gm"]
-    }
   ]
 }
