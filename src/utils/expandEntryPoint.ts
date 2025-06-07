@@ -1,6 +1,8 @@
 import { opendir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
+import { escapeRegExp } from '@webdeveric/utils/escapeRegExp';
+
 import type { EntryPoint } from '@src/types.js';
 
 type ExpandEntryPointContext = {
@@ -55,8 +57,8 @@ export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<
   const context: ExpandEntryPointContext = {
     prefix,
     suffix,
-    prefixPattern: prefix ? new RegExp(`^${prefix}`, 'i') : undefined,
-    suffixPattern: suffix ? new RegExp(`${suffix}$`, 'i') : undefined,
+    prefixPattern: prefix ? new RegExp(`^${escapeRegExp(prefix)}`, 'i') : undefined,
+    suffixPattern: suffix ? new RegExp(`${escapeRegExp(suffix)}$`, 'i') : undefined,
     findStar(path: string): string {
       let star = path;
 
