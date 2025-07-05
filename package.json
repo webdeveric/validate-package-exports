@@ -52,8 +52,8 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.1.1",
-    "@webdeveric/utils": "^0.61.0",
+    "@npmcli/arborist": "^9.1.2",
+    "@webdeveric/utils": "^0.67.0",
     "npm-packlist": "^10.0.0"
   },
   "devDependencies": {
