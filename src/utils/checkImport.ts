@@ -8,7 +8,7 @@ import type { ExecOptions } from 'node:child_process';
 export async function checkImport(entryPoint: EntryPoint, options: ExecOptions): Promise<Result> {
   try {
     if (typeof entryPoint.moduleName === 'string') {
-      await execImport(entryPoint.moduleName, options);
+      await execImport(entryPoint.moduleName, entryPoint.resolvedPath, options);
 
       return new Result({
         code: ResultCode.Success,
