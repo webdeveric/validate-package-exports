@@ -57,19 +57,19 @@
     "npm-packlist": "^10.0.3"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^20.3.1",
-    "@commitlint/types": "^20.3.1",
+    "@commitlint/config-conventional": "^20.4.0",
+    "@commitlint/types": "^20.4.0",
     "@types/node": "^20.19.30",
     "@types/npm-packlist": "^7.0.3",
-    "@types/npmcli__arborist": "^6.3.1",
-    "@vitest/coverage-v8": "^4.0.17",
+    "@types/npmcli__arborist": "^6.3.2",
+    "@vitest/coverage-v8": "^4.0.18",
     "@webdeveric/eslint-config-ts": "^0.11.0",
     "@webdeveric/prettier-config": "^0.3.0",
-    "commitlint": "^20.3.1",
+    "commitlint": "^20.4.0",
     "commitlint-plugin-cspell": "^0.4.0",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "cross-env": "^10.1.0",
-    "cspell": "^9.6.0",
+    "cspell": "^9.6.2",
     "esbuild": "^0.27.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.4.0",
@@ -79,11 +79,11 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "prettier": "^3.8.0",
-    "semantic-release": "^25.0.2",
+    "prettier": "^3.8.1",
+    "semantic-release": "^25.0.3",
     "typescript": "^5.9.3",
-    "vite-tsconfig-paths": "^6.0.4",
-    "vitest": "^4.0.17"
+    "vite-tsconfig-paths": "^6.0.5",
+    "vitest": "^4.0.18"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
