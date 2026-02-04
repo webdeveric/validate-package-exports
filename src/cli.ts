@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --experimental-import-meta-resolve
 
 import { setMaxListeners } from 'node:events';
 import { Readable } from 'node:stream';
@@ -7,6 +7,7 @@ import { ResultCode, type Result } from '@lib/Result.js';
 import { Validator } from '@lib/Validator.js';
 import { ExitCode, type PackageJsonPath } from '@src/types.js';
 import { getCliArguments } from '@utils/getCliArguments.js';
+import { getDetails } from '@utils/getDetails.js';
 import { resolvePackageJson } from '@utils/resolvePackageJson.js';
 
 try {
@@ -65,7 +66,7 @@ try {
     process.stdout.write(
       JSON.stringify(
         results.filter((result) => info || result.code === ResultCode.Error),
-        null,
+        (_, value) => (value instanceof Error ? getDetails(value) : value),
         2,
       ),
     );

@@ -1,20 +1,35 @@
+import { AssertionError } from 'node:assert';
+import { spawn, type SpawnOptions } from 'node:child_process';
+import { once } from 'node:events';
 import { relative } from 'node:path';
 
 import { Result, ResultCode } from '@lib/Result.js';
-import type { EntryPoint } from '@src/types.js';
+import { ExitCode, type EntryPoint } from '@src/types.js';
 
-import { asyncExec } from './asyncExec.js';
-
-import type { ExecOptions } from 'node:child_process';
-
-export async function checkSyntax(entryPoint: EntryPoint, options: ExecOptions): Promise<Result> {
+export async function checkSyntax(entryPoint: EntryPoint, options: SpawnOptions): Promise<Result> {
   try {
-    await asyncExec(`node --check ${entryPoint.resolvedPath}`, options);
+    const check = spawn('node', ['--check', entryPoint.resolvedPath], {
+      ...options,
+      cwd: entryPoint.packageDirectory,
+      stdio: 'inherit',
+    });
+
+    const [code]: number[] = await once(check, 'close', {
+      signal: options.signal,
+    });
+
+    if (code !== ExitCode.Ok) {
+      throw new AssertionError({
+        message: 'exit code not ok when checking syntax',
+        expected: ExitCode.Ok,
+        actual: code,
+      });
+    }
 
     return new Result({
       code: ResultCode.Success,
       entryPoint,
-      message: `${relative(process.cwd(), entryPoint.resolvedPath)} has valid syntax`,
+      message: `${relative(entryPoint.packageDirectory, entryPoint.resolvedPath)} has valid syntax`,
       name: 'check-syntax',
     });
   } catch (error) {

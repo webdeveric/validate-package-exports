@@ -1,14 +1,29 @@
+import { AssertionError } from 'node:assert';
+import { createRequire } from 'node:module';
+
 import { Result, ResultCode } from '@lib/Result.js';
 import type { EntryPoint } from '@src/types.js';
 
-import { execRequire } from './execRequire.js';
+import { memo } from './memo.js';
 
-import type { ExecOptions } from 'node:child_process';
+const getRequire = memo(createRequire);
 
-export async function checkRequire(entryPoint: EntryPoint, options: ExecOptions): Promise<Result> {
+export function checkRequire(entryPoint: EntryPoint): Result {
   try {
     if (typeof entryPoint.moduleName === 'string') {
-      await execRequire(entryPoint.moduleName, options);
+      const require = getRequire(entryPoint.packagePath);
+
+      const resolvedPath = require.resolve(entryPoint.moduleName, {
+        paths: [entryPoint.packageDirectory],
+      });
+
+      if (resolvedPath !== entryPoint.resolvedPath) {
+        throw new AssertionError({
+          message: 'The resolved require path does not equal entrypoint resolved path',
+          expected: entryPoint.resolvedPath,
+          actual: resolvedPath,
+        });
+      }
 
       return new Result({
         code: ResultCode.Success,
