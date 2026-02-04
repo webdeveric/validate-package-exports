@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import type { EntryPoint } from '@src/types.js';
+
 import { getEntryPointsFromTypes } from './getEntryPointsFromTypes.js';
 
 describe('getEntryPointsFromTypes()', () => {
@@ -30,11 +32,12 @@ describe('getEntryPointsFromTypes()', () => {
         itemPath: [typesProperty],
         moduleName: undefined,
         packagePath: './package.json',
+        packageDirectory: '/tmp',
         relativePath: 'types.d.ts',
         resolvedPath: resolve('/tmp/types.d.ts'),
         subpath: undefined,
         type: 'module',
-      },
+      } satisfies EntryPoint,
     ]);
   });
 

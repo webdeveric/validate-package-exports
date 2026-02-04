@@ -3,6 +3,8 @@ import { Readable } from 'node:stream';
 
 import { describe, expect, it } from 'vitest';
 
+import type { EntryPoint } from '@src/types.js';
+
 import { getEntryPointsFromExports } from './getEntryPointsFromExports.js';
 
 describe('getEntryPointsFromExports()', () => {
@@ -49,6 +51,7 @@ describe('getEntryPointsFromExports()', () => {
       expect(entryPoints.at(0)).toEqual({
         moduleName: 'example',
         packagePath: '/tmp/package.json',
+        packageDirectory: '/tmp',
         type: 'commonjs',
         fileName: 'main.js',
         relativePath: 'main.js',
@@ -57,7 +60,7 @@ describe('getEntryPointsFromExports()', () => {
         subpath: '.',
         condition: undefined,
         itemPath: ['exports'],
-      });
+      } satisfies EntryPoint);
     });
 
     it('Works with SubpathExports', async () => {

@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import type { EntryPoint } from '@src/types.js';
+
 import { getEntryPointsFromBrowser } from './getEntryPointsFromBrowser.js';
 
 describe('getEntryPointsFromBrowser()', () => {
@@ -30,12 +32,13 @@ describe('getEntryPointsFromBrowser()', () => {
         itemPath: ['browser'],
         moduleName: undefined,
         packagePath: './package.json',
+        packageDirectory: '/tmp',
         relativePath: 'browser.js',
         resolvedPath: resolve('/tmp/browser.js'),
         subpath: undefined,
         type: 'module',
       },
-    ]);
+    ] satisfies EntryPoint[]);
 
     expect(
       Array.from(
@@ -64,11 +67,12 @@ describe('getEntryPointsFromBrowser()', () => {
         itemPath: ['browser', 'file'],
         moduleName: undefined,
         packagePath: './package.json',
+        packageDirectory: '/tmp',
         relativePath: 'browser.js',
         resolvedPath: resolve('/tmp/browser.js'),
         subpath: undefined,
         type: 'module',
       },
-    ]);
+    ] satisfies EntryPoint[]);
   });
 });

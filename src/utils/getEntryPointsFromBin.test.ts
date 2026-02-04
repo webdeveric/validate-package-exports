@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import type { EntryPoint } from '@src/types.js';
+
 import { getEntryPointsFromBin } from './getEntryPointsFromBin.js';
 
 describe('getEntryPointsFromBin()', () => {
@@ -30,12 +32,13 @@ describe('getEntryPointsFromBin()', () => {
         itemPath: ['bin'],
         moduleName: undefined,
         packagePath: './package.json',
+        packageDirectory: '/tmp',
         relativePath: 'bin.js',
         resolvedPath: resolve('/tmp/bin.js'),
         subpath: undefined,
         type: 'module',
       },
-    ]);
+    ] satisfies EntryPoint[]);
 
     expect(
       Array.from(
@@ -64,6 +67,7 @@ describe('getEntryPointsFromBin()', () => {
         itemPath: ['bin', 'tool'],
         moduleName: undefined,
         packagePath: './package.json',
+        packageDirectory: '/tmp',
         relativePath: 'tool.js',
         resolvedPath: resolve('/tmp/tool.js'),
         subpath: undefined,
@@ -76,11 +80,12 @@ describe('getEntryPointsFromBin()', () => {
         itemPath: ['bin', 'example'],
         moduleName: undefined,
         packagePath: './package.json',
+        packageDirectory: '/tmp',
         relativePath: 'example.js',
         resolvedPath: resolve('/tmp/example.js'),
         subpath: undefined,
         type: 'module',
       },
-    ]);
+    ] satisfies EntryPoint[]);
   });
 });
