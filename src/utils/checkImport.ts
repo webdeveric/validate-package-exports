@@ -1,14 +1,26 @@
+import { AssertionError } from 'node:assert';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+
 import { Result, ResultCode } from '@lib/Result.js';
 import type { EntryPoint } from '@src/types.js';
 
-import { execImport } from './execImport.js';
+const supportsImportMetaResolveParent =
+  typeof import.meta.resolve === 'function' && process.execArgv.includes('--experimental-import-meta-resolve');
 
-import type { ExecOptions } from 'node:child_process';
-
-export async function checkImport(entryPoint: EntryPoint, options: ExecOptions): Promise<Result> {
+export function checkImport(entryPoint: EntryPoint): Result {
   try {
-    if (typeof entryPoint.moduleName === 'string') {
-      await execImport(entryPoint.moduleName, entryPoint.resolvedPath, options);
+    if (typeof entryPoint.moduleName === 'string' && supportsImportMetaResolveParent) {
+      const resolvedPath = fileURLToPath(
+        import.meta.resolve(entryPoint.moduleName, pathToFileURL(entryPoint.packagePath)),
+      );
+
+      if (resolvedPath !== entryPoint.resolvedPath) {
+        throw new AssertionError({
+          message: 'The resolved import path does not equal entrypoint resolved path',
+          expected: entryPoint.resolvedPath,
+          actual: resolvedPath,
+        });
+      }
 
       return new Result({
         code: ResultCode.Success,
