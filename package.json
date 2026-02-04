@@ -57,7 +57,7 @@
     "npm-packlist": "^10.0.3"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^20.4.0",
+    "@commitlint/config-conventional": "^20.4.1",
     "@commitlint/types": "^20.4.0",
     "@types/node": "^20.19.30",
     "@types/npm-packlist": "^7.0.3",
@@ -65,7 +65,7 @@
     "@vitest/coverage-v8": "^4.0.18",
     "@webdeveric/eslint-config-ts": "^0.11.0",
     "@webdeveric/prettier-config": "^0.3.0",
-    "commitlint": "^20.4.0",
+    "commitlint": "^20.4.1",
     "commitlint-plugin-cspell": "^0.4.0",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "cross-env": "^10.1.0",
