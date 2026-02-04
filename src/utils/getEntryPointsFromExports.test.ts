@@ -21,7 +21,7 @@ describe('getEntryPointsFromExports()', () => {
             name: 'example',
             type: 'commonjs',
             path: '/tmp/package.json',
-            directory: '/tmp',
+            directory: resolve('/tmp'),
           },
         ),
       ).toArray();
@@ -41,7 +41,7 @@ describe('getEntryPointsFromExports()', () => {
             name: 'example',
             type: 'commonjs',
             path: '/tmp/package.json',
-            directory: '/tmp',
+            directory: resolve('/tmp'),
           },
         ),
       ).toArray();
@@ -51,7 +51,7 @@ describe('getEntryPointsFromExports()', () => {
       expect(entryPoints.at(0)).toEqual({
         moduleName: 'example',
         packagePath: '/tmp/package.json',
-        packageDirectory: '/tmp',
+        packageDirectory: resolve('/tmp'),
         type: 'commonjs',
         fileName: 'main.js',
         relativePath: 'main.js',
@@ -83,7 +83,7 @@ describe('getEntryPointsFromExports()', () => {
             name: 'example',
             type: 'commonjs',
             path: '/tmp/package.json',
-            directory: '/tmp',
+            directory: resolve('/tmp'),
           },
         ),
       ).toArray();

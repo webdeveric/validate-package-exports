@@ -7,7 +7,7 @@ describe('shouldRequire()', () => {
     expect(
       shouldRequire({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'module',
         fileName: 'test.js',
@@ -23,7 +23,7 @@ describe('shouldRequire()', () => {
     expect(
       shouldRequire({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'module',
         fileName: 'test.js',
@@ -41,7 +41,7 @@ describe('shouldRequire()', () => {
     expect(
       shouldRequire({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'commonjs',
         fileName: 'test.js',
@@ -57,7 +57,7 @@ describe('shouldRequire()', () => {
     expect(
       shouldRequire({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'module',
         fileName: 'test.js',
@@ -73,7 +73,7 @@ describe('shouldRequire()', () => {
     expect(
       shouldRequire({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'commonjs',
         fileName: 'test.js',
@@ -89,7 +89,7 @@ describe('shouldRequire()', () => {
     expect(
       shouldRequire({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'module',
         fileName: 'test.js',
@@ -109,7 +109,7 @@ describe('shouldImport()', () => {
     expect(
       shouldImport({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'commonjs',
         fileName: 'test.js',
@@ -127,7 +127,7 @@ describe('shouldImport()', () => {
     expect(
       shouldImport({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'module',
         fileName: 'test.js',
@@ -143,7 +143,7 @@ describe('shouldImport()', () => {
     expect(
       shouldImport({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'commonjs',
         fileName: 'test.js',
@@ -159,7 +159,7 @@ describe('shouldImport()', () => {
     expect(
       shouldImport({
         packagePath: './package.json',
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         moduleName: 'example-package',
         type: 'module',
         fileName: 'test.js',

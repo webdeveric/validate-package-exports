@@ -1,3 +1,5 @@
+import { resolve } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { Result, ResultCode } from './Result.js';
@@ -9,13 +11,13 @@ describe('Result', () => {
       code: ResultCode.Success,
       message: 'message',
       entryPoint: {
-        packageDirectory: './',
+        packageDirectory: process.cwd(),
         packagePath: 'package.json',
         moduleName: undefined,
         type: 'module',
         fileName: 'index.js',
         relativePath: './index.js',
-        directory: '/tmp',
+        directory: resolve('/tmp'),
         resolvedPath: '/tmp/index.js',
         subpath: undefined,
         condition: undefined,
