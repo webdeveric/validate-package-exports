@@ -50,17 +50,18 @@ export class Validator extends EventEmitter {
     [results].flat().forEach((result) => this.processResult(result));
   }
 
-  protected checkPackageJson(packageJson: PackageJson, context: PackageContext): Result {
+  protected checkPackageJson(packageJson: PackageJson, packageContext: PackageContext): Result {
     const entryPoint: EntryPoint = {
-      moduleName: `${context.name}/package.json`,
-      packagePath: context.path,
-      type: context.type,
+      moduleName: `${packageContext.name}/package.json`,
+      packageDirectory: packageContext.directory,
+      packagePath: packageContext.path,
+      type: packageContext.type,
       fileName: 'package.json',
-      resolvedPath: context.path,
+      resolvedPath: packageContext.path,
       relativePath: 'package.json',
       subpath: undefined,
       condition: undefined,
-      directory: context.directory,
+      directory: packageContext.directory,
       itemPath: [],
     };
 
@@ -132,11 +133,8 @@ export class Validator extends EventEmitter {
     return (
       await Readable.from(entryPoints)
         .map(
-          async (entryPoint: EntryPoint) => {
-            const results = await verifyEntryPoint(entryPoint, {
-              cwd: this.packageDirectory,
-              signal: this.#controller.signal,
-            });
+          (entryPoint: EntryPoint) => {
+            const results = verifyEntryPoint(entryPoint);
 
             this.processResults(results);
 
@@ -216,10 +214,7 @@ export class Validator extends EventEmitter {
       recordErrors(await this.checkSyntax(getNextEntryPoints(entryPoints)));
     }
 
-    // Optionally try to `import`/`require` the module.
-    if (this.options.verify) {
-      recordErrors(await this.verifyIncludes(getNextEntryPoints(entryPoints)));
-    }
+    recordErrors(await this.verifyIncludes(getNextEntryPoints(entryPoints)));
 
     recordErrors(await this.checkPacklist(getNextEntryPoints(entryPoints), packageContext));
 
