@@ -102,6 +102,7 @@ describe('ExportsProcessor', () => {
           condition: 'default',
           type: demoPackageJson.type,
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           moduleName: demoPackageJson.name,
           relativePath: 'index.js',
           resolvedPath: resolve('/tmp/index.js'),
@@ -113,6 +114,7 @@ describe('ExportsProcessor', () => {
         {
           type: demoPackageJson.type,
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           moduleName: demoPackageJson.name,
           relativePath: 'index.js',
           resolvedPath: resolve('/tmp/index.js'),
@@ -125,6 +127,7 @@ describe('ExportsProcessor', () => {
         {
           type: demoPackageJson.type,
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           moduleName: `${demoPackageJson.name}/package.json`,
           relativePath: 'package.json',
           resolvedPath: resolve('/tmp/package.json'),
@@ -168,6 +171,7 @@ describe('ExportsProcessor', () => {
         {
           moduleName: 'demo',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           type: 'commonjs',
           fileName: 'index.d.ts',
           relativePath: fixSlash('dist/types/index.d.ts'),
@@ -180,6 +184,7 @@ describe('ExportsProcessor', () => {
         {
           moduleName: 'demo',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           type: 'commonjs',
           fileName: 'index.js',
           relativePath: fixSlash('dist/cjs/index.js'),
@@ -192,6 +197,7 @@ describe('ExportsProcessor', () => {
         {
           moduleName: 'demo',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           type: 'module',
           fileName: 'index.js',
           relativePath: fixSlash('dist/mjs/index.js'),
@@ -253,6 +259,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'types',
           moduleName: demoPackageJson.name,
           relativePath: fixSlash('dist/types/index.d.ts'),
@@ -265,6 +272,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'require',
           moduleName: demoPackageJson.name,
           relativePath: fixSlash('dist/cjs/index.js'),
@@ -277,6 +285,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'module',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'import',
           moduleName: demoPackageJson.name,
           relativePath: fixSlash('dist/mjs/index.js'),
@@ -289,6 +298,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'types',
           moduleName: `${demoPackageJson.name}/*`,
           relativePath: fixSlash('dist/types/*.d.ts'),
@@ -301,6 +311,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'require',
           moduleName: `${demoPackageJson.name}/*`,
           relativePath: fixSlash('dist/cjs/*.js'),
@@ -313,6 +324,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'module',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'import',
           moduleName: `${demoPackageJson.name}/*`,
           relativePath: fixSlash('dist/mjs/*.js'),
@@ -325,6 +337,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'types',
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/types/sub-folder/*.d.ts'),
@@ -337,6 +350,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'require',
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/cjs/sub-folder/*.js'),
@@ -349,6 +363,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'types',
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/types/sub-folder/*.d.ts'),
@@ -361,6 +376,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'module',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: 'import',
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/mjs/sub-folder/*.js'),
@@ -373,6 +389,7 @@ describe('ExportsProcessor', () => {
         {
           type: 'commonjs',
           packagePath: packageContext.path,
+          packageDirectory: packageContext.directory,
           condition: undefined,
           moduleName: `${demoPackageJson.name}/package.json`,
           relativePath: fixSlash('package.json'),

@@ -9,6 +9,7 @@ describe('Result', () => {
       code: ResultCode.Success,
       message: 'message',
       entryPoint: {
+        packageDirectory: './',
         packagePath: 'package.json',
         moduleName: undefined,
         type: 'module',
