@@ -39,13 +39,12 @@ export type CliArguments = {
   packages: string[];
   bail: boolean;
   check: boolean;
-  verify: boolean;
   concurrency: number;
   json: boolean;
   info: boolean;
 };
 
-export type ValidatorOptions = Pick<CliArguments, 'bail' | 'check' | 'verify' | 'concurrency'> & {
+export type ValidatorOptions = Pick<CliArguments, 'bail' | 'check' | 'concurrency'> & {
   package: PackageJsonPath;
   controller: AbortController;
 };
@@ -154,6 +153,7 @@ export type PackageContext = Readonly<{
 }>;
 
 export type EntryPoint = {
+  packageDirectory: PackageContext['directory'];
   packagePath: PackageContext['path'];
   // bin scripts will not have this
   moduleName: string | undefined; // This is string used with `require` or `import`.

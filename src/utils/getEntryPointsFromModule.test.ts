@@ -2,6 +2,8 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import type { EntryPoint } from '@src/types.js';
+
 import { getEntryPointsFromModule } from './getEntryPointsFromModule.js';
 
 describe('getEntryPointsFromModule()', () => {
@@ -18,7 +20,7 @@ describe('getEntryPointsFromModule()', () => {
             name: 'test-package',
             type: 'module',
             path: './package.json',
-            directory: '/tmp',
+            directory: resolve('/tmp'),
           },
         ),
       ),
@@ -30,11 +32,12 @@ describe('getEntryPointsFromModule()', () => {
         itemPath: ['module'],
         moduleName: 'test-package',
         packagePath: './package.json',
+        packageDirectory: resolve('/tmp'),
         relativePath: 'module.js',
         resolvedPath: resolve('/tmp/module.js'),
         subpath: undefined,
         type: 'module',
-      },
+      } satisfies EntryPoint,
     ]);
   });
 });

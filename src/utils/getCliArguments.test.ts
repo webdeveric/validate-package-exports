@@ -2,6 +2,8 @@ import { availableParallelism } from 'node:os';
 
 import { describe, expect, it } from 'vitest';
 
+import type { CliArguments } from '@src/types.js';
+
 import { getCliArguments } from './getCliArguments.js';
 
 describe('getCliArguments()', () => {
@@ -11,30 +13,20 @@ describe('getCliArguments()', () => {
       check: false,
       info: process.env.RUNNER_DEBUG === '1',
       json: false,
-      verify: false,
       concurrency: availableParallelism(),
       packages: ['./package.json'],
-    });
+    } satisfies CliArguments);
 
     expect(
-      getCliArguments([
-        './some-path/package.json',
-        '--bail',
-        '--info',
-        '--check',
-        '--verify',
-        '--json',
-        '--concurrency=1',
-      ]),
+      getCliArguments(['./some-path/package.json', '--bail', '--info', '--check', '--json', '--concurrency=1']),
     ).toEqual({
       bail: true,
       check: true,
       info: true,
       json: true,
-      verify: true,
       concurrency: 1,
       packages: ['./some-path/package.json'],
-    });
+    } satisfies CliArguments);
 
     expect(getCliArguments(['--bail', '--no-bail'])).toEqual(
       expect.objectContaining({

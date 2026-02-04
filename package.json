@@ -32,14 +32,14 @@
   "engines": {
     "node": ">=20.17.0"
   },
-  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
+  "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
     "format": "prettier --write .",
     "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
-    "postbuild": "node dist/cli.mjs --check --verify",
+    "postbuild": "node dist/cli.mjs --check",
     "typecheck": "tsc --noEmit && tsc -p ./tsconfig.project-files.json",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
     "lint": "eslint ./src \"./*.{mjs,mts}\" --ext .ts",
@@ -52,24 +52,24 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.1.9",
+    "@npmcli/arborist": "^9.1.10",
     "@webdeveric/utils": "^0.74.1",
     "npm-packlist": "^10.0.3"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^20.3.1",
-    "@commitlint/types": "^20.3.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "@commitlint/types": "^20.4.0",
     "@types/node": "^20.19.30",
     "@types/npm-packlist": "^7.0.3",
-    "@types/npmcli__arborist": "^6.3.1",
-    "@vitest/coverage-v8": "^4.0.17",
+    "@types/npmcli__arborist": "^6.3.2",
+    "@vitest/coverage-v8": "^4.0.18",
     "@webdeveric/eslint-config-ts": "^0.11.0",
     "@webdeveric/prettier-config": "^0.3.0",
-    "commitlint": "^20.3.1",
+    "commitlint": "^20.4.1",
     "commitlint-plugin-cspell": "^0.4.0",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "cross-env": "^10.1.0",
-    "cspell": "^9.6.0",
+    "cspell": "^9.6.3",
     "esbuild": "^0.27.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.4.0",
@@ -79,11 +79,11 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "prettier": "^3.8.0",
-    "semantic-release": "^25.0.2",
+    "prettier": "^3.8.1",
+    "semantic-release": "^25.0.3",
     "typescript": "^5.9.3",
-    "vite-tsconfig-paths": "^6.0.4",
-    "vitest": "^4.0.17"
+    "vite-tsconfig-paths": "^6.0.5",
+    "vitest": "^4.0.18"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

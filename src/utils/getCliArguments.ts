@@ -1,4 +1,4 @@
-import { parseArgs, type ParseArgsConfig } from 'node:util';
+import { parseArgs, styleText, type ParseArgsConfig } from 'node:util';
 
 import type { CliArguments } from '@src/types.js';
 
@@ -29,10 +29,11 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
         default: false,
         short: 's',
       },
-      // Attempt to `import()` or `require()` the module.
+      /**
+       * @deprecated This is done automatically and this flag will be removed in the next version.
+       */
       verify: {
         type: 'boolean',
-        default: false,
         short: 'v',
       },
       // Output JSON
@@ -62,6 +63,15 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
 
   const { values, positionals } = parseArgs(config);
 
+  if ('verify' in values && !values.json) {
+    console.warn(
+      styleText(
+        ['bold', 'whiteBright', 'bgBlack'],
+        'The --verify flag is deprecated and will be removed in the next version.',
+      ),
+    );
+  }
+
   const noBail = values['no-bail'] ?? config.options['no-bail'].default;
   const noInfo = values['no-info'] ?? config.options['no-info'].default;
 
@@ -70,8 +80,7 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
     concurrency: parseConcurrency(values.concurrency),
     bail: noBail ? false : (values.bail ?? config.options.bail.default),
     check: values.check ?? config.options.check.default,
-    verify: values.verify ?? config.options.verify.default,
-    json: values.json ?? config.options.verify.default,
+    json: values.json ?? false,
     info: noInfo ? false : (values.info ?? config.options.info.default),
   };
 }

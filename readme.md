@@ -23,7 +23,6 @@ yarn add validate-package-exports -D
 | Flag | Description | Default value |
 | --- | --- | --- |
 | `--check` / `-s` | Check syntax of JS files | `false` |
-| `--verify` / `-v` | Verify a module can be imported or required | `false` |
 | `--concurrency` / `-c` | Concurrency | `availableParallelism()` |
 | `--bail` / `-b` | Stop after the first error | `process.env.CI === 'true'` |
 | `--no-bail` | Turn off `--bail` | `false` |
@@ -45,7 +44,7 @@ validate-package-exports [FILE]... [options]
 {
   "scripts": {
     "build": "YOUR-BUILD-SCRIPT",
-    "postbuild": "validate-package-exports --check --verify"
+    "postbuild": "validate-package-exports --check"
   }
 }
 ```
@@ -55,7 +54,7 @@ OR
 ```json
 {
   "scripts": {
-    "prepublishOnly": "validate-package-exports --check --verify"
+    "prepublishOnly": "validate-package-exports --check"
   }
 }
 ```
@@ -63,7 +62,7 @@ OR
 ### Using `npx`
 
 ```shell
-npx --yes validate-package-exports ./path/to/package.json --check --verify
+npx --yes validate-package-exports ./path/to/package.json --check
 ```
 
 ## Local development
