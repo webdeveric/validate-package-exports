@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --experimental-import-meta-resolve
 
 import { setMaxListeners } from 'node:events';
 import { Readable } from 'node:stream';
