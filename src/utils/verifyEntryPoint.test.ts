@@ -105,7 +105,7 @@ describe('shouldRequire()', () => {
 });
 
 describe('shouldImport()', () => {
-  it('Returns true for cjs packages', () => {
+  it('Returns false for cjs packages', () => {
     expect(
       shouldImport({
         packagePath: './package.json',
@@ -120,7 +120,7 @@ describe('shouldImport()', () => {
         condition: undefined,
         itemPath: ['main'],
       }),
-    ).toBeTruthy();
+    ).toBeFalsy();
   });
 
   it('Returns a boolean', () => {
