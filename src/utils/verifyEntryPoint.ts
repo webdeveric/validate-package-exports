@@ -8,6 +8,10 @@ export function shouldRequire(entryPoint: EntryPoint): boolean {
   if (entryPoint.itemPath.length === 1) {
     const firstPath = entryPoint.itemPath[0];
 
+    if (firstPath === 'module' && entryPoint.type === 'module') {
+      return false;
+    }
+
     if (firstPath === 'main' || firstPath === 'exports') {
       return entryPoint.type !== 'module';
     }
@@ -17,6 +21,18 @@ export function shouldRequire(entryPoint: EntryPoint): boolean {
 }
 
 export function shouldImport(entryPoint: EntryPoint): boolean {
+  if (entryPoint.itemPath.length === 1) {
+    const firstPath = entryPoint.itemPath[0];
+
+    if (firstPath === 'main' && entryPoint.type === 'commonjs') {
+      return false;
+    }
+
+    if (firstPath === 'main' || firstPath === 'exports') {
+      return entryPoint.type !== 'commonjs';
+    }
+  }
+
   return typeof entryPoint.condition === 'undefined' || entryPoint.condition === 'import';
 }
 
