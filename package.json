@@ -52,9 +52,9 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.3.0",
+    "@npmcli/arborist": "^9.3.1",
     "@webdeveric/utils": "^0.74.1",
-    "npm-packlist": "^10.0.3"
+    "npm-packlist": "^10.0.4"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^20.4.2",
