@@ -63,7 +63,7 @@
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.2",
     "@vitest/coverage-v8": "^4.0.18",
-    "@webdeveric/eslint-config-ts": "^0.11.0",
+    "@webdeveric/eslint-config-ts": "^0.12.0",
     "@webdeveric/prettier-config": "^0.3.0",
     "commitlint": "^20.4.1",
     "commitlint-plugin-cspell": "^0.4.0",
