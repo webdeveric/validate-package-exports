@@ -2,6 +2,8 @@ import { EventEmitter } from 'node:events';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 
+import { unique } from '@webdeveric/utils/unique';
+
 import { ExitCode, type EntryPoint, type PackageContext, type PackageJson, type ValidatorOptions } from '@src/types.js';
 import { checkFileExists } from '@utils/checkFileExists.js';
 import { checkSyntax } from '@utils/checkSyntax.js';
@@ -88,7 +90,7 @@ export class Validator extends EventEmitter {
   }
 
   protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<Result[]> {
-    return await Readable.from(entryPoints)
+    return await Readable.from(unique(entryPoints, (entryPoint) => entryPoint.resolvedPath))
       .map(
         async (entryPoint: EntryPoint) => {
           const results = await checkFileExists(entryPoint);
@@ -110,7 +112,7 @@ export class Validator extends EventEmitter {
   protected async checkSyntax(entryPoints: EntryPoint[]): Promise<Result[]> {
     const jsEntryPoints = entryPoints.filter((entryPoint) => /\.[cm]?js$/i.test(entryPoint.resolvedPath));
 
-    return await Readable.from(jsEntryPoints)
+    return await Readable.from(unique(jsEntryPoints, (entryPoint) => entryPoint.resolvedPath))
       .map(
         async (entryPoint: EntryPoint) => {
           const results = await checkSyntax(entryPoint, { signal: this.#controller.signal });
@@ -131,7 +133,7 @@ export class Validator extends EventEmitter {
 
   protected async verifyIncludes(entryPoints: EntryPoint[]): Promise<Result[]> {
     return (
-      await Readable.from(entryPoints)
+      await Readable.from(unique(entryPoints, (entryPoint) => `${entryPoint.moduleName}-${entryPoint.type}`))
         .map(
           (entryPoint: EntryPoint) => {
             const results = verifyEntryPoint(entryPoint);
@@ -154,19 +156,29 @@ export class Validator extends EventEmitter {
   protected async checkPacklist(entryPoints: EntryPoint[], packageContext: PackageContext): Promise<Result[]> {
     const files = new Set(await getPacklist(packageContext.directory));
 
-    const results = entryPoints.map((entryPoint): Result => {
-      const willBePacked = files.has(entryPoint.relativePath);
+    const results: Result[] = await Readable.from(unique(entryPoints, (entryPoint) => entryPoint.relativePath))
+      .map(
+        (entryPoint): Result => {
+          const willBePacked = files.has(entryPoint.relativePath);
 
-      return new Result({
-        name: 'packlist',
-        code: willBePacked ? ResultCode.Success : ResultCode.Error,
-        message: willBePacked
-          ? `${entryPoint.relativePath} will be packed.`
-          : `${entryPoint.relativePath} will not be packed.`,
-        error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files.'),
-        entryPoint,
+          return new Result({
+            name: 'packlist',
+            code: willBePacked ? ResultCode.Success : ResultCode.Error,
+            message: willBePacked
+              ? `${entryPoint.relativePath} will be packed.`
+              : `${entryPoint.relativePath} will not be packed.`,
+            error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files.'),
+            entryPoint,
+          });
+        },
+        {
+          signal: this.#controller.signal,
+          concurrency: this.options.concurrency,
+        },
+      )
+      .toArray({
+        signal: this.#controller.signal,
       });
-    });
 
     this.processResults(results);
 
