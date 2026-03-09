@@ -1,10 +1,10 @@
 import { AssertionError } from 'node:assert';
 import { createRequire } from 'node:module';
 
+import { memo } from '@webdeveric/utils/memo';
+
 import { Result, ResultCode } from '@lib/Result.js';
 import type { EntryPoint } from '@src/types.js';
-
-import { memo } from './memo.js';
 
 const getRequire = memo(createRequire);
 
