@@ -24,6 +24,7 @@ yarn add validate-package-exports -D
 | --- | --- | --- |
 | `--check` / `-s` | Check syntax of JS files | `false` |
 | `--concurrency` / `-c` | Concurrency | `availableParallelism()` |
+| `--dev-condition` | Custom condition name only used during dev | none |
 | `--bail` / `-b` | Stop after the first error | `process.env.CI === 'true'` |
 | `--no-bail` | Turn off `--bail` | `false` |
 | `--info` / `-i` | Show `info` messages.<br>The default behavior is to only show `error`. | `process.env.RUNNER_DEBUG === '1'` |
@@ -55,6 +56,18 @@ OR
 {
   "scripts": {
     "prepublishOnly": "validate-package-exports --check"
+  }
+}
+```
+
+#### Dev Condition
+
+If you use a [`customCondition` in your `tsconfig.json`](https://www.typescriptlang.org/tsconfig/#customConditions), like when using [Nx](https://nx.dev/docs/technologies/test-tools/vitest/guides/testing-without-building-dependencies#step-1-add-customconditions-to-tsconfigbasejson), you can use the `--dev-condition` flag so that those entry points are skipped when validating which files are packed.
+
+```json
+{
+  "scripts": {
+    "prepublishOnly": "validate-package-exports --check --info --dev-condition @example/monorepo"
   }
 }
 ```

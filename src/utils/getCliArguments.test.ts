@@ -11,9 +11,10 @@ describe('getCliArguments()', () => {
     expect(getCliArguments([])).toEqual({
       bail: process.env.CI === 'true',
       check: false,
+      concurrency: availableParallelism(),
+      devCondition: [],
       info: process.env.RUNNER_DEBUG === '1',
       json: false,
-      concurrency: availableParallelism(),
       packages: ['./package.json'],
     } satisfies CliArguments);
 
@@ -22,9 +23,10 @@ describe('getCliArguments()', () => {
     ).toEqual({
       bail: true,
       check: true,
+      concurrency: 1,
+      devCondition: [],
       info: true,
       json: true,
-      concurrency: 1,
       packages: ['./some-path/package.json'],
     } satisfies CliArguments);
 
@@ -39,6 +41,54 @@ describe('getCliArguments()', () => {
         info: false,
       }),
     );
+  });
+
+  it('--dev-condition flag', () => {
+    // Single value
+    expect(getCliArguments(['--dev-condition', '@webdeveric/example'])).toEqual({
+      bail: process.env.CI === 'true',
+      check: false,
+      concurrency: availableParallelism(),
+      devCondition: ['@webdeveric/example'],
+      info: process.env.RUNNER_DEBUG === '1',
+      json: false,
+      packages: ['./package.json'],
+    } satisfies CliArguments);
+
+    // Multiple values
+    expect(
+      getCliArguments(['--dev-condition', '@webdeveric/example1', '--dev-condition', '@webdeveric/example2']),
+    ).toEqual({
+      bail: process.env.CI === 'true',
+      check: false,
+      concurrency: availableParallelism(),
+      devCondition: ['@webdeveric/example1', '@webdeveric/example2'],
+      info: process.env.RUNNER_DEBUG === '1',
+      json: false,
+      packages: ['./package.json'],
+    } satisfies CliArguments);
+
+    // CSV string
+    expect(getCliArguments(['--dev-condition', '@webdeveric/example1,@webdeveric/example2'])).toEqual({
+      bail: process.env.CI === 'true',
+      check: false,
+      concurrency: availableParallelism(),
+      devCondition: ['@webdeveric/example1', '@webdeveric/example2'],
+      info: process.env.RUNNER_DEBUG === '1',
+      json: false,
+      packages: ['./package.json'],
+    } satisfies CliArguments);
+
+    // CSV string with whitespace padding
+    expect(getCliArguments(['--dev-condition', ' @webdeveric/example1 , @webdeveric/example2 '])).toEqual({
+      bail: process.env.CI === 'true',
+      check: false,
+      concurrency: availableParallelism(),
+      devCondition: ['@webdeveric/example1', '@webdeveric/example2'],
+      info: process.env.RUNNER_DEBUG === '1',
+      json: false,
+      packages: ['./package.json'],
+    } satisfies CliArguments);
   });
 
   it('Throws when given incorrect arguments', () => {

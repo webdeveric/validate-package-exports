@@ -12,9 +12,16 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
     strict: true,
     tokens: false,
     options: {
+      // This value is used in `Readable` options.
       concurrency: {
         type: 'string',
         short: 'c',
+      },
+      // Specify which custom conditions are used only during development.
+      'dev-condition': {
+        type: 'string',
+        multiple: true,
+        default: [],
       },
       // Stop processing at the first error.
       bail: {
@@ -30,7 +37,7 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
         short: 's',
       },
       /**
-       * @deprecated This is done automatically and this flag will be removed in the next version.
+       * @deprecated This is done automatically and this flag will be removed in the next major version.
        */
       verify: {
         type: 'boolean',
@@ -74,13 +81,17 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
 
   const noBail = values['no-bail'] ?? config.options['no-bail'].default;
   const noInfo = values['no-info'] ?? config.options['no-info'].default;
+  const devCondition = values['dev-condition'] ?? config.options['dev-condition'].default;
 
   return {
-    packages: positionals.length ? positionals : ['./package.json'],
-    concurrency: parseConcurrency(values.concurrency),
     bail: noBail ? false : (values.bail ?? config.options.bail.default),
     check: values.check ?? config.options.check.default,
-    json: values.json ?? false,
+    concurrency: parseConcurrency(values.concurrency),
+    devCondition: devCondition.flatMap((item) => {
+      return item.split(',').map((singleDevCondition) => singleDevCondition.trim());
+    }),
     info: noInfo ? false : (values.info ?? config.options.info.default),
+    json: values.json ?? false,
+    packages: positionals.length ? positionals : ['./package.json'],
   };
 }
