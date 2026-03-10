@@ -157,6 +157,12 @@ export class Validator extends EventEmitter {
     const files = new Set(await getPacklist(packageContext.directory));
 
     const results: Result[] = await Readable.from(unique(entryPoints, (entryPoint) => entryPoint.relativePath))
+      // Remove entry points that are matching a dev condition.
+      // The assumption is that files for dev conditions will not be packed.
+      .filter(
+        (entryPoint: EntryPoint) =>
+          !(entryPoint.condition !== undefined && this.options.devCondition.includes(entryPoint.condition)),
+      )
       .map(
         (entryPoint): Result => {
           const willBePacked = files.has(entryPoint.relativePath);

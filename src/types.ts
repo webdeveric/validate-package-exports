@@ -36,15 +36,16 @@ export const logLevelMapping = {
 } as const satisfies Record<LogLevelName, LogLevel>;
 
 export type CliArguments = {
-  packages: string[];
   bail: boolean;
   check: boolean;
   concurrency: number;
-  json: boolean;
+  devCondition: string[];
   info: boolean;
+  json: boolean;
+  packages: string[];
 };
 
-export type ValidatorOptions = Pick<CliArguments, 'bail' | 'check' | 'concurrency'> & {
+export type ValidatorOptions = Omit<CliArguments, 'json' | 'info' | 'packages'> & {
   package: PackageJsonPath;
   controller: AbortController;
 };
