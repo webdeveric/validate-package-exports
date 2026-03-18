@@ -1,10 +1,14 @@
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
+
 autoInstallPeers: true
 
 enablePrePostScripts: true
 
-strictPeerDependencies: true
-
 minimumReleaseAge: 2880 # 2 days
 
 minimumReleaseAgeExclude:
-  - '@webdeveric/utils@0.75.0'
+  - '@webdeveric/utils@0.76.0'
+
+strictPeerDependencies: true

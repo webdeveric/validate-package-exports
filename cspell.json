@@ -7,6 +7,7 @@
     "conventionalcommits",
     "corepack",
     "env",
+    "esbuild",
     "esm",
     "npmcli",
     "nvmrc",
@@ -29,6 +30,7 @@
     ".github/CODEOWNERS",
     ".vscode/*.json",
     "node_modules/**",
-    "pnpm-lock.yaml"
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml"
   ]
 }

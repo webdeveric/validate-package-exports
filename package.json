@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=20.17.0"
   },
-  "packageManager": "pnpm@10.32.0+sha512.9b2634bb3fed5601c33633f2d92593f506270a3963b8c51d2b2d6a828da615ce4e9deebef9614ccebbc13ac8d3c0f9c9ccceb583c69c8578436fa477dbb20d70",
+  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
@@ -52,25 +52,25 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.4.0",
-    "@webdeveric/utils": "^0.75.0",
+    "@npmcli/arborist": "^9.4.1",
+    "@webdeveric/utils": "^0.76.0",
     "npm-packlist": "^10.0.4"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^20.4.3",
-    "@commitlint/types": "^20.4.3",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/types": "^20.5.0",
     "@types/node": "^20.19.37",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/coverage-v8": "^4.1.0",
     "@webdeveric/eslint-config-ts": "^0.12.0",
     "@webdeveric/prettier-config": "^0.3.0",
-    "commitlint": "^20.4.3",
+    "commitlint": "^20.5.0",
     "commitlint-plugin-cspell": "^0.6.0",
     "conventional-changelog-conventionalcommits": "^9.3.0",
     "cross-env": "^10.1.0",
     "cspell": "^9.7.0",
-    "esbuild": "^0.27.3",
+    "esbuild": "^0.27.4",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.4.0",
     "eslint": "^8.57.1",
@@ -78,20 +78,11 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.3.2",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
     "semantic-release": "^25.0.3",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.18"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "unrs-resolver"
-    ],
-    "overrides": {
-      "undici@<6.23.0": ">=6.23.0"
-    }
+    "vitest": "^4.1.0"
   }
 }
