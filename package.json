@@ -52,8 +52,8 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.4.0",
-    "@webdeveric/utils": "^0.75.0",
+    "@npmcli/arborist": "^9.4.1",
+    "@webdeveric/utils": "^0.76.0",
     "npm-packlist": "^10.0.4"
   },
   "devDependencies": {
@@ -84,14 +84,5 @@
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "unrs-resolver"
-    ],
-    "overrides": {
-      "undici@<6.23.0": ">=6.23.0"
-    }
   }
 }
