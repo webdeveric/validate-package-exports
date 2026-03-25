@@ -8,10 +8,10 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "javascript.format.semicolons": "insert",
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "typescript.format.semicolons": "insert",
-  "typescript.updateImportsOnFileMove.enabled": "always",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.format.semicolons": "insert",
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "js/ts.suggest.jsdoc.generateReturns": false,
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -24,12 +24,7 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "javascript.suggest.completeJSDocs": true,
-  "javascript.suggest.jsdoc.generateReturns": true,
-  "typescript.suggest.completeJSDocs": false,
-  "typescript.suggest.jsdoc.generateReturns": false,
   "editor.codeActionsOnSave": {
     "source.fixAll": "always"
-  }
+  },
 }

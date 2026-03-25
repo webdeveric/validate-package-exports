@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=20.17.0"
   },
-  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
@@ -40,7 +40,7 @@
     "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
     "postbuild": "node dist/cli.mjs --check",
-    "typecheck": "tsc --noEmit && tsc -p ./tsconfig.project-files.json",
+    "typecheck": "tsc --build --force --noEmit",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
     "lint": "eslint ./src \"./*.{mjs,mts}\" --ext .ts",
     "test": "vitest",
@@ -52,7 +52,7 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.4.1",
+    "@npmcli/arborist": "^9.4.2",
     "@webdeveric/utils": "^0.76.0",
     "npm-packlist": "^10.0.4"
   },
@@ -62,9 +62,9 @@
     "@types/node": "^20.19.37",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.1",
     "@webdeveric/eslint-config-ts": "^0.12.0",
-    "@webdeveric/prettier-config": "^0.3.0",
+    "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^20.5.0",
     "commitlint-plugin-cspell": "^0.6.0",
     "conventional-changelog-conventionalcommits": "^9.3.0",
@@ -81,8 +81,8 @@
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
     "semantic-release": "^25.0.3",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.1"
   }
 }

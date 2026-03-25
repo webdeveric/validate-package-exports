@@ -20,7 +20,7 @@ try {
     },
     packages: 'external',
     target: `node${process.versions.node}`,
-    minify: process.env.NODE_ENV === 'production',
+    minify: process.env['NODE_ENV'] === 'production',
     banner: {
       js: comment(
         `

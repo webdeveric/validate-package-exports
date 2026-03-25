@@ -28,7 +28,7 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
         type: 'boolean',
         short: 'b',
         // Fail quickly if running in a CI service.
-        default: process.env.CI === 'true',
+        default: process.env['CI'] === 'true',
       },
       // Run syntax check
       check: {
@@ -52,7 +52,7 @@ export function getCliArguments(args?: NodeJS.Process['argv']): CliArguments {
       // Show info messages
       info: {
         type: 'boolean',
-        default: process.env.RUNNER_DEBUG === '1',
+        default: process.env['RUNNER_DEBUG'] === '1',
         short: 'i',
       },
       // Turn off `bail`

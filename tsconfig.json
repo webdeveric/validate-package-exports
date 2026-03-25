@@ -1,36 +1,16 @@
 {
+  "extends": "./tsconfig.base.json",
+  "files": [],
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "lib": ["ES2022"],
-    "resolveJsonModule": true,
-    "alwaysStrict": false,
-    "strict": true,
-    "declaration": true,
-    "outDir": "./dist",
-    "downlevelIteration": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "verbatimModuleSyntax": true,
-    "noErrorTruncation": true,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true,
-    "rootDir": "./src",
-    "paths": {
-      "@lib/*": ["./src/lib/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@src/*": ["./src/*"]
-    }
+    "incremental": true,
+    "tsBuildInfoFile": "./cache/.tsbuildinfo"
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "private"]
+  "references": [
+    {
+      "path": "./tsconfig.src.json"
+    },
+    {
+      "path": "./tsconfig.configs.json"
+    }
+  ]
 }
