@@ -72,7 +72,7 @@ try {
     );
   }
 } catch (error) {
-  console.group(process.env.npm_package_name);
+  console.group(process.env['npm_package_name']);
   console.dir(error, { depth: null });
   console.groupEnd();
 
