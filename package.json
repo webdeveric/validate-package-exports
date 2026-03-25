@@ -40,7 +40,7 @@
     "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
     "postbuild": "node dist/cli.mjs --check",
-    "typecheck": "tsc --noEmit && tsc -p ./tsconfig.project-files.json",
+    "typecheck": "tsc --build --force --noEmit",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
     "lint": "eslint ./src \"./*.{mjs,mts}\" --ext .ts",
     "test": "vitest",
@@ -81,7 +81,7 @@
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
     "semantic-release": "^25.0.3",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.1"
   }
