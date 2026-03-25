@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "./src",
+    "verbatimModuleSyntax": true,
+    "tsBuildInfoFile": "./cache/src.tsbuildinfo"
+  },
+  "include": ["src/**/*"]
+}
