@@ -59,7 +59,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^20.5.0",
     "@commitlint/types": "^20.5.0",
-    "@types/node": "^20.19.37",
+    "@types/node": "^25.5.0",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
     "@vitest/coverage-v8": "^4.1.1",
