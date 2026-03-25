@@ -62,9 +62,9 @@
     "@types/node": "^20.19.37",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.1",
     "@webdeveric/eslint-config-ts": "^0.12.0",
-    "@webdeveric/prettier-config": "^0.3.0",
+    "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^20.5.0",
     "commitlint-plugin-cspell": "^0.6.0",
     "conventional-changelog-conventionalcommits": "^9.3.0",
@@ -83,6 +83,6 @@
     "semantic-release": "^25.0.3",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.1"
   }
 }
