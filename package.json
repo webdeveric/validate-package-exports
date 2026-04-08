@@ -72,7 +72,7 @@
     "cspell": "^9.7.0",
     "esbuild": "^0.27.4",
     "esbuild-plugin-clean": "^1.0.1",
-    "esbuild-plugin-environment": "^0.4.0",
+    "esbuild-plugin-environment": "^0.5.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
