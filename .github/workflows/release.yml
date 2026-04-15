@@ -5,13 +5,19 @@ on:
     branches:
       - master
 
+concurrency: release
+
+env:
+  HUSKY: 0
+
 permissions:
   contents: read # for checkout
 
 jobs:
   release:
     name: Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    environment: release
     permissions:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
@@ -29,8 +35,13 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: '.node-version'
           cache: 'pnpm'
+
+      - name: Install latest npm
+        run: |
+          npm install -g npm@latest
+          npm --version
 
       - name: Installing dependencies
         run: pnpm install --frozen-lockfile
@@ -42,7 +53,4 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Set this value in your repository secrets after you generate it at NPM.
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
         run: pnpm exec semantic-release
