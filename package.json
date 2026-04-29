@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=20.17.0"
   },
-  "packageManager": "pnpm@10.33.1+sha512.05ba3c1d5d1c18f68df06470d74055e62d41fc110a0c660db1b2dfb2785327f04cf0f68345d4609bc52089e7fa0343c31593b2f9594e2c5d5da426230acc9820",
+  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
@@ -52,8 +52,8 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.4.2",
-    "@webdeveric/utils": "^0.76.0",
+    "@npmcli/arborist": "^9.4.3",
+    "@webdeveric/utils": "^0.78.0",
     "npm-packlist": "^10.0.4"
   },
   "devDependencies": {
@@ -62,11 +62,11 @@
     "@types/node": "^20.19.39",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@typescript/native-preview": "7.0.0-dev.20260420.1",
-    "@vitest/coverage-v8": "^4.1.4",
+    "@typescript/native-preview": "7.0.0-dev.20260427.1",
+    "@vitest/coverage-v8": "^4.1.5",
     "@webdeveric/eslint-config-ts": "^0.12.0",
     "@webdeveric/prettier-config": "^0.4.0",
-    "commitlint": "^20.5.0",
+    "commitlint": "^20.5.2",
     "commitlint-plugin-cspell": "^0.8.0",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
@@ -83,6 +83,6 @@
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.3",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.5"
   }
 }
