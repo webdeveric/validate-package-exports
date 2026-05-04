@@ -21,6 +21,7 @@
     "typecheck",
     "unrs-resolver",
     "unstub",
+    "vite",
     "vitest",
     "webdeveric"
   ],
