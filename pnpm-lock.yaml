@@ -12,8 +12,8 @@ importers:
         specifier: ^9.4.3
         version: 9.4.3
       '@webdeveric/utils':
-        specifier: ^0.78.0
-        version: 0.78.0
+        specifier: ^0.79.0
+        version: 0.79.0
       npm-packlist:
         specifier: ^10.0.4
         version: 10.0.4
@@ -1324,8 +1324,8 @@ packages:
     peerDependencies:
       prettier: '>=2.4.0'
 
-  '@webdeveric/utils@0.78.0':
-    resolution: {integrity: sha512-y1D2wS2a4MtLRZ0mDxKsLLhMh1Xi5OECBVvHhKslw0wBdP/glrGdzcYjebfzqj7ktmW5NlB4e2MsGJALyf3w6A==}
+  '@webdeveric/utils@0.79.0':
+    resolution: {integrity: sha512-1ANvex1ghT2JlK/Z6QqT1BR48RVFh1+gLYAL2A658FPrfbRCfxLj6FPKW1tGrgT6ucjq2EnCMhgmHY7KAowfww==}
     engines: {node: '>=18.0.0'}
 
   abbrev@4.0.0:
@@ -5288,7 +5288,7 @@ snapshots:
     dependencies:
       prettier: 3.8.3
 
-  '@webdeveric/utils@0.78.0': {}
+  '@webdeveric/utils@0.79.0': {}
 
   abbrev@4.0.0: {}
 
