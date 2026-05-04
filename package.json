@@ -53,7 +53,7 @@
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
     "@npmcli/arborist": "^9.4.3",
-    "@webdeveric/utils": "^0.78.0",
+    "@webdeveric/utils": "^0.79.0",
     "npm-packlist": "^10.0.4"
   },
   "devDependencies": {
@@ -82,7 +82,6 @@
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.3",
-    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.5"
   }
 }

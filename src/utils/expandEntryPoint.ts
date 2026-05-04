@@ -1,6 +1,7 @@
 import { opendir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
+import { countCharacter } from '@webdeveric/utils/countCharacter';
 import { escapeRegExp } from '@webdeveric/utils/escapeRegExp';
 
 import type { EntryPoint } from '@src/types.js';
@@ -20,7 +21,8 @@ function replaceStars(entryPoint: EntryPoint, starValue: string): EntryPoint {
     const value = entry[property];
 
     if (value) {
-      entry[property] = value.replace('*', starValue);
+      // There should only ever be one `*`.
+      entry[property] = value.replaceAll('*', starValue);
     }
 
     return entry;
@@ -46,10 +48,16 @@ async function* processDirectory(
 }
 
 export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<EntryPoint> {
-  if (!entryPoint.resolvedPath.includes('*')) {
+  const numberOfStars = countCharacter(entryPoint.resolvedPath, '*');
+
+  if (numberOfStars === 0) {
     yield entryPoint;
 
     return;
+  }
+
+  if (numberOfStars > 1) {
+    throw new Error('Only one star is allowed in entryPoint.resolvedPath');
   }
 
   const [prefix, suffix] = entryPoint.resolvedPath.split('*');
