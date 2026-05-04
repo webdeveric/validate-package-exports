@@ -6,6 +6,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  HUSKY: 0
+
+permissions:
+  contents: read # for checkout
+
 jobs:
   ci:
     name: Continuous Integration
