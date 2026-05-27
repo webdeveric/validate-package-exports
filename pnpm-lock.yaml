@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@npmcli/arborist':
         specifier: ^9.5.0
-        version: 9.5.0
+        version: 9.6.0
       '@webdeveric/utils':
         specifier: ^0.79.0
         version: 0.79.0
@@ -703,8 +703,8 @@ packages:
     resolution: {integrity: sha512-kAQTcEN9E8ERLVg5AsGwLNoFb+oEG6engbqAU2P43gD4JEIkNGMHdVQ096FsOAAYpZPB0RSt0zgInKIAS1l5QA==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  '@npmcli/arborist@9.5.0':
-    resolution: {integrity: sha512-qS+TtKWC58sjBjD+szLrhEj2TCLnwzUA9vlMyCnU9ztw01ZjQSu25iQPxeBa0sk9sS9/Hzs/xJMWl7J/vRCjGQ==}
+  '@npmcli/arborist@9.6.0':
+    resolution: {integrity: sha512-Dku9UWbrrX+UCu8rQ1obGKaQAL4kwdt3hHCNXrd0n0R/4B8oq3CzloUAShwFjfsAGM6KY27gPuNftOUEZ4nhOw==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
 
@@ -956,8 +956,8 @@ packages:
     resolution: {integrity: sha512-NwCl5Y0V6Di0NexvkTqdoVfmjTaQwoLM236r89KEojGmq/jMls8S+zb7yOwAPdXvbwfKDlP+lmXgAL4vKSQT+A==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  '@sigstore/core@3.2.0':
-    resolution: {integrity: sha512-kxHrDQ9YgfrWUSXU0cjsQGv8JykOFZQ9ErNKbFPWzk3Hgpwu8x2hHrQ9IdA8yl+j9RTLTC3sAF3Tdq1IQCP4oA==}
+  '@sigstore/core@3.2.1':
+    resolution: {integrity: sha512-qRsxPnCrbC/puegGxKuynfnxgLiHqWStrSjxkoB4YKqq3Z3s4cyZyj42ZdWFAEblNP65C+rBH8EuREHIXoi83g==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
   '@sigstore/protobuf-specs@0.5.1':
@@ -972,8 +972,8 @@ packages:
     resolution: {integrity: sha512-TCAzTy0xzdP79EnxSjq9KQ3eaR7+FmudLC6eRKknVKZbV7ZNlGLClAAQb/HMNJ5n2OBNk2GT1tEmU0xuPr+SLQ==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  '@sigstore/verify@3.1.0':
-    resolution: {integrity: sha512-mNe0Iigql08YupSOGv197YdHpPPr+EzDZmfCgMc7RPNaZTw5aLN01nBl6CHJOh3BGtnMIj83EeN4butBchc8Ag==}
+  '@sigstore/verify@3.1.1':
+    resolution: {integrity: sha512-qv7+G3J2cc6wwFj3yKvXOamzqhMwSk1ogPGmhpS8iXllcPrJaIIBA+4HbttlHVu1pqWTdmaCH/WE7UOC51kdoA==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
   '@simple-libs/child-process-utils@1.0.2':
@@ -1459,8 +1459,8 @@ packages:
   before-after-hook@4.0.0:
     resolution: {integrity: sha512-q6tR3RPqIB1pMiTRMFcZwuG5T8vwp+vUvEG0vuI6B+Rikh5BfPp2fQ82c925FOs+b0lcFQ8CFrL+KbilfZFhOQ==}
 
-  bin-links@6.0.0:
-    resolution: {integrity: sha512-X4CiKlcV2GjnCMwnKAfbVWpHa++65th9TuzAEYtZoATiOE2DQKhSp4CJlyLoTqdhBKlXjpXjCTYPNNFS33Fi6w==}
+  bin-links@6.0.2:
+    resolution: {integrity: sha512-frE1t78WOwJ45PKV2cF2tNPjTcs9L1J9s6VkrV59wanRP4GlaomuxYPVma7BwthMg8WnfSory4w5PTE6FZZ81w==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
   bottleneck@2.19.5:
@@ -2764,8 +2764,8 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  lru-cache@11.3.6:
-    resolution: {integrity: sha512-Gf/KoL3C/MlI7Bt0PGI9I+TeTC/I6r/csU58N4BSNc4lppLBeKsOdFYkK+dX0ABDUMJNfCHTyPpzwwO21Awd3A==}
+  lru-cache@11.5.0:
+    resolution: {integrity: sha512-5YgH9UJd7wVb9hIouI2adWpgqrrICkt070Dnj8EUY1+B4B2P9eRLPAkAAo6NICA7CEhOIeBHl46u9zSNpNu7zA==}
     engines: {node: 20 || >=22}
 
   magic-string@0.30.21:
@@ -3250,8 +3250,8 @@ packages:
     resolution: {integrity: sha512-orRsuYpJVw8LdAwqqLykBj9ecS5/cRHlI5+nvTo8LcCKmzDmqVORXtOIYEEQuL9D4BxtA1lm5isAqzQZCoQ6Eg==}
     engines: {node: '>=4'}
 
-  postcss@8.5.14:
-    resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
+  postcss@8.5.15:
+    resolution: {integrity: sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==}
     engines: {node: ^10 || ^12 || >=14}
 
   prelude-ls@1.2.1:
@@ -3421,6 +3421,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.8.1:
+    resolution: {integrity: sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
     engines: {node: '>= 0.4'}
@@ -3468,8 +3473,8 @@ packages:
     resolution: {integrity: sha512-iuh+gPf28RkltuJC7W5MRi6XAjTDCAPC/prJUpQoG4vIP3MJZ+GTydVnodXA7pwvTKb2cA0m9OFZW/cdWy/I/w==}
     engines: {node: '>=6'}
 
-  sigstore@4.1.0:
-    resolution: {integrity: sha512-/fUgUhYghuLzVT/gaJoeVehLCgZiUxPCPMcyVNY0lIf/cTCz58K/WTI7PefDarXxp9nUKpEwg1yyz3eSBMTtgA==}
+  sigstore@4.1.1:
+    resolution: {integrity: sha512-endqECJkfhozrXMK5ngu/UAA0xVcVEFdnHJCElGaExypjW+HK5i6zu3NteLoaX/iFbRUbC3+DjttQs0GARr+5w==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
   skin-tone@2.0.0:
@@ -4109,7 +4114,7 @@ snapshots:
   '@commitlint/is-ignored@21.0.1':
     dependencies:
       '@commitlint/types': 21.0.1
-      semver: 7.8.0
+      semver: 7.8.1
 
   '@commitlint/lint@21.0.1':
     dependencies:
@@ -4181,7 +4186,7 @@ snapshots:
     dependencies:
       '@simple-libs/child-process-utils': 1.0.2
       '@simple-libs/stream-utils': 1.2.0
-      semver: 7.8.0
+      semver: 7.8.1
     optionalDependencies:
       conventional-commits-filter: 5.0.0
       conventional-commits-parser: 6.4.0
@@ -4589,12 +4594,12 @@ snapshots:
       agent-base: 7.1.4
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6
-      lru-cache: 11.3.6
+      lru-cache: 11.5.0
       socks-proxy-agent: 8.0.5
     transitivePeerDependencies:
       - supports-color
 
-  '@npmcli/arborist@9.5.0':
+  '@npmcli/arborist@9.6.0':
     dependencies:
       '@gar/promise-retry': 1.0.3
       '@isaacs/string-locale-compare': 1.1.0
@@ -4608,12 +4613,12 @@ snapshots:
       '@npmcli/query': 5.0.0
       '@npmcli/redact': 4.0.0
       '@npmcli/run-script': 10.0.4
-      bin-links: 6.0.0
+      bin-links: 6.0.2
       cacache: 20.0.4
       common-ancestor-path: 2.0.0
       hosted-git-info: 9.0.3
       json-stringify-nice: 1.1.4
-      lru-cache: 11.3.6
+      lru-cache: 11.5.0
       minimatch: 10.2.5
       nopt: 9.0.0
       npm-install-checks: 8.0.0
@@ -4626,7 +4631,7 @@ snapshots:
       proggy: 4.0.0
       promise-all-reject-late: 1.0.1
       promise-call-limit: 3.0.2
-      semver: 7.8.0
+      semver: 7.8.1
       ssri: 13.0.1
       treeverse: 3.0.0
       walk-up-path: 4.0.0
@@ -4635,17 +4640,17 @@ snapshots:
 
   '@npmcli/fs@5.0.0':
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.1
 
   '@npmcli/git@7.0.2':
     dependencies:
       '@gar/promise-retry': 1.0.3
       '@npmcli/promise-spawn': 9.0.1
       ini: 6.0.0
-      lru-cache: 11.3.6
+      lru-cache: 11.5.0
       npm-pick-manifest: 11.0.3
       proc-log: 6.1.0
-      semver: 7.8.0
+      semver: 7.8.1
       which: 6.0.1
 
   '@npmcli/installed-package-contents@4.0.0':
@@ -4666,7 +4671,7 @@ snapshots:
       json-parse-even-better-errors: 5.0.0
       pacote: 21.5.0
       proc-log: 6.1.0
-      semver: 7.8.0
+      semver: 7.8.1
     transitivePeerDependencies:
       - supports-color
 
@@ -4681,7 +4686,7 @@ snapshots:
       hosted-git-info: 9.0.3
       json-parse-even-better-errors: 5.0.0
       proc-log: 6.1.0
-      semver: 7.8.0
+      semver: 7.8.1
       spdx-expression-parse: 4.0.0
 
   '@npmcli/promise-spawn@9.0.1':
@@ -4908,7 +4913,7 @@ snapshots:
     dependencies:
       '@sigstore/protobuf-specs': 0.5.1
 
-  '@sigstore/core@3.2.0': {}
+  '@sigstore/core@3.2.1': {}
 
   '@sigstore/protobuf-specs@0.5.1': {}
 
@@ -4916,7 +4921,7 @@ snapshots:
     dependencies:
       '@gar/promise-retry': 1.0.3
       '@sigstore/bundle': 4.0.0
-      '@sigstore/core': 3.2.0
+      '@sigstore/core': 3.2.1
       '@sigstore/protobuf-specs': 0.5.1
       make-fetch-happen: 15.0.5
       proc-log: 6.1.0
@@ -4930,10 +4935,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@sigstore/verify@3.1.0':
+  '@sigstore/verify@3.1.1':
     dependencies:
       '@sigstore/bundle': 4.0.0
-      '@sigstore/core': 3.2.0
+      '@sigstore/core': 3.2.1
       '@sigstore/protobuf-specs': 0.5.1
 
   '@simple-libs/child-process-utils@1.0.2':
@@ -5099,7 +5104,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.59.3
       debug: 4.4.3
       minimatch: 10.2.5
-      semver: 7.8.0
+      semver: 7.8.1
       tinyglobby: 0.2.16
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
@@ -5427,7 +5432,7 @@ snapshots:
 
   before-after-hook@4.0.0: {}
 
-  bin-links@6.0.0:
+  bin-links@6.0.2:
     dependencies:
       cmd-shim: 8.0.0
       npm-normalize-package-bin: 5.0.0
@@ -5455,7 +5460,7 @@ snapshots:
       '@npmcli/fs': 5.0.0
       fs-minipass: 3.0.3
       glob: 13.0.6
-      lru-cache: 11.3.6
+      lru-cache: 11.5.0
       minipass: 7.1.3
       minipass-collect: 2.0.1
       minipass-flush: 1.0.7
@@ -6451,7 +6456,7 @@ snapshots:
 
   hosted-git-info@9.0.3:
     dependencies:
-      lru-cache: 11.3.6
+      lru-cache: 11.5.0
 
   html-escaper@2.0.2: {}
 
@@ -6578,7 +6583,7 @@ snapshots:
 
   is-bun-module@2.0.0:
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.1
 
   is-callable@1.2.7: {}
 
@@ -6879,7 +6884,7 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  lru-cache@11.3.6: {}
+  lru-cache@11.5.0: {}
 
   magic-string@0.30.21:
     dependencies:
@@ -6899,7 +6904,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.1
 
   make-fetch-happen@15.0.5:
     dependencies:
@@ -7041,7 +7046,7 @@ snapshots:
       graceful-fs: 4.2.11
       nopt: 9.0.0
       proc-log: 6.1.0
-      semver: 7.8.0
+      semver: 7.8.1
       tar: 7.5.15
       tinyglobby: 0.2.16
       undici: 6.25.0
@@ -7071,7 +7076,7 @@ snapshots:
 
   npm-install-checks@8.0.0:
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.1
 
   npm-normalize-package-bin@5.0.0: {}
 
@@ -7079,7 +7084,7 @@ snapshots:
     dependencies:
       hosted-git-info: 9.0.3
       proc-log: 6.1.0
-      semver: 7.8.0
+      semver: 7.8.1
       validate-npm-package-name: 7.0.2
 
   npm-packlist@10.0.4:
@@ -7098,7 +7103,7 @@ snapshots:
       npm-install-checks: 8.0.0
       npm-normalize-package-bin: 5.0.0
       npm-package-arg: 13.0.2
-      semver: 7.8.0
+      semver: 7.8.1
 
   npm-registry-fetch@19.1.1:
     dependencies:
@@ -7249,7 +7254,7 @@ snapshots:
       npm-pick-manifest: 11.0.3
       npm-registry-fetch: 19.1.1
       proc-log: 6.1.0
-      sigstore: 4.1.0
+      sigstore: 4.1.1
       ssri: 13.0.1
       tar: 7.5.15
     transitivePeerDependencies:
@@ -7307,7 +7312,7 @@ snapshots:
 
   path-scurry@2.0.2:
     dependencies:
-      lru-cache: 11.3.6
+      lru-cache: 11.5.0
       minipass: 7.1.3
 
   path-type@4.0.0: {}
@@ -7334,7 +7339,7 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss@8.5.14:
+  postcss@8.5.15:
     dependencies:
       nanoid: 3.3.12
       picocolors: 1.1.1
@@ -7558,6 +7563,8 @@ snapshots:
 
   semver@7.8.0: {}
 
+  semver@7.8.1: {}
+
   set-function-length@1.2.2:
     dependencies:
       define-data-property: 1.1.4
@@ -7624,14 +7631,14 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  sigstore@4.1.0:
+  sigstore@4.1.1:
     dependencies:
       '@sigstore/bundle': 4.0.0
-      '@sigstore/core': 3.2.0
+      '@sigstore/core': 3.2.1
       '@sigstore/protobuf-specs': 0.5.1
       '@sigstore/sign': 4.1.1
       '@sigstore/tuf': 4.0.2
-      '@sigstore/verify': 3.1.0
+      '@sigstore/verify': 3.1.1
     transitivePeerDependencies:
       - supports-color
 
@@ -8009,7 +8016,7 @@ snapshots:
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
-      postcss: 8.5.14
+      postcss: 8.5.15
       rolldown: 1.0.1
       tinyglobby: 0.2.16
     optionalDependencies:
