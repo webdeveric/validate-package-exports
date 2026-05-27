@@ -9,13 +9,13 @@ importers:
   .:
     dependencies:
       '@npmcli/arborist':
-        specifier: ^9.5.0
+        specifier: ^9.6.0
         version: 9.6.0
       '@webdeveric/utils':
         specifier: ^0.79.0
         version: 0.79.0
       npm-packlist:
-        specifier: ^11.0.0
+        specifier: ^11.1.0
         version: 11.1.0
     devDependencies:
       '@commitlint/config-conventional':
