@@ -50,7 +50,7 @@ importers:
         version: 21.0.2(@types/node@22.19.19)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.4.0)(typescript@6.0.3)
       commitlint-plugin-cspell:
         specifier: ^0.9.1
-        version: 0.9.1(@commitlint/lint@21.0.2)
+        version: 0.9.2(@commitlint/lint@21.0.2)
       conventional-changelog-conventionalcommits:
         specifier: ^9.3.1
         version: 9.3.1
@@ -1600,8 +1600,8 @@ packages:
     resolution: {integrity: sha512-uiqLcOiVDJtBP8WGkZHEP+FZIhTzP1dxvn59EfoYUi9gqupjrBWVQkO2atDrbnKPwLeotFYDsuNb26uBMqB+hw==}
     engines: {node: '>= 6'}
 
-  commitlint-plugin-cspell@0.9.1:
-    resolution: {integrity: sha512-IjIKOi8Kr/u6h0t0vvp5thj7l7m20erjhYtP+5xthbN3Rc+pHQc6d5QJzh719Q3E23CuZz+XK6h/oT2Ni/8t8w==}
+  commitlint-plugin-cspell@0.9.2:
+    resolution: {integrity: sha512-i+1zLJqYVRYdcD+rR+zkwS0ymGUlZ8BhuVUI3ONyTpAQDXNbuV1gl6aTqdhDBL/Y44EKq1KEz6KrscKHo4RssA==}
     peerDependencies:
       '@commitlint/lint': '>=7.6.0'
 
@@ -5586,7 +5586,7 @@ snapshots:
       array-timsort: 1.0.3
       esprima: 4.0.1
 
-  commitlint-plugin-cspell@0.9.1(@commitlint/lint@21.0.2):
+  commitlint-plugin-cspell@0.9.2(@commitlint/lint@21.0.2):
     dependencies:
       '@commitlint/lint': 21.0.2
       '@commitlint/types': 21.0.1
