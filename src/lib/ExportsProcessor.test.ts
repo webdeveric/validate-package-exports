@@ -128,7 +128,7 @@ describe('ExportsProcessor', () => {
       ]);
     });
 
-    it.only('Works with ConditionalExports', () => {
+    it('Works with ConditionalExports', () => {
       const demoPackageJson = {
         ...mockPackageJson,
         exports: {
