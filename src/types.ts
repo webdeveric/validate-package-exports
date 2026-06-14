@@ -148,14 +148,23 @@ export type PackageContext = Readonly<{
    */
   path: string;
   /**
+   * Real path to the `package.json` file, resolving any symlinks
+   */
+  realPath: string;
+  /**
    * Directory containing the `package.json` file
    */
   directory: string;
+  /**
+   * Real path to the directory containing the `package.json` file, resolving any symlinks
+   */
+  realDirectory: string;
 }>;
 
+/**
+ * EntryPoint _can_ have `*` in the path.
+ */
 export type EntryPoint = {
-  packageDirectory: PackageContext['directory'];
-  packagePath: PackageContext['path'];
   // bin scripts will not have this
   moduleName: string | undefined; // This is string used with `require` or `import`.
   type: PackageType;
@@ -166,9 +175,13 @@ export type EntryPoint = {
   subpath: string | undefined;
   condition: string | undefined;
   itemPath: ItemPath;
+  packageContext: PackageContext;
 };
 
-export type ResolvedEntryPoint = EntryPoint & {
+/**
+ * This represents an `EntryPoint` after glob expansions have occurred and symlinks have been resolved.
+ */
+export type RealEntryPoint = EntryPoint & {
   realResolvedPath: string;
   realDirectory: string;
 };
