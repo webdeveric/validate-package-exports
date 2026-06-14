@@ -67,7 +67,7 @@ export const isOptionalPackageDirectories = optional(isPackageDirectories);
 /**
  * @see https://docs.npmjs.com/cli/v10/configuring-npm/package-json#bin
  */
-export const isPackageBin = anyOf(isRelativePath, isStringRecord);
+export const isPackageBin = anyOf(isString, isStringRecord);
 
 export const isOptionalPackageBin = optional(isPackageBin);
 

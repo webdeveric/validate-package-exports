@@ -58,7 +58,7 @@ export type MaybeUndefined<Type> = Type extends UnknownRecord
 
 export type BinRecord = Record<string, RelativePath | string>;
 
-export type PackageBin = RelativePath | BinRecord;
+export type PackageBin = string | BinRecord;
 
 export type PackageType = 'commonjs' | 'module';
 
