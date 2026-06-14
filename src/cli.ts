@@ -14,7 +14,7 @@ try {
   const { json, info, packages, ...options } = getCliArguments();
 
   const resolvedPackages: PackageJsonPath[] = await Readable.from(packages)
-    .map((packagePath) => resolvePackageJson(packagePath), { concurrency: options.concurrency })
+    .map((packagePath: string) => resolvePackageJson(packagePath), { concurrency: options.concurrency })
     .toArray();
 
   const results: Result[] = [];
