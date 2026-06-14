@@ -8,7 +8,6 @@ import { unique } from '@webdeveric/utils/unique';
 
 import {
   ExitCode,
-  type EntryPoint,
   type PackageContext,
   type PackageJson,
   type RealEntryPoint,
@@ -63,7 +62,7 @@ export class Validator extends EventEmitter {
   }
 
   protected checkPackageJson(packageJson: PackageJson, packageContext: PackageContext): Result {
-    const entryPoint: RealEntryPoint = {
+    const realEntryPoint: RealEntryPoint = {
       moduleName: `${packageContext.name}/package.json`,
       type: packageContext.type,
       fileName: 'package.json',
@@ -84,14 +83,14 @@ export class Validator extends EventEmitter {
             name: 'package-json',
             code: ResultCode.Error,
             message: 'package.json exports is missing "." property.',
-            realEntryPoint: entryPoint,
+            realEntryPoint,
             error: new Error('"." is missing from exports.'),
           }
         : {
             name: 'package-json',
             code: ResultCode.Success,
             message: 'package.json exports has required property.',
-            realEntryPoint: entryPoint,
+            realEntryPoint,
           },
     );
 
@@ -101,7 +100,7 @@ export class Validator extends EventEmitter {
   }
 
   protected async checkFilesExist(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
-    return await Readable.from(unique(realEntryPoints, (entryPoint) => entryPoint.resolvedPath))
+    return await Readable.from(unique(realEntryPoints, (realEntryPoint) => realEntryPoint.resolvedPath))
       .map(
         async (realEntryPoint: RealEntryPoint) => {
           const results = await checkFileExists(realEntryPoint);
@@ -144,10 +143,12 @@ export class Validator extends EventEmitter {
 
   protected async verifyIncludes(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
     return (
-      await Readable.from(unique(realEntryPoints, (entryPoint) => `${entryPoint.moduleName}-${entryPoint.type}`))
+      await Readable.from(
+        unique(realEntryPoints, (realEntryPoint) => `${realEntryPoint.moduleName}-${realEntryPoint.type}`),
+      )
         .map(
-          (entryPoint: RealEntryPoint) => {
-            const results = verifyEntryPoint(entryPoint);
+          (realEntryPoint: RealEntryPoint) => {
+            const results = verifyEntryPoint(realEntryPoint);
 
             this.processResults(results);
 
@@ -164,28 +165,30 @@ export class Validator extends EventEmitter {
     ).flat();
   }
 
-  protected async checkPacklist(entryPoints: EntryPoint[], packageContext: PackageContext): Promise<Result[]> {
+  protected async checkPacklist(realEntryPoints: RealEntryPoint[], packageContext: PackageContext): Promise<Result[]> {
     const files = new Set(await getPacklist(packageContext.directory));
 
-    const results: Result[] = await Readable.from(unique(entryPoints, (entryPoint) => entryPoint.relativePath))
+    const results: Result[] = await Readable.from(
+      unique(realEntryPoints, (realEntryPoint) => realEntryPoint.relativePath),
+    )
       // Remove entry points that are matching a dev condition.
       // The assumption is that files for dev conditions will not be packed.
       .filter(
-        (entryPoint: EntryPoint) =>
-          !(entryPoint.condition !== undefined && this.options.devCondition.includes(entryPoint.condition)),
+        (realEntryPoint: RealEntryPoint) =>
+          !(realEntryPoint.condition !== undefined && this.options.devCondition.includes(realEntryPoint.condition)),
       )
       .map(
-        (entryPoint): Result => {
-          const willBePacked = files.has(entryPoint.relativePath);
+        (realEntryPoint: RealEntryPoint): Result => {
+          const willBePacked = files.has(realEntryPoint.relativePath);
 
           return new Result({
             name: 'packlist',
             code: willBePacked ? ResultCode.Success : ResultCode.Error,
             message: willBePacked
-              ? `${entryPoint.relativePath} will be packed.`
-              : `${entryPoint.relativePath} will not be packed.`,
+              ? `${realEntryPoint.relativePath} will be packed.`
+              : `${realEntryPoint.relativePath} will not be packed.`,
             error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files.'),
-            realEntryPoint: entryPoint,
+            realEntryPoint,
           });
         },
         {
@@ -214,7 +217,7 @@ export class Validator extends EventEmitter {
       realDirectory: await realpath(this.packageDirectory),
     });
 
-    const entryPoints: RealEntryPoint[] = await Readable.from(getEntryPoints(packageJson, packageContext), {
+    const realEntryPoints: RealEntryPoint[] = await Readable.from(getEntryPoints(packageJson, packageContext), {
       objectMode: true,
     })
       .map(getRealEntryPoint, {
@@ -224,34 +227,34 @@ export class Validator extends EventEmitter {
         signal: this.#controller.signal,
       });
 
-    const entryPointsWithErrors = new Set<RealEntryPoint>();
+    const realEntryPointsWithErrors = new Set<RealEntryPoint>();
 
     const recordErrors = (results: Result[]): void => {
       results.forEach((result) => {
         if (result.code === ResultCode.Error) {
-          entryPointsWithErrors.add(result.realEntryPoint);
+          realEntryPointsWithErrors.add(result.realEntryPoint);
         }
       });
     };
 
     const getNextEntryPoints = (items: RealEntryPoint[]): RealEntryPoint[] => {
-      return items.filter((entryPoint) => !entryPointsWithErrors.has(entryPoint));
+      return items.filter((realEntryPoint) => !realEntryPointsWithErrors.has(realEntryPoint));
     };
 
     // Check the structure of the `package.json` data.
     recordErrors([this.checkPackageJson(packageJson, packageContext)]);
 
     // Always check to see if the file exists.
-    recordErrors(await this.checkFilesExist(entryPoints));
+    recordErrors(await this.checkFilesExist(realEntryPoints));
 
     // Optionally run a syntax check.
     if (this.options.check) {
-      recordErrors(await this.checkSyntax(getNextEntryPoints(entryPoints)));
+      recordErrors(await this.checkSyntax(getNextEntryPoints(realEntryPoints)));
     }
 
-    recordErrors(await this.verifyIncludes(getNextEntryPoints(entryPoints)));
+    recordErrors(await this.verifyIncludes(getNextEntryPoints(realEntryPoints)));
 
-    recordErrors(await this.checkPacklist(getNextEntryPoints(entryPoints), packageContext));
+    recordErrors(await this.checkPacklist(getNextEntryPoints(realEntryPoints), packageContext));
 
     // TODO: maybe do some reporting using `entryPointsWithErrors`
 
