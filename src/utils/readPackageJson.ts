@@ -3,7 +3,7 @@ import { assertIsPackageJson } from '@utils/type-assertion.js';
 
 import { readJson } from './readJson.js';
 
-export async function importPackageJson(path: string): Promise<PackageJson> {
+export async function readPackageJson(path: string): Promise<PackageJson> {
   const data = await readJson(path);
 
   assertIsPackageJson(data);
