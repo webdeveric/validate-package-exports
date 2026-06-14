@@ -1,4 +1,4 @@
-import type { EntryPoint } from '@src/types.js';
+import type { RealEntryPoint } from '@src/types.js';
 
 export type ResultName = 'package-json' | 'check-syntax' | 'file-exists' | 'require' | 'import' | 'packlist';
 
@@ -12,7 +12,7 @@ export type ResultDetails = {
   name: ResultName;
   code: ResultCode;
   message: string;
-  entryPoint: EntryPoint;
+  realEntryPoint: RealEntryPoint;
   error?: Error | undefined;
 };
 
@@ -23,7 +23,7 @@ export class Result {
 
   message: string;
 
-  entryPoint: EntryPoint;
+  realEntryPoint: RealEntryPoint;
 
   error: Error | undefined;
 
@@ -31,7 +31,7 @@ export class Result {
     this.name = details.name;
     this.code = details.code;
     this.message = details.message;
-    this.entryPoint = details.entryPoint;
+    this.realEntryPoint = details.realEntryPoint;
     this.error = details.error;
   }
 
@@ -39,7 +39,7 @@ export class Result {
     const emoji = this.code === ResultCode.Success ? '✅' : this.code === ResultCode.Error ? '❌' : '😐';
 
     if (this.code === ResultCode.Error) {
-      const itemPath = this.entryPoint.itemPath.length ? ` (${JSON.stringify(this.entryPoint.itemPath)})` : '';
+      const itemPath = this.realEntryPoint.itemPath.length ? ` (${JSON.stringify(this.realEntryPoint.itemPath)})` : '';
 
       return `${emoji} ${this.name}: ${this.message}${itemPath} ${this.error ?? ''}`.trim();
     } else {

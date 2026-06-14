@@ -3,14 +3,16 @@ import { spawn, type SpawnOptions } from 'node:child_process';
 import { once } from 'node:events';
 import { relative } from 'node:path';
 
-import { Result, ResultCode } from '@lib/Result.js';
-import { ExitCode, type EntryPoint } from '@src/types.js';
+import { asError } from '@webdeveric/utils/asError';
 
-export async function checkSyntax(entryPoint: EntryPoint, options: SpawnOptions): Promise<Result> {
+import { Result, ResultCode } from '@lib/Result.js';
+import { ExitCode, type RealEntryPoint } from '@src/types.js';
+
+export async function checkSyntax(realEntryPoint: RealEntryPoint, options: SpawnOptions): Promise<Result> {
   try {
-    const check = spawn('node', ['--check', entryPoint.resolvedPath], {
+    const check = spawn('node', ['--check', realEntryPoint.resolvedPath], {
       ...options,
-      cwd: entryPoint.packageDirectory,
+      cwd: realEntryPoint.packageContext.directory,
       stdio: 'inherit',
     });
 
@@ -28,16 +30,16 @@ export async function checkSyntax(entryPoint: EntryPoint, options: SpawnOptions)
 
     return new Result({
       code: ResultCode.Success,
-      entryPoint,
-      message: `${relative(entryPoint.packageDirectory, entryPoint.resolvedPath)} has valid syntax`,
+      realEntryPoint,
+      message: `${relative(realEntryPoint.packageContext.directory, realEntryPoint.resolvedPath)} has valid syntax`,
       name: 'check-syntax',
     });
   } catch (error) {
     return new Result({
       code: ResultCode.Error,
-      entryPoint,
-      error: error instanceof Error ? error : new Error(String(error)),
-      message: `Could not validate syntax for ${relative(process.cwd(), entryPoint.resolvedPath)}`,
+      realEntryPoint,
+      error: asError(error),
+      message: `Could not validate syntax for ${relative(process.cwd(), realEntryPoint.resolvedPath)}`,
       name: 'check-syntax',
     });
   }

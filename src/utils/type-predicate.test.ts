@@ -88,6 +88,7 @@ describe('isOptionalPackageDirectories()', () => {
 describe('PackageBin()', () => {
   it('Returns true for valid input', () => {
     expect(isPackageBin('./path/to/bin.js')).toBeTruthy();
+    expect(isPackageBin('path/to/bin.js')).toBeTruthy();
     expect(isPackageBin({})).toBeTruthy();
     expect(
       isPackageBin({

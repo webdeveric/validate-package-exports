@@ -2,26 +2,38 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { EntryPoint } from '@src/types.js';
+import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { getEntryPointsFromBin } from './getEntryPointsFromBin.js';
 
 describe('getEntryPointsFromBin()', () => {
+  const mockPackageJson = {
+    name: 'mock-package',
+    type: 'module',
+    version: '0.0.0',
+    exports: {
+      './path.js': './path.js',
+    },
+  } satisfies PackageJson;
+
+  const packageContext: PackageContext = {
+    name: mockPackageJson.name,
+    type: mockPackageJson.type,
+    path: resolve('/tmp/package.json'),
+    realPath: resolve('/tmp/package.json'),
+    directory: resolve('/tmp'),
+    realDirectory: resolve('/tmp'),
+  };
+
   it('yields EntryPoint objects', () => {
     expect(
       Array.from(
         getEntryPointsFromBin(
           {
-            name: 'test',
-            version: '0.0.0',
+            ...mockPackageJson,
             bin: './bin.js',
           },
-          {
-            name: 'test',
-            type: 'module',
-            path: './package.json',
-            directory: resolve('/tmp'),
-          },
+          packageContext,
         ),
       ),
     ).toEqual([
@@ -31,12 +43,11 @@ describe('getEntryPointsFromBin()', () => {
         fileName: 'bin.js',
         itemPath: ['bin'],
         moduleName: undefined,
-        packagePath: './package.json',
-        packageDirectory: resolve('/tmp'),
         relativePath: 'bin.js',
         resolvedPath: resolve('/tmp/bin.js'),
         subpath: undefined,
         type: 'module',
+        packageContext,
       },
     ] satisfies EntryPoint[]);
 
@@ -51,12 +62,7 @@ describe('getEntryPointsFromBin()', () => {
               example: './example.js',
             },
           },
-          {
-            name: 'test',
-            type: 'module',
-            path: './package.json',
-            directory: resolve('/tmp'),
-          },
+          packageContext,
         ),
       ),
     ).toEqual([
@@ -66,12 +72,11 @@ describe('getEntryPointsFromBin()', () => {
         fileName: 'tool.js',
         itemPath: ['bin', 'tool'],
         moduleName: undefined,
-        packagePath: './package.json',
-        packageDirectory: resolve('/tmp'),
         relativePath: 'tool.js',
         resolvedPath: resolve('/tmp/tool.js'),
         subpath: undefined,
         type: 'module',
+        packageContext,
       },
       {
         condition: undefined,
@@ -79,12 +84,11 @@ describe('getEntryPointsFromBin()', () => {
         fileName: 'example.js',
         itemPath: ['bin', 'example'],
         moduleName: undefined,
-        packagePath: './package.json',
-        packageDirectory: resolve('/tmp'),
         relativePath: 'example.js',
         resolvedPath: resolve('/tmp/example.js'),
         subpath: undefined,
         type: 'module',
+        packageContext,
       },
     ] satisfies EntryPoint[]);
   });

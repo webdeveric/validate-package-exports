@@ -3,26 +3,38 @@ import { Readable } from 'node:stream';
 
 import { describe, expect, it } from 'vitest';
 
-import type { EntryPoint } from '@src/types.js';
+import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { getEntryPointsFromExports } from './getEntryPointsFromExports.js';
 
 describe('getEntryPointsFromExports()', () => {
+  const mockPackageJson = {
+    name: 'mock-package',
+    type: 'module',
+    version: '0.0.0',
+    exports: {
+      './path.js': './path.js',
+    },
+  } satisfies PackageJson;
+
+  const packageContext: PackageContext = {
+    name: mockPackageJson.name,
+    type: mockPackageJson.type,
+    path: resolve('/tmp/package.json'),
+    realPath: resolve('/tmp/package.json'),
+    directory: resolve('/tmp'),
+    realDirectory: resolve('/tmp'),
+  };
+
   describe('Gets EntryPoint[] from package.json exports', () => {
     it('Works with null ExportsEntryPath', async () => {
       const entryPoints = await Readable.from(
         getEntryPointsFromExports(
           {
-            name: 'example',
-            version: '123.456.789',
+            ...mockPackageJson,
             exports: null,
           },
-          {
-            name: 'example',
-            type: 'commonjs',
-            path: '/tmp/package.json',
-            directory: resolve('/tmp'),
-          },
+          packageContext,
         ),
       ).toArray();
 
@@ -33,26 +45,18 @@ describe('getEntryPointsFromExports()', () => {
       const entryPoints = await Readable.from(
         getEntryPointsFromExports(
           {
-            name: 'example',
-            version: '123.456.789',
+            ...mockPackageJson,
             exports: './main.js',
           },
-          {
-            name: 'example',
-            type: 'commonjs',
-            path: '/tmp/package.json',
-            directory: resolve('/tmp'),
-          },
+          packageContext,
         ),
       ).toArray();
 
       expect(entryPoints).toHaveLength(1);
 
       expect(entryPoints.at(0)).toEqual({
-        moduleName: 'example',
-        packagePath: '/tmp/package.json',
-        packageDirectory: resolve('/tmp'),
-        type: 'commonjs',
+        moduleName: mockPackageJson.name,
+        type: mockPackageJson.type,
         fileName: 'main.js',
         relativePath: 'main.js',
         directory: resolve('/tmp'),
@@ -60,6 +64,7 @@ describe('getEntryPointsFromExports()', () => {
         subpath: '.',
         condition: undefined,
         itemPath: ['exports'],
+        packageContext,
       } satisfies EntryPoint);
     });
 
@@ -67,8 +72,7 @@ describe('getEntryPointsFromExports()', () => {
       const entryPoints = await Readable.from(
         getEntryPointsFromExports(
           {
-            name: 'example',
-            version: '123.456.789',
+            ...mockPackageJson,
             exports: {
               '.': [
                 {
@@ -79,12 +83,7 @@ describe('getEntryPointsFromExports()', () => {
               './package.json': './package.json',
             },
           },
-          {
-            name: 'example',
-            type: 'commonjs',
-            path: '/tmp/package.json',
-            directory: resolve('/tmp'),
-          },
+          packageContext,
         ),
       ).toArray();
 

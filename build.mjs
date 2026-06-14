@@ -1,55 +1,112 @@
 #!/usr/bin/env -S node --experimental-json-modules --no-warnings
+import { parseArgs } from 'node:util';
 
 import { comment } from '@webdeveric/utils/comment';
-import { build } from 'esbuild';
+import { analyzeMetafile, build, context } from 'esbuild';
 import { clean } from 'esbuild-plugin-clean';
 import { environmentPlugin } from 'esbuild-plugin-environment';
 
 import pkg from './package.json' with { type: 'json' };
 
-try {
-  const results = await build({
-    entryPoints: ['./src/cli.ts'],
-    outdir: './dist',
-    platform: 'node',
-    bundle: true,
-    format: 'esm',
-    splitting: true,
-    outExtension: {
-      '.js': '.mjs',
+const runnerDebug = process.env['RUNNER_DEBUG'] === '1';
+
+const args = parseArgs({
+  options: {
+    debug: {
+      type: 'boolean',
+      short: 'd',
+      default: runnerDebug,
     },
-    packages: 'external',
-    target: `node${process.versions.node}`,
-    minify: process.env['NODE_ENV'] === 'production',
-    banner: {
-      js: comment(
-        `
-          @file ${pkg.name}
-          @version ${pkg.version}
-          @license ${pkg.license}
-          @copyright ${pkg.author.name} ${new Date().getFullYear()}
-          @see {@link ${pkg.homepage}}
-        `,
-        {
-          type: 'legal',
-        },
-      ),
+    verbose: {
+      type: 'boolean',
+      short: 'v',
+      default: runnerDebug,
     },
-    plugins: [
-      clean({
-        patterns: ['./dist/*'],
-      }),
-      environmentPlugin(['npm_package_name']),
-    ],
+    watch: {
+      type: 'boolean',
+      short: 'w',
+      default: false,
+    },
+  },
+});
+
+/** @satisfies {import('esbuild').BuildOptions} */
+const options = {
+  entryPoints: ['./src/cli.ts'],
+  outdir: './dist',
+  platform: 'node',
+  bundle: true,
+  format: 'esm',
+  splitting: true,
+  outExtension: {
+    '.js': '.mjs',
+  },
+  metafile: args.values.verbose,
+  packages: 'external',
+  target: `node${process.versions.node}`,
+  minify: process.env['NODE_ENV'] === 'production',
+  legalComments: 'external',
+  banner: {
+    js: comment(
+      `
+      @file ${pkg.name}
+      @version ${pkg.version}
+      @license ${pkg.license}
+      @copyright ${pkg.author.name} ${new Date().getFullYear()}
+      @see {@link ${pkg.homepage}}
+      `,
+      {
+        type: 'legal',
+      },
+    ),
+  },
+  plugins: [
+    clean({
+      patterns: ['./dist/*'],
+    }),
+    environmentPlugin(['npm_package_name']),
+  ],
+};
+
+if (args.values.debug) {
+  console.group('Build options');
+  console.dir(options);
+  console.groupEnd();
+}
+
+if (args.values.watch) {
+  const ctx = await context(options);
+
+  process.on('SIGINT', () => {
+    ctx.dispose().then(() => {
+      console.log('\nWatching stopped.');
+      process.exit(0);
+    }, console.error);
   });
 
-  const errors = [...results.warnings, ...results.errors];
+  await ctx.watch();
 
-  if (errors.length) {
-    throw new AggregateError(errors, 'Build error and warnings');
+  console.log(`Watching ${options.entryPoints.join(', ')} for changes...`);
+} else {
+  try {
+    const result = await build(options);
+
+    if (result.metafile) {
+      console.log(
+        await analyzeMetafile(result.metafile, {
+          verbose: args.values.debug,
+        }),
+      );
+    }
+
+    const errors = [...result.warnings, ...result.errors];
+
+    if (errors.length) {
+      throw new AggregateError(errors, 'Build error and warnings');
+    }
+  } catch (error) {
+    console.error(error);
+
+    process.exitCode ||= 1;
   }
-} catch (error) {
-  console.error(error);
-
-  process.exitCode ||= 1;
 }

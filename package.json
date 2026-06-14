@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=22.22.2"
   },
-  "packageManager": "pnpm@11.5.1+sha512.93f7b57422ea7068257235b4c16eb60762eb68e1dc23723199cc739043ea9be2c4143274a399d8c6defa2b1176226d9ca1c4b63482d6200c1a8fbaa78c1d1485",
+  "packageManager": "pnpm@11.6.0+sha512.9a36518224080c6fe5165afdcfe79bfa118c29be703f3f462b1e32efe1e98e47e8750b148e08286250aad4113cc7993ca413c4e2cd447752708c2ee5751bc95f",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
@@ -52,26 +52,26 @@
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^9.7.0",
+    "@npmcli/arborist": "^9.8.0",
     "@webdeveric/utils": "^0.79.0",
-    "npm-packlist": "^11.1.0"
+    "npm-packlist": "^11.2.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^21.0.2",
     "@commitlint/types": "^21.0.1",
-    "@types/node": "^22.19.19",
+    "@types/node": "^22.19.21",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@typescript/native-preview": "7.0.0-dev.20260602.1",
+    "@typescript/native-preview": "7.0.0-dev.20260612.1",
     "@vitest/coverage-v8": "^4.1.8",
     "@webdeveric/eslint-config-ts": "^0.12.0",
     "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^21.0.2",
-    "commitlint-plugin-cspell": "^0.9.1",
+    "commitlint-plugin-cspell": "^0.9.2",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
     "cspell": "^10.0.1",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.5.0",
     "eslint": "^8.57.1",
@@ -80,8 +80,8 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.7",
-    "prettier": "^3.8.3",
-    "semantic-release": "^25.0.3",
+    "prettier": "^3.8.4",
+    "semantic-release": "^25.0.5",
     "vitest": "^4.1.8"
   }
 }
