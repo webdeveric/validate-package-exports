@@ -12,6 +12,10 @@
   "js/ts.format.semicolons": "insert",
   "js/ts.updateImportsOnFileMove.enabled": "always",
   "js/ts.suggest.jsdoc.generateReturns": false,
+  "js/ts.preferences.autoImportSpecifierExcludeRegexes": [
+    "^@webdeveric/utils$",
+    "^@webdeveric/utils/index$"
+  ],
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
