@@ -1,15 +1,25 @@
 import { EventEmitter } from 'node:events';
+import { realpath } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 
+import { asArray } from '@webdeveric/utils/asArray';
 import { unique } from '@webdeveric/utils/unique';
 
-import { ExitCode, type EntryPoint, type PackageContext, type PackageJson, type ValidatorOptions } from '@src/types.js';
+import {
+  ExitCode,
+  type EntryPoint,
+  type PackageContext,
+  type PackageJson,
+  type RealEntryPoint,
+  type ValidatorOptions,
+} from '@src/types.js';
 import { checkFileExists } from '@utils/checkFileExists.js';
 import { checkSyntax } from '@utils/checkSyntax.js';
 import { getEntryPoints } from '@utils/getEntryPoints.js';
 import { getPacklist } from '@utils/getPacklist.js';
-import { importPackageJson } from '@utils/importPackageJson.js';
+import { getRealEntryPoint } from '@utils/getRealEntryPoint.js';
+import { readPackageJson } from '@utils/readPackageJson.js';
 import { isSubpathExports } from '@utils/type-predicate.js';
 import { verifyEntryPoint } from '@utils/verifyEntryPoint.js';
 
@@ -49,22 +59,23 @@ export class Validator extends EventEmitter {
   }
 
   protected processResults(results: Result | Result[]): void {
-    [results].flat().forEach((result) => this.processResult(result));
+    asArray(results).forEach((result) => this.processResult(result));
   }
 
   protected checkPackageJson(packageJson: PackageJson, packageContext: PackageContext): Result {
-    const entryPoint: EntryPoint = {
+    const entryPoint: RealEntryPoint = {
       moduleName: `${packageContext.name}/package.json`,
-      packageDirectory: packageContext.directory,
-      packagePath: packageContext.path,
       type: packageContext.type,
       fileName: 'package.json',
       resolvedPath: packageContext.path,
+      realResolvedPath: packageContext.realPath,
       relativePath: 'package.json',
       subpath: undefined,
       condition: undefined,
       directory: packageContext.directory,
+      realDirectory: packageContext.realDirectory,
       itemPath: [],
+      packageContext,
     };
 
     const result = new Result(
@@ -73,14 +84,14 @@ export class Validator extends EventEmitter {
             name: 'package-json',
             code: ResultCode.Error,
             message: 'package.json exports is missing "." property.',
-            entryPoint,
+            realEntryPoint: entryPoint,
             error: new Error('"." is missing from exports.'),
           }
         : {
             name: 'package-json',
             code: ResultCode.Success,
             message: 'package.json exports has required property.',
-            entryPoint,
+            realEntryPoint: entryPoint,
           },
     );
 
@@ -89,11 +100,11 @@ export class Validator extends EventEmitter {
     return result;
   }
 
-  protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<Result[]> {
-    return await Readable.from(unique(entryPoints, (entryPoint) => entryPoint.resolvedPath))
+  protected async checkFilesExist(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
+    return await Readable.from(unique(realEntryPoints, (entryPoint) => entryPoint.resolvedPath))
       .map(
-        async (entryPoint: EntryPoint) => {
-          const results = await checkFileExists(entryPoint);
+        async (realEntryPoint: RealEntryPoint) => {
+          const results = await checkFileExists(realEntryPoint);
 
           this.processResults(results);
 
@@ -109,13 +120,13 @@ export class Validator extends EventEmitter {
       });
   }
 
-  protected async checkSyntax(entryPoints: EntryPoint[]): Promise<Result[]> {
-    const jsEntryPoints = entryPoints.filter((entryPoint) => /\.[cm]?js$/i.test(entryPoint.resolvedPath));
+  protected async checkSyntax(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
+    const jsEntryPoints = realEntryPoints.filter((realEntryPoint) => /\.[cm]?js$/i.test(realEntryPoint.resolvedPath));
 
-    return await Readable.from(unique(jsEntryPoints, (entryPoint) => entryPoint.resolvedPath))
+    return await Readable.from(unique(jsEntryPoints, (realEntryPoint) => realEntryPoint.resolvedPath))
       .map(
-        async (entryPoint: EntryPoint) => {
-          const results = await checkSyntax(entryPoint, { signal: this.#controller.signal });
+        async (realEntryPoint: RealEntryPoint) => {
+          const results = await checkSyntax(realEntryPoint, { signal: this.#controller.signal });
 
           this.processResults(results);
 
@@ -131,11 +142,11 @@ export class Validator extends EventEmitter {
       });
   }
 
-  protected async verifyIncludes(entryPoints: EntryPoint[]): Promise<Result[]> {
+  protected async verifyIncludes(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
     return (
-      await Readable.from(unique(entryPoints, (entryPoint) => `${entryPoint.moduleName}-${entryPoint.type}`))
+      await Readable.from(unique(realEntryPoints, (entryPoint) => `${entryPoint.moduleName}-${entryPoint.type}`))
         .map(
-          (entryPoint: EntryPoint) => {
+          (entryPoint: RealEntryPoint) => {
             const results = verifyEntryPoint(entryPoint);
 
             this.processResults(results);
@@ -174,7 +185,7 @@ export class Validator extends EventEmitter {
               ? `${entryPoint.relativePath} will be packed.`
               : `${entryPoint.relativePath} will not be packed.`,
             error: willBePacked ? undefined : new Error('EntryPoint relativePath not found in packlist files.'),
-            entryPoint,
+            realEntryPoint: entryPoint,
           });
         },
         {
@@ -192,32 +203,38 @@ export class Validator extends EventEmitter {
   }
 
   async run(): Promise<ExitCode> {
-    const packageJson = await importPackageJson(this.options.package);
+    const packageJson = await readPackageJson(this.options.package);
 
-    const packageContext: PackageContext = {
+    const packageContext: PackageContext = Object.freeze({
       name: packageJson.name,
       type: packageJson.type ?? 'commonjs',
       path: this.options.package,
+      realPath: await realpath(this.options.package),
       directory: this.packageDirectory,
-    };
-
-    const entryPoints: EntryPoint[] = await Readable.from(getEntryPoints(packageJson, packageContext), {
-      objectMode: true,
-    }).toArray({
-      signal: this.#controller.signal,
+      realDirectory: await realpath(this.packageDirectory),
     });
 
-    const entryPointsWithErrors = new Set<EntryPoint>();
+    const entryPoints: RealEntryPoint[] = await Readable.from(getEntryPoints(packageJson, packageContext), {
+      objectMode: true,
+    })
+      .map(getRealEntryPoint, {
+        signal: this.#controller.signal,
+      })
+      .toArray({
+        signal: this.#controller.signal,
+      });
+
+    const entryPointsWithErrors = new Set<RealEntryPoint>();
 
     const recordErrors = (results: Result[]): void => {
       results.forEach((result) => {
         if (result.code === ResultCode.Error) {
-          entryPointsWithErrors.add(result.entryPoint);
+          entryPointsWithErrors.add(result.realEntryPoint);
         }
       });
     };
 
-    const getNextEntryPoints = (items: EntryPoint[]): EntryPoint[] => {
+    const getNextEntryPoints = (items: RealEntryPoint[]): RealEntryPoint[] => {
       return items.filter((entryPoint) => !entryPointsWithErrors.has(entryPoint));
     };
 

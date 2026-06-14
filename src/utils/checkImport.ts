@@ -1,30 +1,33 @@
 import { AssertionError } from 'node:assert';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
+import { asError } from '@webdeveric/utils/asError';
+
 import { Result, ResultCode } from '@lib/Result.js';
-import type { EntryPoint } from '@src/types.js';
+import type { RealEntryPoint } from '@src/types.js';
 
 const supportsImportMetaResolveParent =
   typeof import.meta.resolve === 'function' && process.execArgv.includes('--experimental-import-meta-resolve');
 
-export function checkImport(entryPoint: EntryPoint): Result {
+export function checkImport(entryPoint: RealEntryPoint): Result {
   try {
     if (typeof entryPoint.moduleName === 'string' && supportsImportMetaResolveParent) {
+      // If the package is symlinked, this will resolve to the real path.
       const resolvedPath = fileURLToPath(
-        import.meta.resolve(entryPoint.moduleName, pathToFileURL(entryPoint.packagePath)),
+        import.meta.resolve(entryPoint.moduleName, pathToFileURL(entryPoint.packageContext.realPath)),
       );
 
-      if (resolvedPath !== entryPoint.resolvedPath) {
+      if (resolvedPath !== entryPoint.realResolvedPath) {
         throw new AssertionError({
           message: 'The resolved import path does not equal entrypoint resolved path',
-          expected: entryPoint.resolvedPath,
+          expected: entryPoint.realResolvedPath,
           actual: resolvedPath,
         });
       }
 
       return new Result({
         code: ResultCode.Success,
-        entryPoint,
+        realEntryPoint: entryPoint,
         message: `"${entryPoint.moduleName}" works with import`,
         name: 'import',
       });
@@ -32,15 +35,15 @@ export function checkImport(entryPoint: EntryPoint): Result {
 
     return new Result({
       code: ResultCode.Skip,
-      entryPoint,
+      realEntryPoint: entryPoint,
       message: `Import skipped: ${entryPoint.itemPath.join('.')}`,
       name: 'import',
     });
   } catch (error) {
     return new Result({
       code: ResultCode.Error,
-      entryPoint,
-      error: error instanceof Error ? error : new Error(String(error)),
+      realEntryPoint: entryPoint,
+      error: asError(error),
       message: `${entryPoint.moduleName ?? entryPoint.itemPath.join('.')} cannot be imported`,
       name: 'import',
     });

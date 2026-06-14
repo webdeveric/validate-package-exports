@@ -1,33 +1,35 @@
 import { AssertionError } from 'node:assert';
 import { createRequire } from 'node:module';
 
+import { asError } from '@webdeveric/utils/asError';
 import { memo } from '@webdeveric/utils/memo';
 
 import { Result, ResultCode } from '@lib/Result.js';
-import type { EntryPoint } from '@src/types.js';
+import type { RealEntryPoint } from '@src/types.js';
 
 const getRequire = memo(createRequire);
 
-export function checkRequire(entryPoint: EntryPoint): Result {
+export function checkRequire(entryPoint: RealEntryPoint): Result {
   try {
     if (typeof entryPoint.moduleName === 'string') {
-      const require = getRequire(entryPoint.packagePath);
+      const require = getRequire(entryPoint.packageContext.path);
 
+      // If the package is symlinked, this will resolve to the real path.
       const resolvedPath = require.resolve(entryPoint.moduleName, {
-        paths: [entryPoint.packageDirectory],
+        paths: [entryPoint.packageContext.realDirectory],
       });
 
-      if (resolvedPath !== entryPoint.resolvedPath) {
+      if (resolvedPath !== entryPoint.realResolvedPath) {
         throw new AssertionError({
           message: 'The resolved require path does not equal entrypoint resolved path',
-          expected: entryPoint.resolvedPath,
+          expected: entryPoint.realResolvedPath,
           actual: resolvedPath,
         });
       }
 
       return new Result({
         code: ResultCode.Success,
-        entryPoint,
+        realEntryPoint: entryPoint,
         message: `"${entryPoint.moduleName}" works with require`,
         name: 'require',
       });
@@ -35,15 +37,15 @@ export function checkRequire(entryPoint: EntryPoint): Result {
 
     return new Result({
       code: ResultCode.Skip,
-      entryPoint,
+      realEntryPoint: entryPoint,
       message: `Require skipped: ${entryPoint.itemPath.join('.')}`,
       name: 'require',
     });
   } catch (error) {
     return new Result({
       code: ResultCode.Error,
-      entryPoint,
-      error: error instanceof Error ? error : new Error(String(error)),
+      realEntryPoint: entryPoint,
+      error: asError(error),
       message: `${entryPoint.moduleName ?? entryPoint.itemPath.join('.')} cannot be required`,
       name: 'require',
     });
