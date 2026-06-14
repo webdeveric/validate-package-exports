@@ -1,4 +1,5 @@
 import { AssertionError } from 'node:assert';
+import { relative } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 import { asError } from '@webdeveric/utils/asError';
@@ -19,7 +20,7 @@ export function checkImport(entryPoint: RealEntryPoint): Result {
 
       if (resolvedPath !== entryPoint.realResolvedPath) {
         throw new AssertionError({
-          message: 'The resolved import path does not equal entrypoint resolved path',
+          message: `The resolved import path (${relative(process.cwd(), resolvedPath)}) does not equal entrypoint resolved path (${relative(process.cwd(), entryPoint.realResolvedPath)}).`,
           expected: entryPoint.realResolvedPath,
           actual: resolvedPath,
         });

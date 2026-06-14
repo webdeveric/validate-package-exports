@@ -1,5 +1,6 @@
 import { AssertionError } from 'node:assert';
 import { createRequire } from 'node:module';
+import { relative } from 'node:path';
 
 import { asError } from '@webdeveric/utils/asError';
 import { memo } from '@webdeveric/utils/memo';
@@ -21,7 +22,7 @@ export function checkRequire(entryPoint: RealEntryPoint): Result {
 
       if (resolvedPath !== entryPoint.realResolvedPath) {
         throw new AssertionError({
-          message: 'The resolved require path does not equal entrypoint resolved path',
+          message: `The resolved require path (${relative(process.cwd(), resolvedPath)}) does not equal entrypoint resolved path (${relative(process.cwd(), entryPoint.realResolvedPath)}).`,
           expected: entryPoint.realResolvedPath,
           actual: resolvedPath,
         });
