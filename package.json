@@ -59,7 +59,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^21.0.2",
     "@commitlint/types": "^21.0.1",
-    "@types/node": "^22.19.21",
+    "@types/node": "^25.9.3",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
     "@typescript/native-preview": "7.0.0-dev.20260612.1",
