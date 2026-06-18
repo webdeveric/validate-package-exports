@@ -62,8 +62,8 @@
     "@types/node": "^22.19.21",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@typescript/native-preview": "7.0.0-dev.20260612.1",
-    "@vitest/coverage-v8": "^4.1.8",
+    "@typescript/native-preview": "7.0.0-dev.20260616.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "@webdeveric/eslint-config-ts": "^0.12.0",
     "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^21.0.2",
@@ -82,6 +82,6 @@
     "lint-staged": "^17.0.7",
     "prettier": "^3.8.4",
     "semantic-release": "^25.0.5",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   }
 }
