@@ -7,3 +7,6 @@ autoInstallPeers: true
 enablePrePostScripts: false
 
 minimumReleaseAge: 2880 # 2 days
+
+minimumReleaseAgeExclude:
+  - '@webdeveric/utils@0.81.0'

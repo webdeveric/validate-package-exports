@@ -12,11 +12,11 @@ importers:
         specifier: ^9.8.0
         version: 9.8.0
       '@webdeveric/utils':
-        specifier: ^0.79.0
-        version: 0.79.0
+        specifier: ^0.81.0
+        version: 0.81.0
       npm-packlist:
-        specifier: ^11.2.0
-        version: 11.2.0
+        specifier: ^11.3.0
+        version: 11.3.0
     devDependencies:
       '@commitlint/config-conventional':
         specifier: ^21.0.2
@@ -1338,8 +1338,8 @@ packages:
     peerDependencies:
       prettier: '>=2.4.0'
 
-  '@webdeveric/utils@0.79.0':
-    resolution: {integrity: sha512-1ANvex1ghT2JlK/Z6QqT1BR48RVFh1+gLYAL2A658FPrfbRCfxLj6FPKW1tGrgT6ucjq2EnCMhgmHY7KAowfww==}
+  '@webdeveric/utils@0.81.0':
+    resolution: {integrity: sha512-LJylmoQ13+qWM10ohDf/gvlyP/jNE3dZZ+opapy9tcW7p1Um3f1AibmNSsmVqJB6Gbd14vmQ++MaafQFimZ2Hw==}
     engines: {node: '>=18.0.0'}
 
   abbrev@4.0.0:
@@ -2202,6 +2202,7 @@ packages:
   git-raw-commits@5.0.1:
     resolution: {integrity: sha512-Y+csSm2GD/PCSh6Isd/WiMjNAydu0VBiG9J7EdQsNA5P9uXvLayqjmTsNlK5Gs9IhblFZqOU0yid5Il5JPoLiQ==}
     engines: {node: '>=18'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@5.1.2:
@@ -2977,8 +2978,8 @@ packages:
     resolution: {integrity: sha512-uMW73iajD8hiH4ZBxEV3HC+eTnppIqwakjOYuvgddnalIw2lJguKviK1pcUJDlIWm1wSJkchpDZDSVVsZEYRng==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  npm-packlist@11.2.0:
-    resolution: {integrity: sha512-TEuN5ZCDBmJ2kcoW7IgRRt3P09sL9mAC5gg1FWQcJVkEdIuAAgy1e459JahGKAjScLqqSodAJtYJ578kQGY+Ng==}
+  npm-packlist@11.3.0:
+    resolution: {integrity: sha512-cS1yVkyriZgQAbiK8PtwhZHEtsFOsKHsCg5Ww2ONckAvXIspgqd6o4WirOzvkupU24iMRZ4xtO4kb2iK2rbnag==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
 
   npm-pick-manifest@11.0.3:
@@ -5320,7 +5321,7 @@ snapshots:
     dependencies:
       prettier: 3.8.4
 
-  '@webdeveric/utils@0.79.0': {}
+  '@webdeveric/utils@0.81.0': {}
 
   abbrev@4.0.0: {}
 
@@ -7138,7 +7139,7 @@ snapshots:
       ignore-walk: 8.0.0
       proc-log: 6.1.0
 
-  npm-packlist@11.2.0:
+  npm-packlist@11.3.0:
     dependencies:
       glob: 13.0.6
       ignore-walk: 9.0.0
