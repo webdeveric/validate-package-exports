@@ -100,7 +100,7 @@ export class Validator extends EventEmitter {
   }
 
   protected async checkFilesExist(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
-    return await Readable.from(unique(realEntryPoints, (realEntryPoint) => realEntryPoint.resolvedPath))
+    return await Readable.from(unique(realEntryPoints, { identity: (realEntryPoint) => realEntryPoint.resolvedPath }))
       .map(
         async (realEntryPoint: RealEntryPoint) => {
           const results = await checkFileExists(realEntryPoint);
@@ -122,7 +122,7 @@ export class Validator extends EventEmitter {
   protected async checkSyntax(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
     const jsEntryPoints = realEntryPoints.filter((realEntryPoint) => /\.[cm]?js$/i.test(realEntryPoint.resolvedPath));
 
-    return await Readable.from(unique(jsEntryPoints, (realEntryPoint) => realEntryPoint.resolvedPath))
+    return await Readable.from(unique(jsEntryPoints, { identity: (realEntryPoint) => realEntryPoint.resolvedPath }))
       .map(
         async (realEntryPoint: RealEntryPoint) => {
           const results = await checkSyntax(realEntryPoint, { signal: this.#controller.signal });
@@ -144,7 +144,9 @@ export class Validator extends EventEmitter {
   protected async verifyIncludes(realEntryPoints: RealEntryPoint[]): Promise<Result[]> {
     return (
       await Readable.from(
-        unique(realEntryPoints, (realEntryPoint) => `${realEntryPoint.moduleName}-${realEntryPoint.type}`),
+        unique(realEntryPoints, {
+          identity: (realEntryPoint) => `${realEntryPoint.moduleName}-${realEntryPoint.type}`,
+        }),
       )
         .map(
           (realEntryPoint: RealEntryPoint) => {
@@ -169,7 +171,7 @@ export class Validator extends EventEmitter {
     const files = new Set(await getPacklist(packageContext.directory));
 
     const results: Result[] = await Readable.from(
-      unique(realEntryPoints, (realEntryPoint) => realEntryPoint.relativePath),
+      unique(realEntryPoints, { identity: (realEntryPoint) => realEntryPoint.relativePath }),
     )
       // Remove entry points that are matching a dev condition.
       // The assumption is that files for dev conditions will not be packed.
