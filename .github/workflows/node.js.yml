@@ -43,6 +43,9 @@ jobs:
       - name: Type checking
         run: pnpm typecheck
 
+      - name: Spell checking
+        run: pnpm spellcheck
+
       - name: Testing
         run: pnpm coverage
 
