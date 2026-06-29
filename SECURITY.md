@@ -1,13 +1,14 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-Until `1.0.0`, only the latest `0.x` version will be supported.
+Only the last two major versions are supported.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.x.x   | :white_check_mark: |
+| 1.x.x   | :white_check_mark: |
+| 0.x.x   | :x:                |
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-Report any issues to me at `eric@webdeveric.com`
+Click the "**Report a vulnerability**" button on [https://github.com/webdeveric/validate-package-exports/security](https://github.com/webdeveric/validate-package-exports/security).
