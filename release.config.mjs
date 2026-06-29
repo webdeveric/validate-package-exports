@@ -26,10 +26,6 @@ export default {
             release: false,
           },
           {
-            type: 'docs',
-            release: 'patch',
-          },
-          {
             type: 'refactor',
             release: 'patch',
           },
