@@ -49,11 +49,13 @@ const options = {
   banner: {
     js: comment(
       `
-      @file ${pkg.name}
-      @version ${pkg.version}
+      ${pkg.name}
+
       @license ${pkg.license}
-      @copyright ${pkg.author.name} ${new Date().getFullYear()}
+      @copyright Copyright (c) ${new Date().getFullYear()} ${pkg.author.name}
       @see {@link ${pkg.homepage}}
+
+      SPDX-License-Identifier: ${pkg.license}
       `,
       {
         type: 'legal',
