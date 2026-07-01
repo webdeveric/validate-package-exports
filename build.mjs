@@ -44,7 +44,8 @@ const options = {
   metafile: args.values.verbose,
   packages: 'external',
   target: `node${process.versions.node}`,
-  minify: process.env['NODE_ENV'] === 'production',
+  // Don't minify when watching, because it makes debugging harder.
+  minify: args.values.watch === true ? false : process.env['NODE_ENV'] === 'production',
   legalComments: 'external',
   banner: {
     js: comment(
