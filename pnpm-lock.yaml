@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@npmcli/arborist':
-        specifier: ^9.8.0
-        version: 9.8.0
+        specifier: ^9.9.0
+        version: 9.9.0
       '@webdeveric/utils':
-        specifier: ^0.81.0
-        version: 0.81.0
+        specifier: ^0.82.0
+        version: 0.82.0
       npm-packlist:
         specifier: ^11.3.0
         version: 11.3.0
@@ -704,8 +704,8 @@ packages:
     resolution: {integrity: sha512-EUEuWAxnL07Sp5/iC/1X6Xj+XThUvnbei9zfRWZdEXa7lss9RTHMhAHBeg+MZ5To9s/gGaSI+UwZTPdYMvKSeg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  '@npmcli/arborist@9.8.0':
-    resolution: {integrity: sha512-bqjei/1+uait6wA30G7IElMs5VCyGpuVPFQYsvzqhTEEAVmDMsHBCFstcT2lLfeQDvi8MeUQHStfHSArvdTQuw==}
+  '@npmcli/arborist@9.9.0':
+    resolution: {integrity: sha512-tzsb1R8mx0k0drlLDT/9ckEYaQHIaWnUti/ci2IaFoQqdqwfmYrc+90p1+QEZC/ocvqcxBep9P1xKw4FbAGofw==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
 
@@ -1342,8 +1342,8 @@ packages:
     peerDependencies:
       prettier: '>=2.4.0'
 
-  '@webdeveric/utils@0.81.0':
-    resolution: {integrity: sha512-LJylmoQ13+qWM10ohDf/gvlyP/jNE3dZZ+opapy9tcW7p1Um3f1AibmNSsmVqJB6Gbd14vmQ++MaafQFimZ2Hw==}
+  '@webdeveric/utils@0.82.0':
+    resolution: {integrity: sha512-HmCUc1Ve0H94xwWE3pXNxpM/5srNdkS0O6JFXgx+JNFR9ew/tXEb5GAHDeuFgx0T6jYaRuMGtAq1o6shDqZBog==}
     engines: {node: '>=18.0.0'}
 
   abbrev@4.0.0:
@@ -1487,8 +1487,8 @@ packages:
   brace-expansion@1.1.15:
     resolution: {integrity: sha512-EwOCDEex4quD37XhqM3omwtMoJjr//isUZz1JopUNWms+4Z2ViyM/k1YIRePpoVNnQhENnxtFjLaxNHrT7xIUg==}
 
-  brace-expansion@5.0.6:
-    resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
+  brace-expansion@5.0.7:
+    resolution: {integrity: sha512-7oFy703dxfY3/NLxC1fh2SUCQ0H9rmAY+5EpDVfXjUTTs+HEwR2nYaqLv+GWcTsumwxPfiz6CzCNkwXwBUwqCA==}
     engines: {node: 18 || 20 || >=22}
 
   braces@3.0.3:
@@ -4628,7 +4628,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@npmcli/arborist@9.8.0':
+  '@npmcli/arborist@9.9.0':
     dependencies:
       '@gar/promise-retry': 1.0.3
       '@isaacs/string-locale-compare': 1.1.0
@@ -5333,7 +5333,7 @@ snapshots:
     dependencies:
       prettier: 3.9.3
 
-  '@webdeveric/utils@0.81.0': {}
+  '@webdeveric/utils@0.82.0': {}
 
   abbrev@4.0.0: {}
 
@@ -5488,7 +5488,7 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@5.0.6:
+  brace-expansion@5.0.7:
     dependencies:
       balanced-match: 4.0.4
 
@@ -7027,7 +7027,7 @@ snapshots:
 
   minimatch@10.2.5:
     dependencies:
-      brace-expansion: 5.0.6
+      brace-expansion: 5.0.7
 
   minimatch@3.1.5:
     dependencies:

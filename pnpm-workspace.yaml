@@ -9,4 +9,4 @@ enablePrePostScripts: false
 minimumReleaseAge: 2880 # 2 days
 
 minimumReleaseAgeExclude:
-  - '@webdeveric/utils@0.81.0'
+  - '@webdeveric/utils@0.82.0'
