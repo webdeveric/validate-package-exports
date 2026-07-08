@@ -67,7 +67,10 @@ const options = {
     clean({
       patterns: ['./dist/*'],
     }),
-    environmentPlugin(['npm_package_name']),
+    environmentPlugin(['npm_package_name', 'npm_package_version']),
+    environmentPlugin({
+      homepage: pkg.homepage,
+    }),
   ],
 };
 
