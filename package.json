@@ -57,18 +57,18 @@
     "npm-packlist": "^11.3.0"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^21.1.0",
-    "@commitlint/types": "^21.1.0",
+    "@commitlint/config-conventional": "^21.2.0",
+    "@commitlint/types": "^21.2.0",
     "@types/node": "^22.20.0",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@typescript/native-preview": "7.0.0-dev.20260629.1",
-    "@vitest/coverage-v8": "^4.1.9",
-    "@webdeveric/eslint-config-ts": "^0.12.0",
+    "@typescript/native-preview": "7.0.0-dev.20260706.1",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@webdeveric/eslint-config-ts": "^0.12.1",
     "@webdeveric/prettier-config": "^0.4.0",
-    "commitlint": "^21.1.0",
+    "commitlint": "^21.2.0",
     "commitlint-plugin-cspell": "^0.9.3",
-    "conventional-changelog-conventionalcommits": "^10.2.0",
+    "conventional-changelog-conventionalcommits": "^10.2.1",
     "cross-env": "^10.1.0",
     "cspell": "^10.0.1",
     "esbuild": "^0.28.1",
@@ -80,8 +80,8 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.8",
-    "prettier": "^3.9.3",
+    "prettier": "^3.9.4",
     "semantic-release": "^25.0.5",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   }
 }
