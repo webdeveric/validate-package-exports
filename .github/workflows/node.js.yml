@@ -37,6 +37,12 @@ jobs:
       - name: Installing dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Audit dependencies
+        run: pnpm audit --ignore-registry-errors --audit-level=moderate --prod
+
+      - name: Verify registry signatures for installed packages
+        run: pnpm audit signatures
+
       - name: Linting
         run: pnpm lint
 
