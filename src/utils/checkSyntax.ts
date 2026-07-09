@@ -1,37 +1,33 @@
-import { AssertionError } from 'node:assert';
-import { spawn, type SpawnOptions } from 'node:child_process';
-import { once } from 'node:events';
+import { execFile, type ExecFileOptionsWithStringEncoding } from 'node:child_process';
 import { relative } from 'node:path';
+import { promisify } from 'node:util';
 
 import { asError } from '@webdeveric/utils/asError';
 
 import { Result, ResultCode } from '@lib/Result.js';
-import { ExitCode, type RealEntryPoint } from '@src/types.js';
+import type { RealEntryPoint } from '@src/types.js';
 
-export async function checkSyntax(realEntryPoint: RealEntryPoint, options: SpawnOptions): Promise<Result> {
+const execFileAsync = promisify(execFile);
+
+/**
+ * @todo use entryPoint.realRelativePath that is a branded type that proves the path exists.
+ */
+export async function checkSyntax(
+  realEntryPoint: RealEntryPoint,
+  options: Omit<ExecFileOptionsWithStringEncoding, 'cwd'>,
+): Promise<Result> {
   try {
-    const check = spawn('node', ['--check', realEntryPoint.resolvedPath], {
+    const relativePath = relative(realEntryPoint.packageContext.directory, realEntryPoint.resolvedPath);
+
+    await execFileAsync('node', ['--check', relativePath], {
       ...options,
       cwd: realEntryPoint.packageContext.directory,
-      stdio: 'inherit',
     });
-
-    const [code]: number[] = await once(check, 'close', {
-      signal: options.signal,
-    });
-
-    if (code !== ExitCode.Ok) {
-      throw new AssertionError({
-        message: 'exit code not ok when checking syntax',
-        expected: ExitCode.Ok,
-        actual: code,
-      });
-    }
 
     return new Result({
       code: ResultCode.Success,
       realEntryPoint,
-      message: `${relative(realEntryPoint.packageContext.directory, realEntryPoint.resolvedPath)} has valid syntax`,
+      message: `${relativePath} has valid syntax`,
       name: 'check-syntax',
     });
   } catch (error) {
