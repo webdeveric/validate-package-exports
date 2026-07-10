@@ -30,6 +30,10 @@ export class SignalError extends Error {
      * This follows the standard POSIX practice of 128 + the signal code.
      *
      * @see https://nodejs.org/api/process.html#exit-codes
+     *
+     * @privateRemarks
+     * TODO: use `convertProcessSignalToExitCode()` after dropping Node 22 support.
+     * @see https://nodejs.org/docs/latest-v24.x/api/util.html#utilconvertprocesssignaltoexitcodesignal
      */
     this.exitCode = constants.signals[signalName] + 128;
   }
