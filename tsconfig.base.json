@@ -12,7 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "isolatedModules": true,
-    "lib": ["es2022"],
+    "lib": ["es2024"],
     "listEmittedFiles": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
@@ -35,7 +35,7 @@
     "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
-    "target": "ES2022",
+    "target": "ES2024",
     "types": ["node"]
   },
   "exclude": ["node_modules", "private"]
