@@ -40,7 +40,7 @@
     "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
     "postbuild": "node dist/cli.mjs --check",
-    "typecheck": "tsgo --build --force --noEmit",
+    "typecheck": "tsc --build --force --noEmit",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
     "lint": "eslint ./src \"./*.{mjs,mts}\" --ext .ts",
     "test": "vitest",
@@ -62,7 +62,7 @@
     "@types/node": "^22.20.1",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
-    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitest/coverage-v8": "^4.1.10",
     "@webdeveric/eslint-config-ts": "^0.12.1",
     "@webdeveric/prettier-config": "^0.4.0",
@@ -82,6 +82,7 @@
     "lint-staged": "^17.0.8",
     "prettier": "^3.9.5",
     "semantic-release": "^25.0.5",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vitest": "^4.1.10"
   }
 }
