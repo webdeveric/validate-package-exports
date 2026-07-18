@@ -38,7 +38,7 @@ describe('getEntryPointsFromModule()', () => {
       ),
     ).toEqual([
       {
-        condition: undefined,
+        condition: [],
         directory: resolve('/tmp'),
         fileName: 'module.js',
         itemPath: ['module'],

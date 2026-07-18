@@ -10,7 +10,7 @@ export function* getEntryPointsFromBin(
   if (packageJson.bin) {
     for (const [key, path] of Object.entries(normalizeBin(packageJson.bin, packageJson.name))) {
       yield createEntryPoint({
-        condition: undefined,
+        condition: [],
         itemPath: typeof packageJson.bin === 'string' ? ['bin'] : ['bin', key],
         modulePath: path,
         packageContext,

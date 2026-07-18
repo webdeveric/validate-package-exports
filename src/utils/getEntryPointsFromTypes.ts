@@ -13,7 +13,7 @@ export function* getEntryPointsFromTypes(
 
     if (types) {
       yield createEntryPoint({
-        condition: 'types',
+        condition: ['types'],
         itemPath: [typesProperty],
         modulePath: types,
         packageContext,

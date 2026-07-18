@@ -5,6 +5,8 @@ import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { createEntryPoint } from './createEntryPoint.js';
 
+// TODO: validate only `bin` or `directories.bin` can exist, not both.
+
 export async function* getEntryPointsFromBinDirectory(
   packageJson: PackageJson,
   packageContext: PackageContext,
@@ -15,7 +17,7 @@ export async function* getEntryPointsFromBinDirectory(
     for await (const item of binDir) {
       if (item.isFile()) {
         yield createEntryPoint({
-          condition: undefined,
+          condition: [],
           itemPath: ['directories', 'bin'],
           modulePath: resolve(packageJson.directories.bin, item.name),
           packageContext,

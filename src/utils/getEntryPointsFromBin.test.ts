@@ -38,7 +38,7 @@ describe('getEntryPointsFromBin()', () => {
       ),
     ).toEqual([
       {
-        condition: undefined,
+        condition: [],
         directory: resolve('/tmp'),
         fileName: 'bin.js',
         itemPath: ['bin'],
@@ -67,7 +67,7 @@ describe('getEntryPointsFromBin()', () => {
       ),
     ).toEqual([
       {
-        condition: undefined,
+        condition: [],
         directory: resolve('/tmp'),
         fileName: 'tool.js',
         itemPath: ['bin', 'tool'],
@@ -79,7 +79,7 @@ describe('getEntryPointsFromBin()', () => {
         packageContext,
       },
       {
-        condition: undefined,
+        condition: [],
         directory: resolve('/tmp'),
         fileName: 'example.js',
         itemPath: ['bin', 'example'],
