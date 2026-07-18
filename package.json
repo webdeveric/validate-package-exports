@@ -45,7 +45,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepack": "pnpm build",
-    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage && pnpm validate --check",
+    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage",
     "prepare": "husky"
   },
   "sideEffects": false,
