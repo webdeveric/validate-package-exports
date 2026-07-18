@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { findPackageJSON } from 'node:module';
-import { dirname } from 'node:path';
+import { dirname, sep } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import type { PackageType } from '@src/types.js';
 import { isTypeOnlyPackageJson } from '@utils/type-predicate.js';
@@ -12,7 +13,8 @@ import { isTypeOnlyPackageJson } from '@utils/type-predicate.js';
  */
 function getNearestPackageType(directory: string): PackageType | undefined {
   try {
-    const packageJsonPath = findPackageJSON(`${directory}/`, import.meta.url);
+    // Use `sep` so  that it works cross platform
+    const packageJsonPath = findPackageJSON(pathToFileURL(`${directory}${sep}`), import.meta.url);
 
     if (!packageJsonPath) {
       return undefined;
