@@ -9,7 +9,7 @@ export function* getEntryPointsFromMain(
   if (packageJson.main) {
     yield createEntryPoint({
       moduleName: packageContext.name,
-      condition: undefined,
+      condition: [],
       itemPath: ['main'],
       modulePath: packageJson.main,
       packageContext,

@@ -1,78 +1,105 @@
-import { setMaxListeners } from 'node:events';
-import { Readable } from 'node:stream';
+import { ReadableStream, TransformStream } from 'node:stream/web';
+import { inspect, styleText } from 'node:util';
 
-import { ResultCode, type Result } from '@lib/Result.js';
-import { Validator } from '@lib/Validator.js';
-import { ExitCode, type PackageJsonPath } from '@src/types.js';
-import { getCliArguments } from '@utils/getCliArguments.js';
-import { getDetails } from '@utils/getDetails.js';
-import { resolvePackageJson } from '@utils/resolvePackageJson.js';
+import { asError } from '@webdeveric/utils/asError';
+import { prefix } from '@webdeveric/utils/prefix';
+import { unique } from '@webdeveric/utils/unique';
+
+import { PackageJsonValidator } from '@lib/PackageJsonValidator.js';
+import { ResultCode, Result } from '@lib/Result.js';
+import { SignalError } from '@src/errors/SignalError.js';
+import { ExitCode } from '@src/types.js';
+import { createCliContext } from '@utils/createCliContext.js';
+import { getReporterWebStream } from '@utils/getReporterWebStream.js';
+import { helpScreen } from '@utils/help.js';
+import { readStdinLines } from '@utils/readStdinLines.js';
+
+const errorMessage = prefix.bind(null, styleText('red', `[${process.env['npm_package_name']}] `));
 
 try {
-  const { json, info, packages, ...options } = getCliArguments();
+  const cliContext = createCliContext();
 
-  const resolvedPackages: PackageJsonPath[] = await Readable.from(packages)
-    .map((packagePath: string) => resolvePackageJson(packagePath), { concurrency: options.concurrency })
-    .toArray();
+  const { packages, ...options } = cliContext.options;
 
-  const results: Result[] = [];
+  if (options.version) {
+    process.stdout.write(process.env['npm_package_version'] + '\n');
 
-  const handleResult = (result: Result): void => {
-    results.push(result);
+    process.exit(ExitCode.Ok);
+  }
 
-    if (!json && (info || result.code === ResultCode.Error)) {
-      console.log(result.toString());
-    }
-  };
+  if (options.help) {
+    process.stdout.write(helpScreen(cliContext));
 
-  const controller = new AbortController();
+    process.exit(ExitCode.Ok);
+  }
 
-  setMaxListeners(100, controller.signal);
+  process.once('SIGINT', (signal) => {
+    const error = new SignalError(signal);
 
-  // Create a `Validator` for each `package.json`
-  const validators = resolvedPackages.map((path) => {
-    const validator = new Validator({
-      ...options,
-      package: path,
-      controller,
+    // Double CTRL+C
+    process.once('SIGINT', () => {
+      process.stderr.write('\n' + errorMessage('Forced exit.\n'));
+      process.exit(error.exitCode);
     });
 
-    validator.on('result', handleResult);
+    process.stderr.write('\n' + errorMessage(`${signal} received... finishing in progress work.\n`));
 
-    return validator;
+    cliContext.controller.abort(error);
   });
 
-  try {
-    // Sequentially process each `package.json` file.
-    for (const validator of validators) {
-      // eslint-disable-next-line no-await-in-loop
-      await validator.run();
-    }
-  } catch (error) {
-    if (error instanceof Error && error.name !== 'AbortError') {
-      throw error;
-    }
-  }
+  const uniquePackages = unique(cliContext.pipingIn ? readStdinLines() : packages, {
+    filter(item) {
+      return item.trim().length > 0;
+    },
+  });
 
-  // Check if any of the results have an error code.
-  process.exitCode = results.reduce<ExitCode>(
-    (code, result) => (result.code === ResultCode.Error ? ExitCode.Error : code),
-    ExitCode.Ok,
+  const readable = ReadableStream.from(uniquePackages);
+
+  const packageJsonProcessor = new TransformStream<string, Result>(
+    {
+      async transform(chunk, controller) {
+        try {
+          const validator = new PackageJsonValidator({
+            controller, // Allow the validator instance to `enqueue()`
+            cliContext,
+            path: chunk,
+          });
+
+          const exitCode = await validator.run();
+
+          if (exitCode !== ExitCode.Ok) {
+            process.exitCode = exitCode;
+          }
+        } catch (error) {
+          controller.enqueue(
+            new Result({
+              code: ResultCode.Error,
+              error: asError(error),
+              name: 'unexpected-error',
+              message: 'An unexpected error has occurred',
+            }),
+          );
+
+          controller.error(error);
+        }
+      },
+    },
+    new CountQueuingStrategy({ highWaterMark: 1 }),
   );
 
-  if (json) {
-    process.stdout.write(
-      JSON.stringify(
-        results.filter((result) => info || result.code === ResultCode.Error),
-        (_, value) => (value instanceof Error ? getDetails(value) : value),
-        2,
-      ),
-    );
-  }
-} catch (error) {
-  console.group(process.env['npm_package_name']);
-  console.dir(error, { depth: null });
-  console.groupEnd();
+  const output = await getReporterWebStream(cliContext.options);
 
-  process.exitCode ??= ExitCode.Error;
+  await readable
+    .pipeThrough(packageJsonProcessor, { signal: cliContext.controller.signal })
+    .pipeTo(output, { signal: cliContext.controller.signal });
+} catch (error) {
+  if (error instanceof SignalError) {
+    process.stderr.write(errorMessage(`${error.signalName} handled.... goodbye.\n`));
+
+    process.exit(error.exitCode);
+  } else {
+    process.stderr.write(errorMessage(inspect(error)));
+
+    process.exitCode ??= ExitCode.Error;
+  }
 }

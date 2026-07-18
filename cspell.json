@@ -3,6 +3,7 @@
   "words": [
     "cli",
     "CODEOWNERS",
+    "COLORTERM",
     "commitlint",
     "conventionalcommits",
     "corepack",
@@ -17,13 +18,17 @@
     "postbuild",
     "predemo",
     "realpath",
+    "Sarif",
+    "SRCROOT",
     "stringifying",
+    "truecolor",
     "typecheck",
     "unrs-resolver",
     "unstub",
     "vite",
     "vitest",
-    "webdeveric"
+    "webdeveric",
+    "WHATWG"
   ],
   "ignorePaths": [
     "./package.json",

@@ -38,7 +38,7 @@ describe('getEntryPointsFromTypes()', () => {
       ),
     ).toEqual([
       {
-        condition: 'types',
+        condition: ['types'],
         directory: resolve('/tmp'),
         fileName: 'types.d.ts',
         itemPath: [typesProperty],

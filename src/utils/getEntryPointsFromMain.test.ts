@@ -38,7 +38,7 @@ describe('getEntryPointsFromMain()', () => {
       ),
     ).toEqual([
       {
-        condition: undefined,
+        condition: [],
         directory: resolve('/tmp'),
         fileName: 'main.js',
         itemPath: ['main'],

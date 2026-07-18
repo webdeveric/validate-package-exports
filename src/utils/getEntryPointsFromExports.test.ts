@@ -62,7 +62,7 @@ describe('getEntryPointsFromExports()', () => {
         directory: resolve('/tmp'),
         resolvedPath: resolve('/tmp/main.js'),
         subpath: '.',
-        condition: undefined,
+        condition: [],
         itemPath: ['exports'],
         packageContext,
       } satisfies EntryPoint);

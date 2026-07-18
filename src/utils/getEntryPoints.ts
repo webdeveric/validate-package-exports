@@ -1,3 +1,4 @@
+import type { Result } from '@lib/Result.js';
 import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { getEntryPointsFromBin } from './getEntryPointsFromBin.js';
@@ -11,7 +12,7 @@ import { getEntryPointsFromTypes } from './getEntryPointsFromTypes.js';
 export async function* getEntryPoints(
   packageJson: PackageJson,
   packageContext: PackageContext,
-): AsyncGenerator<EntryPoint> {
+): AsyncGenerator<EntryPoint | Result> {
   yield* getEntryPointsFromBin(packageJson, packageContext);
   yield* getEntryPointsFromBinDirectory(packageJson, packageContext);
   yield* getEntryPointsFromBrowser(packageJson, packageContext);

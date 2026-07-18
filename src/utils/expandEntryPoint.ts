@@ -40,6 +40,10 @@ async function* processDirectory(
     const resolvedPath = resolve(directory, item.name);
 
     if (item.isDirectory()) {
+      if (item.name === 'node_modules') {
+        continue;
+      }
+
       yield* processDirectory(resolvedPath, entryPoint, context);
     } else if (item.isFile() && (typeof context.suffix === 'undefined' || item.name.endsWith(context.suffix))) {
       yield replaceStars(entryPoint, context.findStar(resolvedPath));
@@ -48,16 +52,21 @@ async function* processDirectory(
 }
 
 export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<EntryPoint> {
-  const numberOfStars = countCharacter(entryPoint.resolvedPath, '*');
+  const numberOfResolvedPathStars = countCharacter(entryPoint.resolvedPath, '*');
+  const numberOfSubpathStars = entryPoint.subpath ? countCharacter(entryPoint.subpath, '*') : 0;
 
-  if (numberOfStars === 0) {
+  if (numberOfResolvedPathStars === 0 && numberOfSubpathStars === 0) {
     yield entryPoint;
 
     return;
   }
 
-  if (numberOfStars > 1) {
+  if (numberOfResolvedPathStars > 1) {
     throw new Error('Only one star is allowed in entryPoint.resolvedPath');
+  }
+
+  if (numberOfSubpathStars > 1) {
+    throw new Error('Only one star is allowed in entryPoint.subpath');
   }
 
   const [prefix, suffix] = entryPoint.resolvedPath.split('*');

@@ -15,7 +15,7 @@ export function* getEntryPointsFromBrowser(
 
       for (const [key, value] of entries) {
         yield createEntryPoint({
-          condition: undefined,
+          condition: [],
           itemPath: ['browser', key],
           modulePath: value,
           packageContext,
@@ -27,7 +27,7 @@ export function* getEntryPointsFromBrowser(
     }
 
     yield createEntryPoint({
-      condition: undefined,
+      condition: [],
       itemPath: ['browser'],
       modulePath: packageJson.browser,
       packageContext,

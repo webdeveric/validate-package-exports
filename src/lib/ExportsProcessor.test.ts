@@ -90,7 +90,7 @@ describe('ExportsProcessor', () => {
 
       expect(entryPoints).toEqual<EntryPoint[]>([
         {
-          condition: 'default',
+          condition: ['default'],
           type: demoPackageJson.type,
           moduleName: demoPackageJson.name,
           relativePath: 'index.js',
@@ -109,7 +109,7 @@ describe('ExportsProcessor', () => {
           fileName: 'index.js',
           directory: resolve('/tmp'),
           subpath: '.',
-          condition: undefined,
+          condition: [],
           itemPath: ['exports', '.', 1],
           packageContext,
         },
@@ -121,7 +121,7 @@ describe('ExportsProcessor', () => {
           fileName: 'package.json',
           directory: resolve('/tmp'),
           subpath: './package.json',
-          condition: undefined,
+          condition: [],
           itemPath: ['exports', './package.json'],
           packageContext,
         },
@@ -155,7 +155,7 @@ describe('ExportsProcessor', () => {
           directory: resolve('/tmp/dist/types'),
           resolvedPath: resolve('/tmp/dist/types/index.d.ts'),
           subpath: '.',
-          condition: 'types',
+          condition: ['types'],
           itemPath: ['exports', 'types'],
           packageContext,
         },
@@ -167,7 +167,7 @@ describe('ExportsProcessor', () => {
           directory: resolve('/tmp/dist/cjs'),
           resolvedPath: resolve('/tmp/dist/cjs/index.js'),
           subpath: '.',
-          condition: 'require',
+          condition: ['require'],
           itemPath: ['exports', 'require'],
           packageContext,
         },
@@ -179,7 +179,7 @@ describe('ExportsProcessor', () => {
           directory: resolve('/tmp/dist/mjs'),
           resolvedPath: resolve('/tmp/dist/mjs/index.js'),
           subpath: '.',
-          condition: 'import',
+          condition: ['import'],
           itemPath: ['exports', 'import'],
           packageContext,
         },
@@ -225,7 +225,7 @@ describe('ExportsProcessor', () => {
       expect(entryPoints).toEqual<EntryPoint[]>([
         {
           type: mockPackageJson.type,
-          condition: 'types',
+          condition: ['types'],
           moduleName: demoPackageJson.name,
           relativePath: fixSlash('dist/types/index.d.ts'),
           resolvedPath: resolve('/tmp/dist/types/index.d.ts'),
@@ -237,7 +237,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: 'commonjs',
-          condition: 'require',
+          condition: ['require'],
           moduleName: demoPackageJson.name,
           relativePath: fixSlash('dist/cjs/index.js'),
           resolvedPath: resolve('/tmp/dist/cjs/index.js'),
@@ -249,7 +249,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: 'module',
-          condition: 'import',
+          condition: ['import'],
           moduleName: demoPackageJson.name,
           relativePath: fixSlash('dist/mjs/index.js'),
           resolvedPath: resolve('/tmp/dist/mjs/index.js'),
@@ -261,7 +261,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: mockPackageJson.type,
-          condition: 'types',
+          condition: ['types'],
           moduleName: `${demoPackageJson.name}/*`,
           relativePath: fixSlash('dist/types/*.d.ts'),
           resolvedPath: resolve('/tmp/dist/types/*.d.ts'),
@@ -273,7 +273,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: 'commonjs',
-          condition: 'require',
+          condition: ['require'],
           moduleName: `${demoPackageJson.name}/*`,
           relativePath: fixSlash('dist/cjs/*.js'),
           resolvedPath: resolve('/tmp/dist/cjs/*.js'),
@@ -285,7 +285,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: 'module',
-          condition: 'import',
+          condition: ['import'],
           moduleName: `${demoPackageJson.name}/*`,
           relativePath: fixSlash('dist/mjs/*.js'),
           resolvedPath: resolve('/tmp/dist/mjs/*.js'),
@@ -297,7 +297,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: mockPackageJson.type,
-          condition: 'types',
+          condition: ['require', 'types'],
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/types/sub-folder/*.d.ts'),
           resolvedPath: resolve('/tmp/dist/types/sub-folder/*.d.ts'),
@@ -309,7 +309,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: 'commonjs',
-          condition: 'require',
+          condition: ['require'],
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/cjs/sub-folder/*.js'),
           resolvedPath: resolve('/tmp/dist/cjs/sub-folder/*.js'),
@@ -321,7 +321,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: mockPackageJson.type,
-          condition: 'types',
+          condition: ['import', 'types'],
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/types/sub-folder/*.d.ts'),
           resolvedPath: resolve('/tmp/dist/types/sub-folder/*.d.ts'),
@@ -333,7 +333,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: 'module',
-          condition: 'import',
+          condition: ['import'],
           moduleName: `${demoPackageJson.name}/sub-folder/*`,
           relativePath: fixSlash('dist/mjs/sub-folder/*.js'),
           resolvedPath: resolve('/tmp/dist/mjs/sub-folder/*.js'),
@@ -345,7 +345,7 @@ describe('ExportsProcessor', () => {
         },
         {
           type: mockPackageJson.type,
-          condition: undefined,
+          condition: [],
           moduleName: `${demoPackageJson.name}/package.json`,
           relativePath: fixSlash('package.json'),
           resolvedPath: resolve('/tmp/package.json'),

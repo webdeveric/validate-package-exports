@@ -12,7 +12,7 @@ export type CreateEntryPointOptions = {
   packageContext: PackageContext;
   subpath: string | undefined;
   itemPath: ItemPath;
-  condition?: string | undefined;
+  condition?: string[];
 };
 
 export function createEntryPoint({
@@ -21,13 +21,13 @@ export function createEntryPoint({
   packageContext,
   subpath,
   itemPath,
-  condition,
+  condition = [],
 }: CreateEntryPointOptions): EntryPoint {
   const resolvedPath = getResolvedPath(modulePath, packageContext);
 
   return {
     moduleName: moduleName ?? (subpath ? getModuleName(packageContext.name, subpath) : undefined),
-    type: getModuleType(modulePath, packageContext.type, condition),
+    type: getModuleType(resolvedPath, packageContext.type, condition),
     fileName: basename(resolvedPath),
     relativePath: relative(packageContext.directory, resolvedPath),
     directory: dirname(resolvedPath),

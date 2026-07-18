@@ -39,7 +39,7 @@ describe('getEntryPointsFromBrowser()', () => {
       ),
     ).toEqual([
       {
-        condition: undefined,
+        condition: [],
         directory: resolve('/tmp'),
         fileName: 'browser.js',
         itemPath: ['browser'],
@@ -67,7 +67,7 @@ describe('getEntryPointsFromBrowser()', () => {
       ),
     ).toEqual([
       {
-        condition: undefined,
+        condition: [],
         directory: resolve('/tmp'),
         fileName: 'browser.js',
         itemPath: ['browser', 'file'],

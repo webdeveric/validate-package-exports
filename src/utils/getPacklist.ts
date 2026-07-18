@@ -7,7 +7,7 @@ import { fixSlash } from '@utils/fixSlash.js';
 export async function getPacklist(directory: string): Promise<string[]> {
   const arborist = new Arborist({ path: directory });
   const tree = await arborist.loadActual();
-  const files = await packlist(tree);
+  const files = await packlist(tree, { path: directory });
 
   return files.map((file) => fixSlash(file));
 }

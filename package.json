@@ -32,28 +32,27 @@
   "engines": {
     "node": ">=22.22.2"
   },
-  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8",
+  "packageManager": "pnpm@11.14.0+sha512.66c1ac4c7d4762d6d7dde44c7f3e5a73591ed0a0806e751d4ed32d4f004f25b2285a906b1fd8a9e3e621df3b4e2858bf88e50e0cf626bedbe977fe434a5caf85",
   "scripts": {
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
     "format": "prettier --write .",
     "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
-    "postbuild": "node dist/cli.mjs --check",
     "typecheck": "tsc --build --force --noEmit",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
     "lint": "eslint ./src \"./*.{mjs,mts}\" --ext .ts",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepack": "pnpm build",
-    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage",
+    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage && pnpm validate --check",
     "prepare": "husky"
   },
   "sideEffects": false,
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
-    "@npmcli/arborist": "^10.0.0",
-    "@webdeveric/utils": "^1.0.0",
+    "@npmcli/arborist": "^10.0.1",
+    "@webdeveric/utils": "^1.1.0",
     "npm-packlist": "^11.3.0"
   },
   "devDependencies": {
@@ -81,7 +80,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.0.8",
     "prettier": "^3.9.5",
-    "semantic-release": "^25.0.5",
+    "semantic-release": "^25.0.7",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vitest": "^4.1.10"
   }

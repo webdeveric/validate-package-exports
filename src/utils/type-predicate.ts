@@ -120,3 +120,7 @@ export const isPackageJson = shape<PackageJson>({
   bin: isOptionalPackageBin,
   files: optional(isStringArray),
 });
+
+export const isTypeOnlyPackageJson = shape({
+  type: isPackageType,
+});

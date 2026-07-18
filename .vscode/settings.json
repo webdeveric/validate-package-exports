@@ -8,6 +8,7 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "js/ts.experimental.useTsgo": true,
   "js/ts.tsdk.path": "node_modules/typescript/lib",
   "js/ts.format.semicolons": "insert",
   "js/ts.updateImportsOnFileMove.enabled": "always",
@@ -30,6 +31,5 @@
   },
   "editor.codeActionsOnSave": {
     "source.fixAll": "always"
-  },
-  "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+  }
 }
