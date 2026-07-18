@@ -1,5 +1,6 @@
 import type { Branded } from '@webdeveric/utils/types/branded';
 import type { UnknownRecord } from '@webdeveric/utils/types/records';
+import type { ParseArgsConfig, ParseArgsOptionDescriptor } from 'node:util';
 
 export type PackageJsonPath = Branded<string, 'package.json'>;
 
@@ -35,17 +36,41 @@ export const logLevelMapping = {
   debug: LogLevel.Debug,
 } as const satisfies Record<LogLevelName, LogLevel>;
 
-export type CliArguments = {
+/**
+ * This is basically `ParseArgsConfig`, with a `description` added to the options.
+ */
+export type ParseArgsConfigWithDescription = Omit<ParseArgsConfig, 'options'> & {
+  options: {
+    [longOption: string]: ParseArgsOptionDescriptor & { description: string };
+  };
+};
+
+/**
+ * This is the shape of the parsed CLI arguments
+ */
+export type CliOptions = {
+  /**
+   * Stop after the first `Error`
+   */
   bail: boolean;
+  /**
+   * Check syntax of js files using `node --check`.
+   */
   check: boolean;
   concurrency: number;
   devCondition: string[];
+  reporter: 'text' | 'ndjson' | 'json' | 'sarif';
   info: boolean;
-  json: boolean;
+  verbose: boolean;
+  help: boolean;
+  version: boolean;
+  /**
+   * This will be empty if data is piped in
+   */
   packages: string[];
 };
 
-export type ValidatorOptions = Omit<CliArguments, 'json' | 'info' | 'packages'> & {
+export type ValidatorOptions = Omit<CliOptions, 'info' | 'packages'> & {
   package: PackageJsonPath;
   controller: AbortController;
 };
@@ -165,23 +190,30 @@ export type PackageContext = Readonly<{
  * EntryPoint _can_ have `*` in the path.
  */
 export type EntryPoint = {
-  // bin scripts will not have this
-  moduleName: string | undefined; // This is string used with `require` or `import`.
+  /**
+   * This is the string used with `require()` or `import()`.
+   *
+   * bin scripts will not have this
+   */
+  moduleName: string | undefined;
   type: PackageType;
   fileName: string;
   relativePath: string;
   directory: string;
   resolvedPath: string;
   subpath: string | undefined;
-  condition: string | undefined;
+  /**
+   * The chain of nested conditions leading to this entry point,
+   * @example
+   * `{"node": {"import": "./x.js"}}` produces `["node", "import"]`.
+   */
+  condition: string[];
   itemPath: ItemPath;
   packageContext: PackageContext;
 };
 
-/**
- * This represents an `EntryPoint` after glob expansions have occurred and symlinks have been resolved.
- */
-export type RealEntryPoint = EntryPoint & {
-  realResolvedPath: string;
-  realDirectory: string;
-};
+export type JsonStringifyReplacer =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ((this: any, key: string, value: any) => any) | (string | number)[] | null | undefined;
+
+export type JsonStringifySpace = Parameters<JSON['stringify']>[2];

@@ -2,41 +2,45 @@ import { availableParallelism } from 'node:os';
 
 import { describe, expect, it } from 'vitest';
 
-import type { CliArguments } from '@src/types.js';
+import type { CliOptions } from '@src/types.js';
 
-import { getCliArguments } from './getCliArguments.js';
+import { getCliOptions } from './getCliOptions.js';
 
-describe('getCliArguments()', () => {
-  it('Returns CliArguments', () => {
-    expect(getCliArguments([])).toEqual({
+describe('getCliOptions()', () => {
+  it('Returns CliOptions', () => {
+    expect(getCliOptions([])).toEqual({
       bail: process.env['CI'] === 'true',
       check: false,
       concurrency: availableParallelism(),
       devCondition: [],
       info: process.env['RUNNER_DEBUG'] === '1',
-      json: false,
+      reporter: 'text',
+      verbose: false,
+      help: false,
+      version: false,
       packages: ['./package.json'],
-    } satisfies CliArguments);
+    } satisfies CliOptions);
 
-    expect(
-      getCliArguments(['./some-path/package.json', '--bail', '--info', '--check', '--json', '--concurrency=1']),
-    ).toEqual({
+    expect(getCliOptions(['./some-path/package.json', '--bail', '--info', '--check', '--concurrency=1'])).toEqual({
       bail: true,
       check: true,
       concurrency: 1,
       devCondition: [],
       info: true,
-      json: true,
+      reporter: 'text',
+      verbose: false,
+      help: false,
+      version: false,
       packages: ['./some-path/package.json'],
-    } satisfies CliArguments);
+    } satisfies CliOptions);
 
-    expect(getCliArguments(['--bail', '--no-bail'])).toEqual(
+    expect(getCliOptions(['--bail', '--no-bail'])).toEqual(
       expect.objectContaining({
         bail: false,
       }),
     );
 
-    expect(getCliArguments(['--info', '--no-info'])).toEqual(
+    expect(getCliOptions(['--info', '--no-info'])).toEqual(
       expect.objectContaining({
         info: false,
       }),
@@ -45,55 +49,67 @@ describe('getCliArguments()', () => {
 
   it('--dev-condition flag', () => {
     // Single value
-    expect(getCliArguments(['--dev-condition', '@webdeveric/example'])).toEqual({
+    expect(getCliOptions(['--dev-condition', '@webdeveric/example'])).toEqual({
       bail: process.env['CI'] === 'true',
       check: false,
       concurrency: availableParallelism(),
       devCondition: ['@webdeveric/example'],
       info: process.env['RUNNER_DEBUG'] === '1',
-      json: false,
+      reporter: 'text',
+      verbose: false,
+      help: false,
+      version: false,
       packages: ['./package.json'],
-    } satisfies CliArguments);
+    } satisfies CliOptions);
 
     // Multiple values
     expect(
-      getCliArguments(['--dev-condition', '@webdeveric/example1', '--dev-condition', '@webdeveric/example2']),
+      getCliOptions(['--dev-condition', '@webdeveric/example1', '--dev-condition', '@webdeveric/example2']),
     ).toEqual({
       bail: process.env['CI'] === 'true',
       check: false,
       concurrency: availableParallelism(),
       devCondition: ['@webdeveric/example1', '@webdeveric/example2'],
       info: process.env['RUNNER_DEBUG'] === '1',
-      json: false,
+      reporter: 'text',
+      verbose: false,
+      help: false,
+      version: false,
       packages: ['./package.json'],
-    } satisfies CliArguments);
+    } satisfies CliOptions);
 
     // CSV string
-    expect(getCliArguments(['--dev-condition', '@webdeveric/example1,@webdeveric/example2'])).toEqual({
+    expect(getCliOptions(['--dev-condition', '@webdeveric/example1,@webdeveric/example2'])).toEqual({
       bail: process.env['CI'] === 'true',
       check: false,
       concurrency: availableParallelism(),
       devCondition: ['@webdeveric/example1', '@webdeveric/example2'],
       info: process.env['RUNNER_DEBUG'] === '1',
-      json: false,
+      reporter: 'text',
+      verbose: false,
+      help: false,
+      version: false,
       packages: ['./package.json'],
-    } satisfies CliArguments);
+    } satisfies CliOptions);
 
     // CSV string with whitespace padding
-    expect(getCliArguments(['--dev-condition', ' @webdeveric/example1 , @webdeveric/example2 '])).toEqual({
+    expect(getCliOptions(['--dev-condition', ' @webdeveric/example1 , @webdeveric/example2 '])).toEqual({
       bail: process.env['CI'] === 'true',
       check: false,
       concurrency: availableParallelism(),
       devCondition: ['@webdeveric/example1', '@webdeveric/example2'],
       info: process.env['RUNNER_DEBUG'] === '1',
-      json: false,
+      reporter: 'text',
+      verbose: false,
+      help: false,
+      version: false,
       packages: ['./package.json'],
-    } satisfies CliArguments);
+    } satisfies CliOptions);
   });
 
   it('Throws when given incorrect arguments', () => {
     expect(() => {
-      getCliArguments(['--not-a-real-flag']);
+      getCliOptions(['--not-a-real-flag']);
     }).toThrow();
   });
 });
