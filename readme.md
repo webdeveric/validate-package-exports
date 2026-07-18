@@ -22,14 +22,26 @@ yarn add validate-package-exports -D
 
 | Flag | Description | Default value |
 | --- | --- | --- |
-| `--check` / `-s` | Check syntax of JS files | `false` |
-| `--concurrency` / `-c` | Concurrency | `availableParallelism()` |
-| `--dev-condition` | Custom condition name only used during dev | none |
-| `--bail` / `-b` | Stop after the first error | `process.env.CI === 'true'` |
+| `--concurrency` / `-c` | How many tasks to do at the same time | `availableParallelism()` |
+| `--dev-condition` | Specify which custom conditions are used only during development | none |
+| `--bail` / `-b` | Stop processing at the first error.<br>Enabled by default when `CI=true` | `process.env.CI === 'true'` |
 | `--no-bail` | Turn off `--bail` | `false` |
-| `--info` / `-i` | Show `info` messages.<br>The default behavior is to only show `error`. | `process.env.RUNNER_DEBUG === '1'` |
+| `--check` / `-s` | Check syntax of JS files | `false` |
+| `--reporter` | Reporter to use for output | `text` |
+| `--verbose` | Use verbose output | `false` |
+| `--info` / `-i` | Show `info` messages.<br>Enabled by default when `RUNNER_DEBUG=1` | `process.env.RUNNER_DEBUG === '1'` |
 | `--no-info` | Turn off `--info` | `false` |
-| `--json` / `-j` | Use JSON output | `false` |
+| `--version` / `-v` | Print the version number | `false` |
+| `--help` / `-h` | Show the help screen | `false` |
+
+### Reporters
+
+| Reporter | Description |
+| --- | --- |
+| `text` | Human-readable output with icons and colors. This is the default. |
+| `json` | A single JSON array containing all results. |
+| `ndjson` | [Newline-delimited JSON](http://ndjson.org/). Each result is written as its own JSON object as soon as it's available. |
+| `sarif` | [SARIF](https://sarifweb.azurewebsites.net/) 2.1.0 output, useful for integrating with tools like GitHub code scanning. |
 
 ## Usage
 
@@ -85,4 +97,25 @@ fnm use
 corepack enable
 pnpm install
 pnpm build
+```
+
+### Use local build
+
+Run in separate tabs.
+
+```sh
+pnpm build -w
+```
+
+```sh
+./dist/cli.mjs [FILE]... [OPTIONS]
+```
+
+#### Validate all packages in `node_modules`
+
+This example demonstrates how you can bulk validate packages by piping in the `package.json` paths (one per line).
+
+```sh
+find -L ./node_modules -type d -name '.*' -prune -o \
+  -type f -regex '.*/node_modules/\(@[^/]+/\)?[^/]+/package\.json' -print | ./dist/cli.mjs
 ```
