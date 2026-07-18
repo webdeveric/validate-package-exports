@@ -56,3 +56,38 @@ jobs:
 
       - name: Building
         run: pnpm build
+
+  sarif:
+    name: SARIF Report
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # for checkout
+      security-events: write # for uploading SARIF report
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+
+      - name: Installing dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Building
+        run: pnpm build
+
+      - name: Generate SARIF report
+        run: pnpm validate --check --info --reporter sarif > report.sarif.json
+
+      - name: Upload SARIF report
+        if: always()
+        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
+        with:
+          sarif_file: report.sarif.json
