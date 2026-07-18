@@ -18,7 +18,7 @@ import {
 } from '@utils/type-predicate.js';
 
 export type ProcessExportsContext = {
-  condition?: string | undefined;
+  condition?: string[];
   subpath?: string;
   itemPath: ItemPath;
 };
@@ -95,36 +95,26 @@ export class ExportsProcessor {
     exportsContext: ProcessExportsContext,
     packageContext: PackageContext,
   ): EntryPoint[] {
-    const getCondition = (
-      conditionName: string,
-      exportsEntry: AnyExportsEntry,
-      itemPath: ItemPath,
-    ): string | undefined => {
-      if (isConditionalExport(exportsEntry)) {
-        return conditionName;
+    const condition = exportsContext.condition ?? [];
+
+    // `default` nested directly under a real condition (e.g. `require`/`import`) doesn't add
+    // information on its own, so it's only appended when it isn't already inside a condition chain.
+    const getCondition = (conditionName: string, exportsEntry: AnyExportsEntry): string[] => {
+      if (conditionName === 'default' && !isConditionalExport(exportsEntry) && condition.length > 0) {
+        return condition;
       }
 
-      if (itemPath.at(-1) === 'default') {
-        const segment = itemPath.at(-2);
-
-        if (typeof segment === 'string') {
-          return segment;
-        }
-      }
-
-      return conditionName;
+      return [...condition, conditionName];
     };
 
     return Object.entries(conditionalExport)
       .map(([conditionName, exportsEntry]) => {
-        const itemPath = [...exportsContext.itemPath, conditionName];
-
         return this.process(
           exportsEntry,
           {
             ...exportsContext,
-            condition: getCondition(conditionName, exportsEntry, itemPath),
-            itemPath,
+            condition: getCondition(conditionName, exportsEntry),
+            itemPath: [...exportsContext.itemPath, conditionName],
           },
           packageContext,
         );
