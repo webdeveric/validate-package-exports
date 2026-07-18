@@ -41,6 +41,9 @@ jobs:
       - name: Building
         run: pnpm build
 
+      - name: Validate
+        run: pnpm validate --info --check
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
