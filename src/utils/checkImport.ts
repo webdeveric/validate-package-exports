@@ -1,51 +1,59 @@
 import { AssertionError } from 'node:assert';
+import { realpathSync } from 'node:fs';
 import { relative } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 import { asError } from '@webdeveric/utils/asError';
 
 import { Result, ResultCode } from '@lib/Result.js';
-import type { RealEntryPoint } from '@src/types.js';
+import type { EntryPoint } from '@src/types.js';
+
+import { resolveWithConditions } from './resolveWithConditions.js';
 
 const supportsImportMetaResolveParent =
   typeof import.meta.resolve === 'function' && process.execArgv.includes('--experimental-import-meta-resolve');
 
-export function checkImport(realEntryPoint: RealEntryPoint): Result {
+export function checkImport(entryPoint: EntryPoint): Result {
   try {
-    if (typeof realEntryPoint.moduleName === 'string' && supportsImportMetaResolveParent) {
-      // If the package is symlinked, this will resolve to the real path.
-      const resolvedPath = fileURLToPath(
-        import.meta.resolve(realEntryPoint.moduleName, pathToFileURL(realEntryPoint.packageContext.realPath)),
+    if (typeof entryPoint.moduleName === 'string' && supportsImportMetaResolveParent) {
+      const importResolvedPath = fileURLToPath(
+        resolveWithConditions(
+          entryPoint.moduleName,
+          pathToFileURL(entryPoint.packageContext.realPath),
+          entryPoint.condition.length > 0 ? entryPoint.condition : undefined,
+        ),
       );
 
-      if (resolvedPath !== realEntryPoint.realResolvedPath) {
+      const realResolvedPath = realpathSync(entryPoint.resolvedPath);
+
+      if (importResolvedPath !== realResolvedPath) {
         throw new AssertionError({
-          message: `The resolved import path (${relative(process.cwd(), resolvedPath)}) does not equal entrypoint resolved path (${relative(process.cwd(), realEntryPoint.realResolvedPath)}).`,
-          expected: realEntryPoint.realResolvedPath,
-          actual: resolvedPath,
+          message: `The resolved import path (${relative(process.cwd(), importResolvedPath)}) does not equal entrypoint resolved path (${relative(process.cwd(), realResolvedPath)}).`,
+          expected: realResolvedPath,
+          actual: importResolvedPath,
         });
       }
 
       return new Result({
         code: ResultCode.Success,
-        realEntryPoint,
-        message: `"${realEntryPoint.moduleName}" works with import`,
+        entryPoint,
+        message: `"${entryPoint.moduleName}" works with import`,
         name: 'import',
       });
     }
 
     return new Result({
       code: ResultCode.Skip,
-      realEntryPoint,
-      message: `Import skipped: ${realEntryPoint.itemPath.join('.')}`,
+      entryPoint,
+      message: `Import skipped: ${entryPoint.itemPath.join('.')}`,
       name: 'import',
     });
   } catch (error) {
     return new Result({
       code: ResultCode.Error,
-      realEntryPoint,
+      entryPoint,
       error: asError(error),
-      message: `${realEntryPoint.moduleName ?? realEntryPoint.itemPath.join('.')} cannot be imported`,
+      message: `${entryPoint.moduleName ?? entryPoint.itemPath.join('.')} cannot be imported`,
       name: 'import',
     });
   }
