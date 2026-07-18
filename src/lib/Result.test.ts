@@ -5,22 +5,20 @@ import { describe, expect, it } from 'vitest';
 import { Result, ResultCode } from './Result.js';
 
 describe('Result', () => {
-  it('Holds data describing what happened', () => {
+  it('Uses name for Symbol.toStringTag', () => {
     const result = new Result({
       name: 'file-exists',
       code: ResultCode.Success,
       message: 'message',
-      realEntryPoint: {
+      entryPoint: {
         moduleName: undefined,
         type: 'module',
         fileName: 'index.js',
         relativePath: './index.js',
         directory: resolve('/tmp'),
-        realDirectory: resolve('/tmp'),
         resolvedPath: '/tmp/index.js',
-        realResolvedPath: '/tmp/index.js',
         subpath: undefined,
-        condition: undefined,
+        condition: [],
         itemPath: ['main'],
         packageContext: {
           name: 'example',
@@ -33,14 +31,7 @@ describe('Result', () => {
       },
     });
 
-    expect(result.toString()).toEqual('✅ file-exists: message');
-
-    result.code = ResultCode.Error;
-
-    expect(result.toString()).toEqual('❌ file-exists: message (["main"])');
-
-    result.code = ResultCode.Skip;
-
-    expect(result.toString()).toEqual('😐 file-exists: message');
+    expect(result[Symbol.toStringTag]).toBe('Result:file-exists');
+    expect(Object.prototype.toString.call(result)).toBe('[object Result:file-exists]');
   });
 });
