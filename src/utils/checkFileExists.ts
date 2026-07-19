@@ -24,7 +24,8 @@ export async function checkFileExists(entryPoint: EntryPoint): Promise<Result> {
       name: 'file-exists',
       code: ResultCode.Error,
       entryPoint,
-      message: `${relative(process.cwd(), entryPoint.resolvedPath)} does not exist.`,
+      message:
+        error instanceof Error ? error.message : `${relative(process.cwd(), entryPoint.resolvedPath)} does not exist.`,
       error: asError(error),
     });
   }
