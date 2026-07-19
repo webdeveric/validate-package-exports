@@ -1,9 +1,9 @@
 import { WritableStream, type UnderlyingSink } from 'node:stream/web';
-import { stripVTControlCharacters, styleText } from 'node:util';
+import { inspect, stripVTControlCharacters, styleText } from 'node:util';
 
 import { assertExhaustive } from '@webdeveric/utils/assertion';
 import { graphemeLength } from '@webdeveric/utils/graphemeLength';
-import { isStringWithLength } from '@webdeveric/utils/predicate';
+import { indent } from '@webdeveric/utils/indent';
 
 import { ResultCode, type Result } from '@lib/Result.js';
 import { stdoutWritableStream } from '@utils/stdoutWritableStream.js';
@@ -21,6 +21,8 @@ export class TextWritableStream extends WritableStream<Result> {
   info: boolean;
 
   verbose: boolean;
+
+  readonly supportsColors: boolean;
 
   constructor(options: TextWritableStreamOptions = {}) {
     const { destination, info = false, verbose = false, highWaterMark = 1 } = options;
@@ -51,6 +53,7 @@ export class TextWritableStream extends WritableStream<Result> {
     this.destination = writable;
     this.info = info;
     this.verbose = verbose;
+    this.supportsColors = !destination && process.stdout.isTTY && process.stdout.hasColors();
   }
 
   getIcon(resultCode: ResultCode): string {
@@ -67,25 +70,25 @@ export class TextWritableStream extends WritableStream<Result> {
   }
 
   format(result: Result): string {
-    const prefix = `${this.getIcon(result.code)} ${result.name}: `;
+    const iconPrefix = `${this.getIcon(result.code)} `;
+    const prefix = `${iconPrefix}${result.name}: `;
 
-    const indent = ' '.repeat(graphemeLength(stripVTControlCharacters(prefix)));
+    if (this.verbose) {
+      const lines = [
+        `${prefix}${result.message}`,
+        indent(
+          // spread the result to get rid of the mangled class name in the output.
+          inspect({ ...result }, { colors: this.supportsColors }),
+          ' '.repeat(graphemeLength(stripVTControlCharacters(iconPrefix))),
+        ),
+      ];
 
-    const itemPath =
-      this.verbose && result.entryPoint?.itemPath.length
-        ? `${indent}Item path: ${JSON.stringify(result.entryPoint.itemPath)}`
-        : '';
-
-    const conditions =
-      this.verbose && result.entryPoint?.condition.length
-        ? `${indent}Condition: ${JSON.stringify(result.entryPoint.condition)}`
-        : '';
+      return lines.join('\n');
+    }
 
     const errorMessage =
-      result.error && result.error.message !== result.message ? `${indent}Error: ${result.error.message}` : '';
+      result.error && result.error.message !== result.message ? `Error: ${result.error.message}` : '';
 
-    const lines = [`${prefix}${result.message}`, itemPath, conditions, errorMessage];
-
-    return lines.filter(isStringWithLength).join('\n');
+    return `${prefix}${result.message} ${errorMessage}`;
   }
 }
