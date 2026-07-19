@@ -51,6 +51,16 @@ validate-package-exports [FILE]... [options]
 
 :information_source: If you do not provide a path to a `package.json`, it will try to find one in the current directory.
 
+### Piping in
+
+You can pipe in the list of packages to validate.
+
+#### Validate all locally defined packages in your repo
+
+```sh
+pnpm ls -r --depth -1 --parseable | pnpm dlx validate-package-exports --info
+```
+
 ### Package scripts examples
 
 ```json
