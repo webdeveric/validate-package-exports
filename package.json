@@ -78,9 +78,9 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.8",
-    "prettier": "^3.9.5",
-    "semantic-release": "^25.0.7",
+    "lint-staged": "^17.1.0",
+    "prettier": "^3.9.6",
+    "semantic-release": "^25.0.8",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vitest": "^4.1.10"
   }
