@@ -1,1 +1,9 @@
-npx --no lint-staged -- --relative
+# Prevent accidental commits to the master branch.
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "master" ]; then
+  echo "Create a feature branch and open a pull request instead of directly committing to master."
+  exit 1
+fi
+
+pnpm exec lint-staged --relative
