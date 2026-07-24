@@ -42,7 +42,7 @@ export function checkRequire(entryPoint: EntryPoint): Result {
     return new Result({
       code: ResultCode.Skip,
       entryPoint,
-      message: `Require skipped: ${entryPoint.itemPath.join('.')}`,
+      message: `"${entryPoint.moduleName}" skipped`,
       name: 'require',
     });
   } catch (error) {
