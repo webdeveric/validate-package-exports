@@ -45,7 +45,7 @@ export function checkImport(entryPoint: EntryPoint): Result {
     return new Result({
       code: ResultCode.Skip,
       entryPoint,
-      message: `Import skipped: ${entryPoint.itemPath.join('.')}`,
+      message: `"${entryPoint.moduleName}" skipped`,
       name: 'import',
     });
   } catch (error) {
@@ -53,7 +53,7 @@ export function checkImport(entryPoint: EntryPoint): Result {
       code: ResultCode.Error,
       entryPoint,
       error: asError(error),
-      message: `${entryPoint.moduleName ?? entryPoint.itemPath.join('.')} cannot be imported`,
+      message: `${entryPoint.moduleName ?? entryPoint.relativePath} cannot be imported`,
       name: 'import',
     });
   }
