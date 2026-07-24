@@ -5,6 +5,7 @@ import { assertExhaustive } from '@webdeveric/utils/assertion';
 import { graphemeLength } from '@webdeveric/utils/graphemeLength';
 import { indent } from '@webdeveric/utils/indent';
 
+import { checkMark, emptyBox, xMark } from '@lib/reporters/text-icons.js';
 import { ResultCode, type Result } from '@lib/Result.js';
 import { stdoutWritableStream } from '@utils/stdoutWritableStream.js';
 
@@ -59,11 +60,11 @@ export class TextWritableStream extends WritableStream<Result> {
   getIcon(resultCode: ResultCode): string {
     switch (resultCode) {
       case ResultCode.Success:
-        return styleText(['greenBright'], '🗹');
+        return styleText(['greenBright'], checkMark);
       case ResultCode.Error:
-        return styleText(['redBright'], '🗷');
+        return styleText(['redBright'], xMark);
       case ResultCode.Skip:
-        return styleText(['whiteBright'], '🞏');
+        return styleText(['whiteBright'], emptyBox);
       default:
         assertExhaustive(resultCode, 'Unhandled ResultCode');
     }
