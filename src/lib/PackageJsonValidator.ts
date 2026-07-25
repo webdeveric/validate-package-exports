@@ -233,6 +233,7 @@ export class PackageJsonValidator {
 
     const packageContext: PackageContext = Object.freeze({
       name: packageJson.name,
+      version: packageJson.version,
       type: packageJson.type ?? 'commonjs',
       path: resolvedPath,
       realPath,

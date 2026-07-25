@@ -165,6 +165,10 @@ export type PackageContext = Readonly<{
    */
   name: string;
   /**
+   * The `version` from `package.json`
+   */
+  version: string | undefined;
+  /**
    * The `type` from `package.json`
    */
   type: PackageType;
