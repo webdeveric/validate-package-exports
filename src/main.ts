@@ -76,7 +76,7 @@ try {
               code: ResultCode.Error,
               error: asError(error),
               name: 'unexpected-error',
-              message: 'An unexpected error has occurred',
+              message: 'An unexpected error has occurred.',
             }),
           );
 
