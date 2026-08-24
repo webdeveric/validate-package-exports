@@ -4,7 +4,7 @@ import { WritableStream, type UnderlyingSink } from 'node:stream/web';
 import { pathToFileURL } from 'node:url';
 
 import { asError } from '@webdeveric/utils/asError';
-import { assertExhaustive } from '@webdeveric/utils/assertion';
+import { assertExhaustive } from '@webdeveric/utils/assertion/assertExhaustive';
 import { toPascalCase } from '@webdeveric/utils/toPascalCase';
 
 import { ResultCode, type Result, type ResultName } from '@lib/Result.js';
