@@ -1,5 +1,5 @@
-import { realpath } from 'node:fs/promises';
-import { dirname, relative } from 'node:path';
+import { readFile, realpath } from 'node:fs/promises';
+import { relative } from 'node:path';
 import { Readable } from 'node:stream';
 
 import { asError } from '@webdeveric/utils/asError';
@@ -10,10 +10,11 @@ import { ExitCode, type EntryPoint, type PackageContext, type PackageJson } from
 import { checkFileExists } from '@utils/checkFileExists.js';
 import { checkSyntax } from '@utils/checkSyntax.js';
 import type { CliContext } from '@utils/createCliContext.js';
+import { createPackageContext } from '@utils/createPackageContext.js';
 import { getEntryPoints } from '@utils/getEntryPoints.js';
 import { getPacklist } from '@utils/getPacklist.js';
-import { readPackageJson } from '@utils/readPackageJson.js';
 import { resolvePackageJson } from '@utils/resolvePackageJson.js';
+import { assertIsPackageJson } from '@utils/type-assertion.js';
 import { isSubpathExports } from '@utils/type-predicate.js';
 import { verifyEntryPoint } from '@utils/verifyEntryPoint.js';
 
@@ -28,6 +29,10 @@ export type PackageValidatorOptions = {
   path: string;
 };
 
+/**
+ * @privateRemarks
+ * https://nodejs.org/docs/latest-v24.x/api/esm.html#resolution-algorithm
+ */
 export class PackageJsonValidator {
   #cliContext: CliContext;
 
@@ -209,11 +214,15 @@ export class PackageJsonValidator {
       return ExitCode.Error;
     }
 
+    let rawPackageJson: string;
     let packageJson: PackageJson;
 
     try {
-      // https://nodejs.org/docs/latest-v24.x/api/esm.html#resolution-algorithm
-      packageJson = await readPackageJson(resolvedPath);
+      rawPackageJson = await readFile(resolvedPath, 'utf-8');
+
+      packageJson = JSON.parse(rawPackageJson);
+
+      assertIsPackageJson(packageJson);
     } catch (err) {
       const error = asError(err);
 
@@ -231,14 +240,11 @@ export class PackageJsonValidator {
 
     const realPath = await realpath(resolvedPath);
 
-    const packageContext: PackageContext = Object.freeze({
-      name: packageJson.name,
-      version: packageJson.version,
-      type: packageJson.type ?? 'commonjs',
-      path: resolvedPath,
+    const packageContext = createPackageContext({
+      resolvedPath,
       realPath,
-      directory: dirname(resolvedPath),
-      realDirectory: dirname(realPath),
+      packageJson,
+      rawPackageJson,
     });
 
     // Check the structure of the `package.json` data.

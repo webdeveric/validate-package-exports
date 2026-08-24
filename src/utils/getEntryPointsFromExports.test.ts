@@ -3,8 +3,9 @@ import { Readable } from 'node:stream';
 
 import { describe, expect, it } from 'vitest';
 
-import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
+import type { EntryPoint, PackageJson } from '@src/types.js';
 
+import { createPackageContext } from './createPackageContext.js';
 import { getEntryPointsFromExports } from './getEntryPointsFromExports.js';
 
 describe('getEntryPointsFromExports()', () => {
@@ -17,14 +18,12 @@ describe('getEntryPointsFromExports()', () => {
     },
   } satisfies PackageJson;
 
-  const packageContext: PackageContext = {
-    name: mockPackageJson.name,
-    type: mockPackageJson.type,
-    path: resolve('/tmp/package.json'),
+  const packageContext = createPackageContext({
+    resolvedPath: resolve('/tmp/package.json'),
     realPath: resolve('/tmp/package.json'),
-    directory: resolve('/tmp'),
-    realDirectory: resolve('/tmp'),
-  };
+    packageJson: mockPackageJson,
+    rawPackageJson: JSON.stringify(mockPackageJson),
+  });
 
   describe('Gets EntryPoint[] from package.json exports', () => {
     it('Works with null ExportsEntryPath', async () => {
