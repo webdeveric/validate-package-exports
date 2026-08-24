@@ -4,5 +4,6 @@ export function readStdinLines(): AsyncIterable<string> {
   return createInterface({
     input: process.stdin,
     terminal: false,
+    crlfDelay: Infinity,
   });
 }

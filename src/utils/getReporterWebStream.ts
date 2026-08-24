@@ -1,6 +1,6 @@
 import { AssertionError } from 'node:assert';
 
-import { assertExhaustive } from '@webdeveric/utils/assertion';
+import { assertExhaustive } from '@webdeveric/utils/assertion/assertExhaustive';
 
 import type { CliOptions } from '@src/types.js';
 
@@ -12,6 +12,7 @@ export async function getReporterWebStream(options: CliOptions): Promise<Writabl
       return new TextWritableStream({
         info: options.info,
         verbose: options.verbose,
+        debug: options.debug,
       });
     }
     case 'ndjson': {

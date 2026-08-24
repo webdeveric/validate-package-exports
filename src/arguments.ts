@@ -57,6 +57,17 @@ export const cliArgsConfig = Object.freeze({
       default: false,
       description: 'Turn off --info',
     },
+    debug: {
+      type: 'boolean',
+      default: process.env['RUNNER_DEBUG'] === '1',
+      short: 'd',
+      description: 'Show debug messages.\nEnabled by default when RUNNER_DEBUG=1',
+    },
+    'no-debug': {
+      type: 'boolean',
+      default: false,
+      description: 'Turn off --debug',
+    },
     version: {
       type: 'boolean',
       default: false,

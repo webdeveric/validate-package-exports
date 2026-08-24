@@ -37,7 +37,7 @@ export function checkImport(entryPoint: EntryPoint): Result {
       return new Result({
         code: ResultCode.Success,
         entryPoint,
-        message: `"${entryPoint.moduleName}" works with import`,
+        message: `"${entryPoint.moduleName}" works with import.`,
         name: 'import',
       });
     }
@@ -45,7 +45,7 @@ export function checkImport(entryPoint: EntryPoint): Result {
     return new Result({
       code: ResultCode.Skip,
       entryPoint,
-      message: `"${entryPoint.moduleName}" skipped`,
+      message: `"${entryPoint.moduleName}" skipped.`,
       name: 'import',
     });
   } catch (error) {
@@ -53,7 +53,7 @@ export function checkImport(entryPoint: EntryPoint): Result {
       code: ResultCode.Error,
       entryPoint,
       error: asError(error),
-      message: `${entryPoint.moduleName ?? entryPoint.relativePath} cannot be imported`,
+      message: `${entryPoint.moduleName ?? entryPoint.relativePath} cannot be imported.`,
       name: 'import',
     });
   }

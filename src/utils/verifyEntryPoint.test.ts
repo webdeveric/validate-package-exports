@@ -2,8 +2,9 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { PackageContext, PackageJson } from '@src/types.js';
+import type { PackageJson } from '@src/types.js';
 
+import { createPackageContext } from './createPackageContext.js';
 import { shouldRequire, shouldImport } from './verifyEntryPoint.js';
 
 const mockPackageJson = {
@@ -15,14 +16,12 @@ const mockPackageJson = {
   },
 } satisfies PackageJson;
 
-const packageContext: PackageContext = {
-  name: mockPackageJson.name,
-  type: mockPackageJson.type,
-  path: resolve('/tmp/package.json'),
+const packageContext = createPackageContext({
+  resolvedPath: resolve('/tmp/package.json'),
   realPath: resolve('/tmp/package.json'),
-  directory: resolve('/tmp'),
-  realDirectory: resolve('/tmp'),
-};
+  packageJson: mockPackageJson,
+  rawPackageJson: JSON.stringify(mockPackageJson),
+});
 
 describe('shouldRequire()', () => {
   it('Returns false for esm packages', () => {

@@ -34,7 +34,7 @@ export function checkRequire(entryPoint: EntryPoint): Result {
       return new Result({
         code: ResultCode.Success,
         entryPoint,
-        message: `"${entryPoint.moduleName}" works with require`,
+        message: `"${entryPoint.moduleName}" works with require.`,
         name: 'require',
       });
     }
@@ -42,7 +42,7 @@ export function checkRequire(entryPoint: EntryPoint): Result {
     return new Result({
       code: ResultCode.Skip,
       entryPoint,
-      message: `"${entryPoint.moduleName}" skipped`,
+      message: `"${entryPoint.moduleName}" skipped.`,
       name: 'require',
     });
   } catch (error) {
@@ -50,7 +50,7 @@ export function checkRequire(entryPoint: EntryPoint): Result {
       code: ResultCode.Error,
       entryPoint,
       error: asError(error),
-      message: `${entryPoint.moduleName ?? entryPoint.itemPath.join('.')} cannot be required`,
+      message: `${entryPoint.moduleName ?? entryPoint.itemPath.join('.')} cannot be required.`,
       name: 'require',
     });
   }

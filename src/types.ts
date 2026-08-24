@@ -62,6 +62,7 @@ export type CliOptions = {
   reporter: 'text' | 'ndjson' | 'json' | 'sarif';
   info: boolean;
   verbose: boolean;
+  debug: boolean;
   help: boolean;
   version: boolean;
   /**
@@ -165,6 +166,10 @@ export type PackageContext = Readonly<{
    */
   name: string;
   /**
+   * The `version` from `package.json`
+   */
+  version: string | undefined;
+  /**
    * The `type` from `package.json`
    */
   type: PackageType;
@@ -184,6 +189,14 @@ export type PackageContext = Readonly<{
    * Real path to the directory containing the `package.json` file, resolving any symlinks
    */
   realDirectory: string;
+  /**
+   * Get the raw source of the `package.json` file
+   */
+  getSource: () => string;
+  /**
+   * Get the parsed `package.json` data
+   */
+  getData: () => PackageJson;
 }>;
 
 /**

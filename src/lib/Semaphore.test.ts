@@ -3,6 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { Semaphore } from './Semaphore.js';
 
 describe('Semaphore', () => {
+  it('constructor() throws when given invalid limit', async () => {
+    expect(() => new Semaphore(1)).not.toThrow();
+    expect(() => new Semaphore(-1)).toThrow();
+  });
+
   it('Runs a task immediately when under the limit', async () => {
     const semaphore = new Semaphore(1);
 

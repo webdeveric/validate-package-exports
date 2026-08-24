@@ -1,3 +1,5 @@
+import { assertIsPositiveFiniteNumber } from '@webdeveric/utils/assertion/assertIsPositiveFiniteNumber';
+
 /**
  * Limits how many async operations can run at the same time.
  *
@@ -20,6 +22,8 @@ export class Semaphore {
   readonly #queue: ReturnType<typeof Promise.withResolvers<void>>[] = [];
 
   constructor(limit: number) {
+    assertIsPositiveFiniteNumber(limit);
+
     this.#limit = limit;
   }
 

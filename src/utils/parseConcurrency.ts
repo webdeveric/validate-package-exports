@@ -1,5 +1,8 @@
 import { availableParallelism } from 'node:os';
 
+import { clamp } from '@webdeveric/utils/clamp';
+import { isIntString } from '@webdeveric/utils/predicate/isIntString';
+
 /**
  * Parses a concurrency value, clamping it between 1 and the number of
  * available logical CPU cores. Falls back to `availableParallelism()`
@@ -13,8 +16,7 @@ import { availableParallelism } from 'node:os';
  * ```
  */
 export function parseConcurrency(input: unknown): number {
-  const defaultValue = availableParallelism();
-  const value = Number.parseInt(`${input}`, 10);
+  const value = String(input);
 
-  return Number.isInteger(value) ? Math.max(1, Math.min(value, defaultValue)) : defaultValue;
+  return isIntString(value) ? clamp(1, Number.parseInt(value, 10), availableParallelism()) : availableParallelism();
 }

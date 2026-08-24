@@ -2,7 +2,8 @@ import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { EntryPoint, PackageContext, PackageExports, PackageJson } from '@src/types.js';
+import type { EntryPoint, PackageExports, PackageJson } from '@src/types.js';
+import { createPackageContext } from '@utils/createPackageContext.js';
 import { fixSlash } from '@utils/fixSlash.js';
 
 import { ExportsProcessor } from './ExportsProcessor.js';
@@ -17,14 +18,12 @@ describe('ExportsProcessor', () => {
     },
   } satisfies PackageJson;
 
-  const packageContext: PackageContext = {
-    name: mockPackageJson.name,
-    type: mockPackageJson.type,
-    path: resolve('/tmp/package.json'),
+  const packageContext = createPackageContext({
+    resolvedPath: resolve('/tmp/package.json'),
     realPath: resolve('/tmp/package.json'),
-    directory: resolve('/tmp'),
-    realDirectory: resolve('/tmp'),
-  };
+    packageJson: mockPackageJson,
+    rawPackageJson: JSON.stringify(mockPackageJson),
+  });
 
   describe('Gets EntryPoint[] from package.json exports', () => {
     it('Bad values get empty array', () => {

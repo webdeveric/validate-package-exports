@@ -1,17 +1,20 @@
 import { WritableStream, type UnderlyingSink } from 'node:stream/web';
-import { inspect, stripVTControlCharacters, styleText } from 'node:util';
+import { inspect, styleText } from 'node:util';
 
-import { assertExhaustive } from '@webdeveric/utils/assertion';
-import { graphemeLength } from '@webdeveric/utils/graphemeLength';
 import { indent } from '@webdeveric/utils/indent';
+import { isStringWithLength } from '@webdeveric/utils/predicate/isStringWithLength';
+import { trimIndentation } from '@webdeveric/utils/trimIndentation';
+import stringWidth from 'string-width';
 
-import { checkMark, emptyBox, xMark } from '@lib/reporters/text-icons.js';
+import { packageBox } from '@lib/reporters/emoji-icons.js';
+import { checkMark, rightArrow, ballotX, downArrow, warning, curvingRightArrow } from '@lib/reporters/text-icons.js';
 import { ResultCode, type Result } from '@lib/Result.js';
 import { stdoutWritableStream } from '@utils/stdoutWritableStream.js';
 
 export interface TextWritableStreamOptions {
   info?: boolean;
   verbose?: boolean;
+  debug?: boolean;
   destination?: WritableStream<Uint8Array>;
   highWaterMark?: number;
 }
@@ -23,10 +26,24 @@ export class TextWritableStream extends WritableStream<Result> {
 
   verbose: boolean;
 
+  debug: boolean;
+
+  #currentPackage: string | undefined;
+
+  #packageLinePrefix: string;
+
+  #resultLineIndent: string;
+
   readonly supportsColors: boolean;
 
+  static #iconMap: Record<ResultCode, string> = {
+    [ResultCode.Success]: styleText(['greenBright'], checkMark),
+    [ResultCode.Error]: styleText(['redBright'], ballotX),
+    [ResultCode.Skip]: styleText(['gray'], downArrow),
+  };
+
   constructor(options: TextWritableStreamOptions = {}) {
-    const { destination, info = false, verbose = false, highWaterMark = 1 } = options;
+    const { destination, info = false, verbose = false, debug = false, highWaterMark = 1 } = options;
 
     const encoder = new TextEncoder();
     const writable = destination ?? stdoutWritableStream();
@@ -37,6 +54,16 @@ export class TextWritableStream extends WritableStream<Result> {
         write: async (record: Result) => {
           if (record.code !== ResultCode.Error && !info) {
             return;
+          }
+
+          if (
+            record.entryPoint?.packageContext.name &&
+            record.entryPoint.packageContext.name !== this.#currentPackage
+          ) {
+            this.#currentPackage = record.entryPoint.packageContext.name;
+            const line = this.getPackageLine(record);
+
+            line && (await writer.write(encoder.encode(line + '\n')));
           }
 
           await writer.write(encoder.encode(this.format(record) + '\n'));
@@ -54,19 +81,22 @@ export class TextWritableStream extends WritableStream<Result> {
     this.destination = writable;
     this.info = info;
     this.verbose = verbose;
+    this.debug = debug;
     this.supportsColors = !destination && process.stdout.isTTY && process.stdout.hasColors();
+
+    this.#packageLinePrefix = `${packageBox} `;
+    this.#resultLineIndent = ' '.repeat(stringWidth(this.#packageLinePrefix));
   }
 
   getIcon(resultCode: ResultCode): string {
-    switch (resultCode) {
-      case ResultCode.Success:
-        return styleText(['greenBright'], checkMark);
-      case ResultCode.Error:
-        return styleText(['redBright'], xMark);
-      case ResultCode.Skip:
-        return styleText(['whiteBright'], emptyBox);
-      default:
-        assertExhaustive(resultCode, 'Unhandled ResultCode');
+    return TextWritableStream.#iconMap[resultCode];
+  }
+
+  getPackageLine(result: Result): string | undefined {
+    if (result.entryPoint) {
+      const { name, version, type } = result.entryPoint.packageContext;
+
+      return `${this.#packageLinePrefix}${name} (${[`v${version}`, type].join(', ')})`;
     }
   }
 
@@ -74,22 +104,33 @@ export class TextWritableStream extends WritableStream<Result> {
     const iconPrefix = `${this.getIcon(result.code)} `;
     const prefix = `${iconPrefix}${result.name}: `;
 
-    if (this.verbose) {
-      const lines = [
-        `${prefix}${result.message}`,
-        indent(
-          // spread the result to get rid of the mangled class name in the output.
-          inspect({ ...result }, { colors: this.supportsColors }),
-          ' '.repeat(graphemeLength(stripVTControlCharacters(iconPrefix))),
-        ),
-      ];
-
-      return lines.join('\n');
-    }
-
     const errorMessage =
       result.error && result.error.message !== result.message ? `Error: ${result.error.message}` : '';
 
-    return `${prefix}${result.message} ${errorMessage}`;
+    if (this.verbose) {
+      const extraIndent = ' '.repeat(stringWidth(iconPrefix));
+
+      const lines = [
+        `${this.#resultLineIndent}${prefix}${result.message}`,
+        result.entryPoint &&
+          indent(
+            `${curvingRightArrow} ${result.entryPoint.itemPath.length ? result.entryPoint.itemPath.map((item) => `"${item}"`).join(` ${rightArrow} `) : styleText('gray', 'no item path')}`,
+            `${this.#resultLineIndent}${extraIndent}`,
+          ),
+        errorMessage && `${extraIndent}${styleText('red', warning)} ${errorMessage}`,
+        this.debug &&
+          indent(
+            trimIndentation(`
+              ${curvingRightArrow} Result
+              ${indent(inspect({ ...result }, { colors: this.supportsColors }), extraIndent)}
+            `),
+            `${this.#resultLineIndent}${extraIndent}`,
+          ),
+      ];
+
+      return lines.filter(isStringWithLength).join('\n');
+    }
+
+    return `${this.#resultLineIndent}${prefix}${result.message} ${errorMessage}`;
   }
 }
