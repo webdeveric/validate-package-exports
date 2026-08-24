@@ -27,6 +27,7 @@ export function getCliOptions(args?: NodeJS.Process['argv'], pipingIn = false): 
 
   const noBail = values['no-bail'] ?? config.options['no-bail'].default;
   const noInfo = values['no-info'] ?? config.options['no-info'].default;
+  const noDebug = values['no-debug'] ?? config.options['no-debug'].default;
   const devCondition = values['dev-condition'] ?? config.options['dev-condition'].default;
 
   const isReporter = is('text', 'ndjson', 'json', 'sarif');
@@ -41,6 +42,7 @@ export function getCliOptions(args?: NodeJS.Process['argv'], pipingIn = false): 
     ),
     info: noInfo ? false : (values.info ?? config.options.info.default),
     verbose: values.verbose ?? config.options.verbose.default,
+    debug: noDebug ? false : (values.debug ?? config.options.debug.default),
     help: values.help ?? config.options.help.default,
     version: values.version ?? config.options.version.default,
     packages: pipingIn ? [] : positionals.length ? positionals : ['./package.json'],
