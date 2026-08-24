@@ -22,7 +22,7 @@ importers:
         version: 8.2.2
     devDependencies:
       '@commitlint/config-conventional':
-        specifier: ^21.2.0
+        specifier: ^21.2.2
         version: 21.2.2
       '@commitlint/types':
         specifier: ^21.2.0
@@ -40,7 +40,7 @@ importers:
         specifier: npm:typescript@^7.0.2
         version: typescript@7.0.2
       '@vitest/coverage-v8':
-        specifier: ^4.1.10
+        specifier: ^4.1.11
         version: 4.1.11(vitest@4.1.11)
       '@webdeveric/eslint-config-ts':
         specifier: ^0.12.1
@@ -49,7 +49,7 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0(prettier@3.9.6)
       commitlint:
-        specifier: ^21.2.1
+        specifier: ^21.2.2
         version: 21.2.2(@types/node@22.20.1)(@typescript/typescript6@6.0.2)(conventional-commits-parser@7.1.2)
       commitlint-plugin-cspell:
         specifier: ^0.9.4
@@ -64,7 +64,7 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1
       esbuild:
-        specifier: ^0.28.1
+        specifier: ^0.28.2
         version: 0.28.2
       esbuild-plugin-clean:
         specifier: ^1.0.1
@@ -88,19 +88,19 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^17.2.0
+        specifier: ^17.3.0
         version: 17.3.0
       prettier:
         specifier: ^3.9.6
         version: 3.9.6
       semantic-release:
-        specifier: ^25.0.8
+        specifier: ^25.0.9
         version: 25.0.9(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
       typescript:
         specifier: npm:@typescript/typescript6@^6.0.2
         version: '@typescript/typescript6@6.0.2'
       vitest:
-        specifier: ^4.1.10
+        specifier: ^4.1.11
         version: 4.1.11(@types/node@22.20.1)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@22.20.1)(esbuild@0.28.2)(jiti@2.6.1)(yaml@2.9.0))
 
 packages:
