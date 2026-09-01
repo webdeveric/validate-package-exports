@@ -52,7 +52,7 @@
   "prettier": "@webdeveric/prettier-config",
   "dependencies": {
     "@npmcli/arborist": "^10.0.2",
-    "@webdeveric/utils": "^1.4.0",
+    "@webdeveric/utils": "^1.5.0",
     "npm-packlist": "^11.3.0",
     "string-width": "^8.2.2"
   },
