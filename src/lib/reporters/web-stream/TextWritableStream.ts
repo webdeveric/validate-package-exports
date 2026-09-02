@@ -96,7 +96,7 @@ export class TextWritableStream extends WritableStream<Result> {
     if (result.entryPoint) {
       const { name, version, type } = result.entryPoint.packageContext;
 
-      return `${this.#packageLinePrefix}${name} (${[`v${version}`, type].join(', ')})`;
+      return `${this.#packageLinePrefix}${name} (${[version ? `v${version}` : styleText(['dim'], 'version missing'), type].join(', ')})`;
     }
   }
 
