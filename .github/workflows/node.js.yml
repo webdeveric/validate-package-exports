@@ -31,13 +31,13 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node }}
-          cache: "pnpm"
+          cache: 'pnpm'
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=moderate --prod
 
       - name: Installing dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Audit dependencies
-        run: pnpm audit --ignore-registry-errors --audit-level=moderate --prod
 
       - name: Verify registry signatures for installed packages
         run: pnpm audit signatures
@@ -74,8 +74,8 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version-file: ".node-version"
-          cache: "pnpm"
+          node-version-file: '.node-version'
+          cache: 'pnpm'
 
       - name: Installing dependencies
         run: pnpm install --frozen-lockfile
