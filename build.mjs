@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-json-modules --no-warnings
+#!/usr/bin/env -S node --experimental-json-modules
 import { parseArgs } from 'node:util';
 
 import { comment } from '@webdeveric/utils/comment';
