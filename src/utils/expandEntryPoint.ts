@@ -6,13 +6,13 @@ import { escapeRegExp } from '@webdeveric/utils/escapeRegExp';
 
 import type { EntryPoint } from '@src/types.js';
 
-type ExpandEntryPointContext = {
+type ExpandEntryPointContext = Readonly<{
   prefix: string | undefined;
   suffix: string | undefined;
   prefixPattern: RegExp | undefined;
   suffixPattern: RegExp | undefined;
   findStar: (path: string) => string;
-};
+}>;
 
 function replaceStars(entryPoint: EntryPoint, starValue: string): EntryPoint {
   const properties = ['moduleName', 'relativePath', 'fileName', 'resolvedPath'] satisfies (keyof EntryPoint)[];
@@ -71,7 +71,7 @@ export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<
 
   const [prefix, suffix] = entryPoint.resolvedPath.split('*');
 
-  const context: ExpandEntryPointContext = {
+  const context: ExpandEntryPointContext = Object.freeze({
     prefix,
     suffix,
     prefixPattern: prefix ? new RegExp(`^${escapeRegExp(prefix)}`, 'i') : undefined,
@@ -89,7 +89,7 @@ export async function* expandEntryPoint(entryPoint: EntryPoint): AsyncGenerator<
 
       return star;
     },
-  };
+  });
 
   yield* processDirectory(entryPoint.directory, entryPoint, context);
 }

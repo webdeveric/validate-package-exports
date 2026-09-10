@@ -1,5 +1,6 @@
 import type { Branded } from '@webdeveric/utils/types/branded';
 import type { UnknownRecord } from '@webdeveric/utils/types/records';
+import type { Pretty } from '@webdeveric/utils/types/utils';
 import type { ParseArgsConfig, ParseArgsOptionDescriptor } from 'node:util';
 
 export type PackageJsonPath = Branded<string, 'package.json'>;
@@ -160,44 +161,46 @@ export type PackageJson = {
 
 export type ItemPath = (string | number)[];
 
-export type PackageContext = Readonly<{
-  /**
-   * The name from `package.json`
-   */
-  name: string;
-  /**
-   * The `version` from `package.json`
-   */
-  version: string | undefined;
-  /**
-   * The `type` from `package.json`
-   */
-  type: PackageType;
-  /**
-   * Path to the `package.json` file
-   */
-  path: string;
-  /**
-   * Real path to the `package.json` file, resolving any symlinks
-   */
-  realPath: string;
-  /**
-   * Directory containing the `package.json` file
-   */
-  directory: string;
-  /**
-   * Real path to the directory containing the `package.json` file, resolving any symlinks
-   */
-  realDirectory: string;
-  /**
-   * Get the raw source of the `package.json` file
-   */
-  getSource: () => string;
-  /**
-   * Get the parsed `package.json` data
-   */
-  getData: () => PackageJson;
-}>;
+export type PackageContext = Pretty<
+  Readonly<{
+    /**
+     * The name from `package.json`
+     */
+    name: string;
+    /**
+     * The `version` from `package.json`
+     */
+    version: string | undefined;
+    /**
+     * The `type` from `package.json`
+     */
+    type: PackageType;
+    /**
+     * Path to the `package.json` file
+     */
+    path: string;
+    /**
+     * Real path to the `package.json` file, resolving any symlinks
+     */
+    realPath: string;
+    /**
+     * Directory containing the `package.json` file
+     */
+    directory: string;
+    /**
+     * Real path to the directory containing the `package.json` file, resolving any symlinks
+     */
+    realDirectory: string;
+    /**
+     * Get the raw source of the `package.json` file
+     */
+    getSource: () => string;
+    /**
+     * Get the parsed `package.json` data
+     */
+    getData: () => PackageJson;
+  }>
+>;
 
 /**
  * EntryPoint _can_ have `*` in the path.

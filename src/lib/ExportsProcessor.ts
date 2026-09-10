@@ -17,11 +17,11 @@ import {
   isSubpathExports,
 } from '@utils/type-predicate.js';
 
-export type ProcessExportsContext = {
+export type ProcessExportsContext = Readonly<{
   condition?: string[];
   subpath?: string;
   itemPath: ItemPath;
-};
+}>;
 
 export class ExportsProcessor {
   processExportsEntryPath(
