@@ -3,13 +3,13 @@ import type { CliOptions } from '@src/types.js';
 import { getCliOptions } from '@utils/getCliOptions.js';
 import { isPipedInput, isPipedOutput } from '@utils/process.js';
 
-export type CliContext = {
+export type CliContext = Readonly<{
   options: CliOptions;
   controller: AbortController;
   pipingIn: boolean;
   pipingOut: boolean;
-  run<Type>(fn: () => Promise<Type>): Promise<Type>;
-};
+  run<Type>(fn: (cliContext: CliContext) => Promise<Type>): Promise<Type>;
+}>;
 
 export type CreateCliContextOptions = {
   args?: NodeJS.Process['argv'];
@@ -28,7 +28,7 @@ export function createCliContext({
   controller = new AbortController(),
   pipingIn = isPipedInput(),
   pipingOut = isPipedOutput(),
-}: CreateCliContextOptions = {}): Readonly<CliContext> {
+}: CreateCliContextOptions = {}): CliContext {
   const options = getCliOptions(args, pipingIn);
 
   const sem = new Semaphore(options.concurrency);
@@ -38,8 +38,8 @@ export function createCliContext({
     controller,
     pipingIn,
     pipingOut,
-    async run<Type>(fn: () => Promise<Type>): Promise<Type> {
-      return sem.run(fn);
+    async run<Type>(fn: (cliContext: CliContext) => Promise<Type>): Promise<Type> {
+      return sem.run(() => fn(this));
     },
   });
 }

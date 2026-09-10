@@ -93,7 +93,7 @@ export class PackageJsonValidator {
   protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<void> {
     await Readable.from(entryPoints).forEach(
       async (entryPoint: EntryPoint) => {
-        const result = await this.#cliContext.run(() => checkFileExists(entryPoint));
+        const result = await this.#cliContext.run((cliContext) => checkFileExists(entryPoint, cliContext));
 
         this.#enqueue(result);
       },
@@ -128,8 +128,8 @@ export class PackageJsonValidator {
       }),
     ).forEach(
       async (entryPoint: EntryPoint) => {
-        const result = await this.#cliContext.run(() =>
-          checkSyntax(entryPoint, { signal: this.#cliContext.controller.signal }),
+        const result = await this.#cliContext.run((cliContext) =>
+          checkSyntax(entryPoint, { signal: cliContext.controller.signal }),
         );
 
         this.#enqueue(result);
