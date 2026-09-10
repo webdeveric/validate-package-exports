@@ -32,13 +32,14 @@
   "engines": {
     "node": ">=22.22.2"
   },
-  "packageManager": "pnpm@11.25.0+sha512.5cde925b4f075f725eb71fbae18a42ffe784524789f19b61c731cb8721ec28aaee160e01a8d5af4fedb2a42cdbf300efe23db356b0d4a17b4d63e11f8ab7c956",
+  "packageManager": "pnpm@11.26.0+sha512.fc0e2bf890b9f983611f1ab68c0637bce914390653699f83c1a78b005ed25f2c81e77920c8fd8eee2ecf0b58b28cdcb00a84d97f69bcf7c56b2f344710238664",
   "scripts": {
+    "clean": "rm -rf ./cache ./dist",
     "prevalidate": "pnpm build:dev",
     "validate": "./dist/cli.mjs",
     "format": "prettier --write .",
-    "build": "cross-env NODE_ENV=production node --experimental-json-modules --no-warnings ./build.mjs",
-    "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules --no-warnings ./build.mjs",
+    "build": "cross-env NODE_ENV=production node --experimental-json-modules ./build.mjs",
+    "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules ./build.mjs",
     "typecheck": "tsc --build --force --noEmit",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
     "lint": "eslint ./src \"./*.{mjs,mts}\" --ext .ts",
@@ -63,14 +64,14 @@
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
     "@typescript/native": "npm:typescript@^7.0.2",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.0",
     "@webdeveric/eslint-config-ts": "^0.12.1",
     "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^21.2.2",
     "commitlint-plugin-cspell": "^0.9.4",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
-    "cspell": "^10.2.0",
+    "cspell": "^10.3.0",
     "esbuild": "^0.28.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.5.0",
@@ -79,10 +80,10 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.5.0",
     "prettier": "^3.9.6",
     "semantic-release": "^25.0.9",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   }
 }
