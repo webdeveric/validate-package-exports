@@ -86,11 +86,11 @@ export class PackageJsonValidator {
     );
   }
 
-  #getNextEntryPoints = (items: EntryPoint[]): EntryPoint[] => {
+  #getNextEntryPoints = (items: readonly EntryPoint[]): readonly EntryPoint[] => {
     return items.filter((entryPoint) => !this.#entryPointsWithError.has(entryPoint));
   };
 
-  protected async checkFilesExist(entryPoints: EntryPoint[]): Promise<void> {
+  protected async checkFilesExist(entryPoints: readonly EntryPoint[]): Promise<void> {
     await Readable.from(entryPoints).forEach(
       async (entryPoint: EntryPoint) => {
         const result = await this.#cliContext.run((cliContext) => checkFileExists(entryPoint, cliContext));
@@ -118,7 +118,7 @@ export class PackageJsonValidator {
     }
   }
 
-  protected async checkSyntax(entryPoints: EntryPoint[]): Promise<void> {
+  protected async checkSyntax(entryPoints: readonly EntryPoint[]): Promise<void> {
     await Readable.from(
       unique(entryPoints, {
         identity: (entryPoint) => entryPoint.resolvedPath,
@@ -141,7 +141,7 @@ export class PackageJsonValidator {
     );
   }
 
-  protected async verifyIncludes(entryPoints: EntryPoint[]): Promise<void> {
+  protected async verifyIncludes(entryPoints: readonly EntryPoint[]): Promise<void> {
     await Readable.from(
       unique(entryPoints, {
         // The identity must be made from more than only `moduleName` and `type`
@@ -163,7 +163,7 @@ export class PackageJsonValidator {
     );
   }
 
-  protected async checkPacklist(entryPoints: EntryPoint[], packlist: Set<string>): Promise<void> {
+  protected async checkPacklist(entryPoints: readonly EntryPoint[], packlist: Set<string>): Promise<void> {
     await Readable.from(unique(entryPoints, { identity: (entryPoint) => entryPoint.relativePath }))
       // Remove entry points that are matching a dev condition.
       // The assumption is that files for dev conditions will not be packed.
@@ -250,7 +250,7 @@ export class PackageJsonValidator {
     // Check the structure of the `package.json` data.
     this.#enqueue(this.checkPackageJson(packageJson, packageContext));
 
-    const entryPoints = await this.#cliContext.run(async (): Promise<EntryPoint[]> => {
+    const entryPoints = await this.#cliContext.run(async (): Promise<readonly EntryPoint[]> => {
       const data = await Array.fromAsync(getEntryPoints(packageJson, packageContext));
 
       return data.filter((item): item is EntryPoint => {
@@ -268,10 +268,14 @@ export class PackageJsonValidator {
 
     await this.verifyIncludes(this.#getNextEntryPoints(entryPoints));
 
-    const packlistPromise = this.#cliContext.run(async () => new Set(await getPacklist(packageContext.directory)));
+    const nextEntryPoints = this.#getNextEntryPoints(entryPoints);
+
+    const packlistPromise = nextEntryPoints.length
+      ? this.#cliContext.run(async () => new Set(await getPacklist(packageContext.directory)))
+      : Promise.resolve(new Set<string>());
 
     if (this.#cliContext.options.check) {
-      await this.checkSyntax(this.#getNextEntryPoints(entryPoints));
+      await this.checkSyntax(nextEntryPoints);
     }
 
     const packlist = await packlistPromise;
