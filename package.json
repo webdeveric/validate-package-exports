@@ -32,7 +32,7 @@
   "engines": {
     "node": ">=22.22.2"
   },
-  "packageManager": "pnpm@11.26.0+sha512.fc0e2bf890b9f983611f1ab68c0637bce914390653699f83c1a78b005ed25f2c81e77920c8fd8eee2ecf0b58b28cdcb00a84d97f69bcf7c56b2f344710238664",
+  "packageManager": "pnpm@11.27.0+sha512.ad12821463bb143295f1fa3ecde77a6b9b97a7990386da800ff57bffc3964dc64b7b1c7559d5dbe5c337aea659ed9c8937d4370bd198ca2009bc6fa0249808e7",
   "scripts": {
     "clean": "rm -rf ./cache ./dist",
     "prevalidate": "pnpm build:dev",
@@ -60,7 +60,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^21.2.2",
     "@commitlint/types": "^21.2.0",
-    "@types/node": "^22.20.1",
+    "@types/node": "^22.20.2",
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
     "@typescript/native": "npm:typescript@^7.0.2",
@@ -80,7 +80,7 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.5.0",
+    "lint-staged": "^17.5.1",
     "prettier": "^3.9.6",
     "semantic-release": "^25.0.9",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
