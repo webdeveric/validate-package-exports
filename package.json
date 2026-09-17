@@ -32,7 +32,20 @@
   "engines": {
     "node": ">=22.22.2"
   },
-  "packageManager": "pnpm@11.27.0+sha512.ad12821463bb143295f1fa3ecde77a6b9b97a7990386da800ff57bffc3964dc64b7b1c7559d5dbe5c337aea659ed9c8937d4370bd198ca2009bc6fa0249808e7",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": ">=12.0.0 <13.0.0",
+      "onFail": "download"
+    },
+    "runtime": [
+      {
+        "name": "node",
+        "version": "^26.9.0",
+        "onFail": "download"
+      }
+    ]
+  },
   "scripts": {
     "clean": "rm -rf ./cache ./dist",
     "prevalidate": "pnpm build:dev",
@@ -42,7 +55,7 @@
     "build:dev": "cross-env NODE_ENV=development node --experimental-json-modules ./build.mjs",
     "typecheck": "tsc --build --force --noEmit",
     "spellcheck": "cspell --no-progress \"./src/**/*.{ts,js,json}\" \"./*.{md,js,mjs,mts}\" \"./LICENSE\" \"./package.json\"",
-    "lint": "eslint ./src \"./*.{mjs,mts}\" --ext .ts",
+    "lint": "eslint ./src \"./__mocks__/**/*.cts\" \"./*.{mjs,mts}\" --ext .ts",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepack": "pnpm build",
@@ -64,14 +77,14 @@
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
     "@typescript/native": "npm:typescript@^7.0.2",
-    "@vitest/coverage-v8": "^5.0.0",
+    "@vitest/coverage-v8": "^5.0.1",
     "@webdeveric/eslint-config-ts": "^0.12.1",
     "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^21.2.2",
     "commitlint-plugin-cspell": "^0.9.4",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
-    "cspell": "^10.3.0",
+    "cspell": "^10.3.2",
     "esbuild": "^0.28.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.5.0",
@@ -81,9 +94,10 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
+    "memfs": "^4.78.0",
     "prettier": "^3.9.6",
     "semantic-release": "^25.0.9",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.1"
   }
 }
