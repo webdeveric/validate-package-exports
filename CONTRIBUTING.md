@@ -1,19 +1,16 @@
 # Contributing
 
+## Install `pnpm` 12+
+
+[Install pnpm](https://pnpm.io/installation) first. It will manage the Node.js runtime and the specific version of `pnpm` to use for this project. See the `devEngines` property in `package.json` for more details.
+
 ## Setup
 
 ```bash
 git clone https://github.com/webdeveric/validate-package-exports.git
 cd validate-package-exports
-corepack enable
 pnpm install --frozen-lockfile
 ```
-
-### Node.js version
-
-This project uses the Node version in [.node-version](.node-version).
-
-Run `fnm use` or `nvm use` to ensure you're using the correct Node.js version.
 
 ## Testing
 

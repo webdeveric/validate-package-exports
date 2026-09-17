@@ -102,9 +102,9 @@ npx --yes validate-package-exports ./path/to/package.json --check
 
 ## Local development
 
+[Install pnpm](https://pnpm.io/installation) first. It will manage the Node.js runtime and the specific version of `pnpm` to use for this project. See the `devEngines` property in `package.json` for more details.
+
 ```
-fnm use
-corepack enable
 pnpm install
 pnpm build
 ```
