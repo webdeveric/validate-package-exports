@@ -6,7 +6,7 @@ import { asError } from '@webdeveric/utils/asError';
 import { unique } from '@webdeveric/utils/unique';
 
 import { Result, ResultCode } from '@lib/Result.js';
-import { ExitCode, type EntryPoint, type PackageContext, type PackageJson } from '@src/types.js';
+import { ExitCode, type EntryPoint, type PackageContext, type PackageJson, type PackageJsonPath } from '@src/types.js';
 import { checkFileExists } from '@utils/checkFileExists.js';
 import { checkSyntax } from '@utils/checkSyntax.js';
 import type { CliContext } from '@utils/createCliContext.js';
@@ -195,7 +195,7 @@ export class PackageJsonValidator {
   }
 
   async run(): Promise<ExitCode> {
-    let resolvedPath: string;
+    let resolvedPath: PackageJsonPath;
 
     try {
       resolvedPath = await resolvePackageJson(this.#path);
