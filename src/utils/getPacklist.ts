@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-named-as-default
-import Arborist from '@npmcli/arborist';
+import { Arborist } from '@npmcli/arborist';
 import packlist from 'npm-packlist';
 
 import { fixSlash } from '@utils/fixSlash.js';
