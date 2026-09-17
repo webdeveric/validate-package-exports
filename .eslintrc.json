@@ -66,5 +66,13 @@
       }
     ],
     "sort-imports": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.cts"],
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off"
+      }
+    }
+  ]
 }

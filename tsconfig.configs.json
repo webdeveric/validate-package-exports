@@ -7,5 +7,5 @@
     "rootDir": "./",
     "tsBuildInfoFile": "./cache/configs.tsbuildinfo"
   },
-  "include": ["./*.ts", "./*.mts", "./*.cts", "./*.js", "./*.mjs", "./*.cjs", "./package.json", "./__mocks__/**/*.ts"]
+  "include": ["./*.ts", "./*.mts", "./*.cts", "./*.js", "./*.mjs", "./*.cjs", "./package.json", "./__mocks__/**/*.cts"]
 }
