@@ -58,12 +58,10 @@ export class PackageJsonValidator {
       type: packageContext.type,
       fileName: 'package.json',
       resolvedPath: packageContext.path,
-      // realResolvedPath: packageContext.realPath,
       relativePath: 'package.json',
       subpath: undefined,
       condition: [],
       directory: packageContext.directory,
-      // realDirectory: packageContext.realDirectory,
       itemPath: [],
       packageContext,
     };
