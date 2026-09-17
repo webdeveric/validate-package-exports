@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { PackageJson } from '@src/types.js';
 import { createPackageContext } from '@utils/createPackageContext.js';
+import { normalizePackageJsonPath } from '@utils/resolvePackageJson.js';
 
 import { Result, ResultCode } from './Result.js';
 
@@ -31,7 +32,7 @@ describe('Result', () => {
         condition: [],
         itemPath: ['main'],
         packageContext: createPackageContext({
-          resolvedPath: resolve('/tmp/package.json'),
+          resolvedPath: normalizePackageJsonPath('/tmp/package.json'),
           realPath: resolve('/tmp/package.json'),
           packageJson: mockPackageJson,
           rawPackageJson: JSON.stringify(mockPackageJson),

@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import type { EntryPoint, PackageExports, PackageJson } from '@src/types.js';
 import { createPackageContext } from '@utils/createPackageContext.js';
 import { fixSlash } from '@utils/fixSlash.js';
+import { normalizePackageJsonPath } from '@utils/resolvePackageJson.js';
 
 import { ExportsProcessor } from './ExportsProcessor.js';
 
@@ -19,8 +20,8 @@ describe('ExportsProcessor', () => {
   } satisfies PackageJson;
 
   const packageContext = createPackageContext({
-    resolvedPath: resolve('/tmp/package.json'),
-    realPath: resolve('/tmp/package.json'),
+    resolvedPath: normalizePackageJsonPath('/tmp/package.json'),
+    realPath: normalizePackageJsonPath('/tmp/package.json'),
     packageJson: mockPackageJson,
     rawPackageJson: JSON.stringify(mockPackageJson),
   });
