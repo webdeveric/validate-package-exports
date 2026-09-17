@@ -9,9 +9,6 @@ import type { EntryPoint } from '@src/types.js';
 
 const execFileAsync = promisify(execFile);
 
-/**
- * @todo use entryPoint.realRelativePath that is a branded type that proves the path exists.
- */
 export async function checkSyntax(
   entryPoint: EntryPoint,
   options: Omit<ExecFileOptionsWithStringEncoding, 'cwd'>,
