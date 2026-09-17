@@ -41,7 +41,7 @@
     "runtime": [
       {
         "name": "node",
-        "version": "^26.8.2",
+        "version": "^26.9.0",
         "onFail": "download"
       }
     ]
@@ -77,14 +77,14 @@
     "@types/npm-packlist": "^7.0.3",
     "@types/npmcli__arborist": "^6.3.3",
     "@typescript/native": "npm:typescript@^7.0.2",
-    "@vitest/coverage-v8": "^5.0.0",
+    "@vitest/coverage-v8": "^5.0.1",
     "@webdeveric/eslint-config-ts": "^0.12.1",
     "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^21.2.2",
     "commitlint-plugin-cspell": "^0.9.4",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
-    "cspell": "^10.3.0",
+    "cspell": "^10.3.2",
     "esbuild": "^0.28.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.5.0",
@@ -94,9 +94,10 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
+    "memfs": "^4.78.0",
     "prettier": "^3.9.6",
     "semantic-release": "^25.0.9",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.1"
   }
 }
