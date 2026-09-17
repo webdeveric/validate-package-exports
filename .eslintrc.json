@@ -35,7 +35,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["./build.mjs", "./vitest.config.mts", "**/*.test.ts"]
+        "devDependencies": ["./build.mjs", "./vitest.config.mts", "**/*.test.ts", "__mocks__/**"]
       }
     ],
     "import/no-relative-packages": "error",
