@@ -44,6 +44,9 @@ jobs:
       - name: Validate
         run: pnpm validate --info --check
 
+      - name: Install npm for Trusted Publishing
+        run: pnpm add --global npm@latest
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
