@@ -6,6 +6,7 @@ export type ResultName =
   | 'file-exists'
   | 'require'
   | 'import'
+  | 'strict-module-type'
   | 'packlist'
   | 'entry-point-expansion'
   | 'unexpected-error';

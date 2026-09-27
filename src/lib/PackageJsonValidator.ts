@@ -17,6 +17,7 @@ import { resolvePackageJson } from '@utils/resolvePackageJson.js';
 import { assertIsPackageJson } from '@utils/type-assertion.js';
 import { isSubpathExports } from '@utils/type-predicate.js';
 import { verifyEntryPoint } from '@utils/verifyEntryPoint.js';
+import { verifyStrictModuleType } from '@utils/verifyStrictModuleType.js';
 
 import type { TransformStreamDefaultController } from 'node:stream/web';
 
@@ -161,6 +162,24 @@ export class PackageJsonValidator {
     );
   }
 
+  protected async verifyStrictModuleType(entryPoints: readonly EntryPoint[]): Promise<void> {
+    await Readable.from(
+      unique(entryPoints, {
+        // The identity must be made from more than only `moduleName` and `type`
+        // since `.d.ts` files share the same `moduleName` and `type`.
+        identity: (entryPoint) => `${entryPoint.moduleName}|${entryPoint.type}|${entryPoint.fileName}`,
+      }),
+    ).forEach(
+      (entryPoint: EntryPoint) => {
+        this.#enqueue(verifyStrictModuleType(entryPoint));
+      },
+      {
+        signal: this.#cliContext.controller.signal,
+        concurrency: this.#cliContext.options.concurrency,
+      },
+    );
+  }
+
   protected async checkPacklist(entryPoints: readonly EntryPoint[], packlist: Set<string>): Promise<void> {
     await Readable.from(unique(entryPoints, { identity: (entryPoint) => entryPoint.relativePath }))
       // Remove entry points that are matching a dev condition.
@@ -265,6 +284,10 @@ export class PackageJsonValidator {
     await this.checkFilesExist(this.#getNextEntryPoints(entryPoints));
 
     await this.verifyIncludes(this.#getNextEntryPoints(entryPoints));
+
+    if (this.#cliContext.options.strictModuleType) {
+      await this.verifyStrictModuleType(this.#getNextEntryPoints(entryPoints));
+    }
 
     const nextEntryPoints = this.#getNextEntryPoints(entryPoints);
 

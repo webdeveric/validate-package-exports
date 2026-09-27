@@ -40,6 +40,7 @@ export function getCliOptions(args?: NodeJS.Process['argv'], pipingIn = false): 
     devCondition: devCondition.flatMap((item) =>
       item.split(',').map((singleDevCondition) => singleDevCondition.trim()),
     ),
+    strictModuleType: values['strict-module-type'] ?? config.options['strict-module-type'].default,
     info: noInfo ? false : (values.info ?? config.options.info.default),
     verbose: values.verbose ?? config.options.verbose.default,
     debug: noDebug ? false : (values.debug ?? config.options.debug.default),

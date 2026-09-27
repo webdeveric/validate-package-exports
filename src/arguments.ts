@@ -19,6 +19,11 @@ export const cliArgsConfig = Object.freeze({
       default: [],
       description: 'Specify which custom conditions are used only during development',
     },
+    'strict-module-type': {
+      type: 'boolean',
+      default: false,
+      description: '"require" condition must use "commonjs" and "import" condition must use "module"',
+    },
     bail: {
       type: 'boolean',
       short: 'b',

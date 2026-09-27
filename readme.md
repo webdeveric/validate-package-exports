@@ -24,6 +24,7 @@ yarn add validate-package-exports -D
 | --- | --- | --- |
 | `--concurrency` / `-c` | How many tasks to do at the same time | `availableParallelism()` |
 | `--dev-condition` | Specify which custom conditions are used only during development | none |
+| `--strict-module-type` | `require` condition must use `commonjs` and `import` condition must use `module` | `false` |
 | `--bail` / `-b` | Stop processing at the first error.<br>Enabled by default when `CI=true` | `process.env.CI === 'true'` |
 | `--no-bail` | Turn off `--bail` | `false` |
 | `--check` / `-s` | Check syntax of JS files | `false` |

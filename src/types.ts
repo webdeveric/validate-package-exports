@@ -60,6 +60,7 @@ export type CliOptions = {
   check: boolean;
   concurrency: number;
   devCondition: string[];
+  strictModuleType: boolean;
   reporter: 'text' | 'ndjson' | 'json' | 'sarif';
   info: boolean;
   verbose: boolean;
