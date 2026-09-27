@@ -4,7 +4,7 @@ allowBuilds:
 
 autoInstallPeers: true
 
-enablePrePostScripts: false
+enablePrePostScripts: true
 
 minimumReleaseAge: 2880 # 2 days
 

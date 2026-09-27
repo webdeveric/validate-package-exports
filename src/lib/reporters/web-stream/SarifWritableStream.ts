@@ -68,6 +68,7 @@ const ruleDescriptions = withAllResultNames([
   ['file-exists', 'The entry point file exists on disk.'],
   ['require', 'The entry point can be loaded with `require()`.'],
   ['import', 'The entry point can be loaded with `import`.'],
+  ['strict-module-type', 'The entry point has the correct module type.'],
   ['packlist', 'The entry point file will be included when the package is packed.'],
   ['entry-point-expansion', 'Glob patterns used in "exports" can be expanded.'],
   ['unexpected-error', 'No unexpected error occurred while validating.'],
