@@ -41,7 +41,7 @@
     "runtime": [
       {
         "name": "node",
-        "version": "^26.9.0",
+        "version": "^26.10.0",
         "onFail": "download"
       }
     ]
@@ -84,7 +84,7 @@
     "commitlint-plugin-cspell": "^0.9.5",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "cross-env": "^10.1.0",
-    "cspell": "^10.3.4",
+    "cspell": "^10.3.5",
     "esbuild": "^0.28.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-environment": "^0.5.0",
@@ -93,7 +93,7 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.5.1",
+    "lint-staged": "^17.6.0",
     "memfs": "^4.79.0",
     "prettier": "^3.9.9",
     "semantic-release": "^25.0.9",
