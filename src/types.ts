@@ -107,10 +107,21 @@ export type PackageDirectories = {
 
 export type RelativePath = `./${string}`;
 
-// https://nodejs.org/api/packages.html#subpath-patterns
+/**
+ * @see {@link https://nodejs.org/api/packages.html#subpath-patterns}
+ */
 export type SubpathPattern = `./${string}*${string}`;
 
-export type NodeConditions = 'node-addons' | 'node' | 'import' | 'require' | 'default';
+/**
+ * @see {@link https://nodejs.org/api/packages.html#conditional-exports}
+ */
+export type NodeConditions =
+  | 'node-addons' // Native C++ addons
+  | 'node' // Any Node environment
+  | 'import' // Matches when loaded via `import` or `import()`
+  | 'require' // Matches when loaded via `require()`
+  | 'module-sync' // Module format is expected to be ESM
+  | 'default'; // Generic fallback that always matches. It should always be the last condition.
 
 export type CommunityConditions = 'types' | 'browser' | 'development' | 'production';
 
@@ -228,9 +239,5 @@ export type EntryPoint = {
   itemPath: ItemPath;
   packageContext: PackageContext;
 };
-
-export type JsonStringifyReplacer =
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((this: any, key: string, value: any) => any) | (string | number)[] | null | undefined;
 
 export type JsonStringifySpace = Parameters<JSON['stringify']>[2];
