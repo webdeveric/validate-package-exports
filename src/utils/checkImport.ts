@@ -8,7 +8,7 @@ import { asError } from '@webdeveric/utils/asError';
 import { Result, ResultCode } from '@lib/Result.js';
 import type { EntryPoint } from '@src/types.js';
 
-import { resolveWithConditions } from './resolveWithConditions.js';
+import { importResolveWithConditions } from './resolveWithConditions.js';
 
 const supportsImportMetaResolveParent =
   typeof import.meta.resolve === 'function' && process.execArgv.includes('--experimental-import-meta-resolve');
@@ -17,7 +17,7 @@ export function checkImport(entryPoint: EntryPoint): Result {
   try {
     if (typeof entryPoint.moduleName === 'string' && supportsImportMetaResolveParent) {
       const importResolvedPath = fileURLToPath(
-        resolveWithConditions(
+        importResolveWithConditions(
           entryPoint.moduleName,
           pathToFileURL(entryPoint.packageContext.realPath),
           entryPoint.condition.length > 0 ? entryPoint.condition : undefined,
