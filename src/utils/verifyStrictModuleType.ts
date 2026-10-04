@@ -16,7 +16,7 @@ export function verifyStrictModuleType(entryPoint: EntryPoint): Result {
     });
   }
 
-  if (lastCondition === 'import' && entryPoint.type === 'commonjs') {
+  if ((lastCondition === 'import' || lastCondition === 'module-sync') && entryPoint.type === 'commonjs') {
     return new Result({
       name: 'strict-module-type',
       code: ResultCode.Error,
