@@ -8,7 +8,13 @@ enablePrePostScripts: true
 
 minimumReleaseAge: 2880 # 2 day
 
+minimumReleaseAgeExclude:
+  - http-cache-semantics@4.3.0
+
 minimumReleaseAgeExcludePrune: true
+
+overrides:
+  http-cache-semantics@<=4.2.0: ^4.3.0
 
 update:
   githubActions: true
