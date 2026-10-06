@@ -10,6 +10,7 @@
     "env",
     "esbuild",
     "esm",
+    "memfs",
     "npmcli",
     "nvmrc",
     "outdir",
