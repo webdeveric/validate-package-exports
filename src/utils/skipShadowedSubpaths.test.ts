@@ -10,10 +10,6 @@ import { createPackageContext } from './createPackageContext.js';
 import { normalizePackageJsonPath } from './resolvePackageJson.js';
 import { skipShadowedSubpaths } from './skipShadowedSubpaths.js';
 
-async function* toAsyncIterable(entryPoints: EntryPoint[]): AsyncGenerator<EntryPoint> {
-  yield* entryPoints;
-}
-
 describe('skipShadowedSubpaths()', () => {
   const mockPackageJson = {
     name: 'mock-package',
@@ -57,9 +53,7 @@ describe('skipShadowedSubpaths()', () => {
   }
 
   async function getModuleNames(entryPoints: EntryPoint[]): Promise<(string | undefined)[]> {
-    const results: EntryPoint[] = await Readable.from(
-      skipShadowedSubpaths(toAsyncIterable(entryPoints), processor),
-    ).toArray();
+    const results: EntryPoint[] = await Readable.from(skipShadowedSubpaths(entryPoints, processor)).toArray();
 
     return results.map((entryPoint) => entryPoint.moduleName);
   }

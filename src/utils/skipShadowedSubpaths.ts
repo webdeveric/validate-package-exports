@@ -11,18 +11,12 @@ import { getConcreteSubpath } from './getConcreteSubpath.js';
  * and anything whose own subpath key resolves to `null` for its condition chain, like `[null, "./dist/*.js"]`.
  */
 export async function* skipShadowedSubpaths(
-  entryPoints: AsyncIterable<EntryPoint>,
+  entryPoints: AsyncIterable<EntryPoint> | Iterable<EntryPoint>,
   processor: ExportsProcessor,
 ): AsyncGenerator<EntryPoint> {
   for await (const entryPoint of entryPoints) {
     // Only subpath patterns can be shadowed by another subpath key.
-    if (!entryPoint.subpath?.includes('*')) {
-      yield entryPoint;
-
-      continue;
-    }
-
-    const subpath = getConcreteSubpath(entryPoint);
+    const subpath = entryPoint.subpath?.includes('*') ? getConcreteSubpath(entryPoint) : undefined;
 
     if (
       typeof subpath === 'undefined' ||
