@@ -358,4 +358,59 @@ describe('ExportsProcessor', () => {
       ]);
     });
   });
+
+  describe('Tracks internal subpaths', () => {
+    const exports = {
+      '.': './dist/index.js',
+      './*': {
+        types: './dist/types/*.d.ts',
+        default: './dist/*.js',
+      },
+      './internal/*': null,
+      './conditional/*': {
+        import: null,
+        require: './dist/conditional/*.js',
+      },
+      './default/*': {
+        default: null,
+      },
+      './package.json': './package.json',
+    } satisfies PackageExports;
+
+    it('Records subpaths with a null target', () => {
+      const processor = new ExportsProcessor();
+
+      processor.process(exports, { itemPath: ['exports'] }, packageContext);
+
+      expect(processor.internalSubpaths).toEqual([
+        { subpath: './internal/*', condition: [], itemPath: ['exports', './internal/*'] },
+        { subpath: './conditional/*', condition: ['import'], itemPath: ['exports', './conditional/*', 'import'] },
+        { subpath: './default/*', condition: ['default'], itemPath: ['exports', './default/*', 'default'] },
+      ]);
+    });
+
+    it('isInternalSubpath() uses the most specific subpath key', () => {
+      const processor = new ExportsProcessor();
+
+      processor.process(exports, { itemPath: ['exports'] }, packageContext);
+
+      expect(processor.isInternalSubpath('./internal/utils')).toBe(true);
+      expect(processor.isInternalSubpath('./internal/nested/utils')).toBe(true);
+      expect(processor.isInternalSubpath('./default/utils')).toBe(true);
+      expect(processor.isInternalSubpath('./conditional/utils')).toBe(false);
+      expect(processor.isInternalSubpath('./utils')).toBe(false);
+      expect(processor.isInternalSubpath('.')).toBe(false);
+    });
+
+    it('isInternalSubpath() checks null per condition', () => {
+      const processor = new ExportsProcessor();
+
+      processor.process(exports, { itemPath: ['exports'] }, packageContext);
+
+      expect(processor.isInternalSubpath('./conditional/utils', ['import'])).toBe(true);
+      expect(processor.isInternalSubpath('./conditional/utils', ['require'])).toBe(false);
+      expect(processor.isInternalSubpath('./default/utils', ['import'])).toBe(true);
+      expect(processor.isInternalSubpath('./utils', ['types'])).toBe(false);
+    });
+  });
 });

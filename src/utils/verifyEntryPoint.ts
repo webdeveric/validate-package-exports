@@ -17,7 +17,9 @@ export function shouldRequire(entryPoint: EntryPoint): boolean {
     }
   }
 
-  return entryPoint.condition.length === 0 || entryPoint.condition.at(-1) === 'require';
+  const lastCondition = entryPoint.condition.at(-1);
+
+  return lastCondition === undefined || lastCondition === 'require' || lastCondition === 'module-sync';
 }
 
 export function shouldImport(entryPoint: EntryPoint): boolean {
@@ -33,7 +35,9 @@ export function shouldImport(entryPoint: EntryPoint): boolean {
     }
   }
 
-  return entryPoint.condition.length === 0 || entryPoint.condition.at(-1) === 'import';
+  const lastCondition = entryPoint.condition.at(-1);
+
+  return lastCondition === undefined || lastCondition === 'import' || lastCondition === 'module-sync';
 }
 
 export function verifyEntryPoint(entryPoint: EntryPoint): Result[] {

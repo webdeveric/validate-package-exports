@@ -1,14 +1,23 @@
 import { resolve } from 'node:path';
 import { Readable } from 'node:stream';
 
-import { describe, expect, it } from 'vitest';
+import { vol } from 'memfs';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { Result } from '@lib/Result.js';
 import type { EntryPoint, PackageJson } from '@src/types.js';
 
 import { createPackageContext } from './createPackageContext.js';
+import { fixSlash } from './fixSlash.js';
 import { getEntryPointsFromExports } from './getEntryPointsFromExports.js';
 
+vi.mock('node:fs/promises');
+
 describe('getEntryPointsFromExports()', () => {
+  afterEach(() => {
+    vol.reset();
+  });
+
   const mockPackageJson = {
     name: 'mock-package',
     type: 'module',
@@ -68,6 +77,11 @@ describe('getEntryPointsFromExports()', () => {
     });
 
     it('Works with SubpathExports', async () => {
+      vol.fromJSON({
+        [resolve('/tmp/dist/a.js')]: '',
+        [resolve('/tmp/dist/b.js')]: '',
+      });
+
       const entryPoints = await Readable.from(
         getEntryPointsFromExports(
           {
@@ -79,6 +93,12 @@ describe('getEntryPointsFromExports()', () => {
                 },
                 './index.js',
               ],
+              './*': './dist/*',
+              './internal': null,
+              './internal/*': null,
+              './utils/internal/*': {
+                default: null,
+              },
               './package.json': './package.json',
             },
           },
@@ -86,7 +106,19 @@ describe('getEntryPointsFromExports()', () => {
         ),
       ).toArray();
 
-      expect(entryPoints).toHaveLength(3);
+      expect(entryPoints.filter((item) => item instanceof Result)).toEqual([]);
+
+      expect(
+        entryPoints
+          .filter((item): item is EntryPoint => !(item instanceof Result))
+          .map((item) => [item.subpath, item.relativePath, item.itemPath]),
+      ).toEqual([
+        ['.', 'index.js', ['exports', '.', 0, 'default']],
+        ['.', 'index.js', ['exports', '.', 1]],
+        ['./*', fixSlash('dist/a.js'), ['exports', './*']],
+        ['./*', fixSlash('dist/b.js'), ['exports', './*']],
+        ['./package.json', 'package.json', ['exports', './package.json']],
+      ]);
     });
   });
 });
