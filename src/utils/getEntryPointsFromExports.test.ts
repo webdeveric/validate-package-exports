@@ -79,6 +79,12 @@ describe('getEntryPointsFromExports()', () => {
                 },
                 './index.js',
               ],
+              './*': './dist/*',
+              './internal': null,
+              './internal/*': null,
+              './utils/internal/*': {
+                default: null,
+              },
               './package.json': './package.json',
             },
           },

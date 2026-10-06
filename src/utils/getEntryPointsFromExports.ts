@@ -5,13 +5,16 @@ import { Result, ResultCode } from '@lib/Result.js';
 import type { EntryPoint, PackageContext, PackageJson } from '@src/types.js';
 
 import { expandEntryPoint } from './expandEntryPoint.js';
+import { skipShadowedSubpaths } from './skipShadowedSubpaths.js';
 
 export async function* getEntryPointsFromExports(
   packageJson: PackageJson,
   packageContext: PackageContext,
 ): AsyncGenerator<EntryPoint | Result> {
   if (packageJson.exports) {
-    const entryPoints = new ExportsProcessor().process(
+    const processor = new ExportsProcessor();
+
+    const entryPoints = processor.process(
       packageJson.exports,
       {
         itemPath: ['exports'],
@@ -21,7 +24,7 @@ export async function* getEntryPointsFromExports(
 
     for (const entryPoint of entryPoints) {
       try {
-        yield* expandEntryPoint(entryPoint);
+        yield* skipShadowedSubpaths(expandEntryPoint(entryPoint), processor);
       } catch (error) {
         yield new Result({
           code: ResultCode.Error,

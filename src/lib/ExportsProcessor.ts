@@ -10,6 +10,8 @@ import type {
   PackageContext,
 } from '@src/types.js';
 import { createEntryPoint } from '@utils/createEntryPoint.js';
+import { matchSubpathKey } from '@utils/matchSubpathKey.js';
+import { resolveExportsTarget } from '@utils/resolveExportsTarget.js';
 import {
   isConditionalExport,
   isExportsEntryPath,
@@ -23,22 +25,132 @@ export type ProcessExportsContext = Readonly<{
   itemPath: ItemPath;
 }>;
 
+/**
+ * A subpath that has been blocked from being exported by setting it to `null`.
+ *
+ * @example
+ * `{"./internal/*": null}` produces `{ subpath: "./internal/*", condition: [] }`.
+ */
+export type InternalSubpath = Readonly<{
+  subpath: string;
+  condition: string[];
+  itemPath: ItemPath;
+}>;
+
+/**
+ * Walk a `package.json` `exports` field and collect an `EntryPoint` for every non-`null` target,
+ * tracking its subpath, condition chain, and `itemPath` along the way.
+ *
+ * While processing, it records every subpath key it sees and any subpath with a `null` target,
+ * so that expanded subpath patterns can later be checked against the subpath key and conditions
+ * Node would actually use to resolve them (see `skipShadowedSubpaths()`).
+ *
+ * @example
+ * ```json
+ * {"exports": {".": {"import": "./dist/index.mjs", "require": "./dist/index.cjs"}, "./internal/*": null}}
+ * ```
+ *
+ * ```ts
+ * const processor = new ExportsProcessor();
+ *
+ * // Two entry points: `.` with `['import']` and `.` with `['require']`.
+ * const entryPoints = processor.process(packageJson.exports, { itemPath: ['exports'] }, packageContext);
+ *
+ * processor.isInternalSubpath('./internal/utils'); // true
+ * ```
+ */
 export class ExportsProcessor {
+  /**
+   * Every subpath key seen while processing `SubpathExports`, with its target.
+   */
+  readonly subpaths = new Map<string, AnyExportsEntry>();
+
+  /**
+   * Subpaths that have a `null` target.
+   */
+  readonly internalSubpaths: InternalSubpath[] = [];
+
+  /**
+   * Get the subpath key that Node would use to resolve `subpath`.
+   *
+   * @example
+   * ```json
+   * {"./*": "./dist/*.js", "./internal/index": "./dist/internal/index.js"}
+   * ```
+   *
+   * ```ts
+   * processor.getSubpathKey('./internal/index'); // './internal/index'
+   * processor.getSubpathKey('./utils'); // './*'
+   * ```
+   */
+  getSubpathKey(subpath: string): string | undefined {
+    return matchSubpathKey(this.subpaths.keys(), subpath);
+  }
+
+  /**
+   * Determine if `subpath` resolves to a `null` target with the given `condition` chain,
+   * using the same key matching and condition matching that Node uses.
+   *
+   * `default` always matches, so with no `condition`, this checks if `subpath` is blocked for everything.
+   *
+   * @example
+   * ```json
+   * {
+   *   "./*": "./dist/*.js",
+   *   "./internal/*": null,
+   *   "./internal/index": "./dist/internal/index.js",
+   *   "./cjs-only/*": {
+   *     "import": null,
+   *     "require": "./dist/*.cjs"
+   *   }
+   * }
+   * ```
+   *
+   * ```ts
+   * processor.isInternalSubpath('./internal/utils'); // true
+   * processor.isInternalSubpath('./internal/index'); // false
+   * processor.isInternalSubpath('./utils'); // false
+   * processor.isInternalSubpath('./cjs-only/utils', ['import']); // true
+   * processor.isInternalSubpath('./cjs-only/utils', ['require']); // false
+   * ```
+   */
+  isInternalSubpath(subpath: string, condition: string[] = []): boolean {
+    const key = this.getSubpathKey(subpath);
+
+    if (typeof key === 'undefined') {
+      return false;
+    }
+
+    const target = this.subpaths.get(key);
+
+    return typeof target !== 'undefined' && resolveExportsTarget(target, condition) === null;
+  }
+
   processExportsEntryPath(
     exportsEntryPath: ExportsEntryPath,
     exportsContext: ProcessExportsContext,
     packageContext: PackageContext,
   ): EntryPoint[] {
-    return exportsEntryPath === null
-      ? []
-      : [
-          createEntryPoint({
-            modulePath: exportsEntryPath,
-            subpath: '.',
-            ...exportsContext,
-            packageContext,
-          }),
-        ];
+    if (exportsEntryPath === null) {
+      if (typeof exportsContext.subpath !== 'undefined') {
+        this.internalSubpaths.push({
+          subpath: exportsContext.subpath,
+          condition: exportsContext.condition ?? [],
+          itemPath: exportsContext.itemPath,
+        });
+      }
+
+      return [];
+    }
+
+    return [
+      createEntryPoint({
+        modulePath: exportsEntryPath,
+        subpath: '.',
+        ...exportsContext,
+        packageContext,
+      }),
+    ];
   }
 
   processExportsEntry(
@@ -77,6 +189,8 @@ export class ExportsProcessor {
   ): EntryPoint[] {
     return Object.entries(subpathExports)
       .map(([subpath, exportsEntry]) => {
+        this.subpaths.set(subpath, exportsEntry);
+
         return this.process(
           exportsEntry,
           {
