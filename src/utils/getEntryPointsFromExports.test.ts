@@ -8,6 +8,7 @@ import { Result } from '@lib/Result.js';
 import type { EntryPoint, PackageJson } from '@src/types.js';
 
 import { createPackageContext } from './createPackageContext.js';
+import { fixSlash } from './fixSlash.js';
 import { getEntryPointsFromExports } from './getEntryPointsFromExports.js';
 
 vi.mock('node:fs/promises');
@@ -114,8 +115,8 @@ describe('getEntryPointsFromExports()', () => {
       ).toEqual([
         ['.', 'index.js', ['exports', '.', 0, 'default']],
         ['.', 'index.js', ['exports', '.', 1]],
-        ['./*', 'dist/a.js', ['exports', './*']],
-        ['./*', 'dist/b.js', ['exports', './*']],
+        ['./*', fixSlash('dist/a.js'), ['exports', './*']],
+        ['./*', fixSlash('dist/b.js'), ['exports', './*']],
         ['./package.json', 'package.json', ['exports', './package.json']],
       ]);
     });
