@@ -17,16 +17,25 @@ type ExpandEntryPointContext = Readonly<{
 function replaceStars(entryPoint: EntryPoint, starValue: string): EntryPoint {
   const properties = ['moduleName', 'relativePath', 'fileName', 'resolvedPath'] satisfies (keyof EntryPoint)[];
 
-  return properties.reduce((entry, property) => {
-    const value = entry[property];
+  // `structuredClone()` can't be used here since it drops the non-enumerable `packageContext` methods.
+  // `packageContext` is frozen and shared by every entry point, so only the arrays need copying.
+  return properties.reduce(
+    (entry, property) => {
+      const value = entry[property];
 
-    if (value) {
-      // There should only ever be one `*`.
-      entry[property] = value.replaceAll('*', starValue);
-    }
+      if (value) {
+        // There should only ever be one `*`.
+        entry[property] = value.replaceAll('*', starValue);
+      }
 
-    return entry;
-  }, structuredClone(entryPoint));
+      return entry;
+    },
+    {
+      ...entryPoint,
+      condition: [...entryPoint.condition],
+      itemPath: [...entryPoint.itemPath],
+    },
+  );
 }
 
 async function* processDirectory(
