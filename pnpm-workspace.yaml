@@ -2,6 +2,9 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
 
+audit:
+  ignorePrune: true
+
 autoInstallPeers: true
 
 enablePrePostScripts: true
@@ -12,9 +15,6 @@ minimumReleaseAgeExclude:
   - http-cache-semantics@4.3.0
 
 minimumReleaseAgeExcludePrune: true
-
-overrides:
-  http-cache-semantics@<=4.2.0: ^4.3.0
 
 update:
   githubActions: true
