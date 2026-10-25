@@ -9,6 +9,7 @@ import { toPascalCase } from '@webdeveric/utils/toPascalCase';
 
 import { ResultCode, type Result, type ResultName } from '@lib/Result.js';
 import type { JsonStringifySpace } from '@src/types.js';
+import { getJsonRegion } from '@utils/getJsonRegion.js';
 import { stdoutWritableStream } from '@utils/stdoutWritableStream.js';
 
 import type { JsonValue } from '@webdeveric/utils/types';
@@ -190,6 +191,15 @@ export class SarifWritableStream extends WritableStream<Result> {
 
               const entryPoint = result.entryPoint;
               const uri = entryPoint && relative(srcRoot, entryPoint.resolvedPath).split(sep).join('/');
+              // The resolved file is often build output that isn't committed, so the
+              // primary location is the `package.json` that declares the entry point.
+              const packageJsonUri =
+                entryPoint && relative(srcRoot, entryPoint.packageContext.path).split(sep).join('/');
+              // An empty `itemPath` refers to the whole file, which doesn't need a region.
+              const region =
+                entryPoint && entryPoint.itemPath.length > 0
+                  ? getJsonRegion(entryPoint.packageContext.getSource(), entryPoint.itemPath)
+                  : undefined;
 
               return {
                 ruleId: result.name,
@@ -204,12 +214,29 @@ export class SarifWritableStream extends WritableStream<Result> {
                     {
                       physicalLocation: {
                         artifactLocation: {
-                          uri,
+                          uri: packageJsonUri,
                           uriBaseId: 'SRCROOT',
                         },
+                        ...(region && { region }),
                       },
                     },
                   ],
+                  ...(uri !== packageJsonUri && {
+                    relatedLocations: [
+                      {
+                        id: 0,
+                        physicalLocation: {
+                          artifactLocation: {
+                            uri,
+                            uriBaseId: 'SRCROOT',
+                          },
+                        },
+                        message: {
+                          text: 'Resolved entry point',
+                        },
+                      },
+                    ],
+                  }),
                   partialFingerprints: {
                     'validatePackageExports/v1': hash(
                       'sha256',

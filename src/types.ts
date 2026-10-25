@@ -61,7 +61,7 @@ export type CliOptions = {
   concurrency: number;
   devCondition: string[];
   strictModuleType: boolean;
-  reporter: 'text' | 'ndjson' | 'json' | 'sarif';
+  reporter: 'text' | 'ndjson' | 'json' | 'sarif' | 'github';
   info: boolean;
   verbose: boolean;
   debug: boolean;
