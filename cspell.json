@@ -7,6 +7,7 @@
     "commitlint",
     "conventionalcommits",
     "corepack",
+    "endgroup",
     "env",
     "esbuild",
     "esm",
