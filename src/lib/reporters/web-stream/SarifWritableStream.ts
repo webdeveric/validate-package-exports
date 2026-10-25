@@ -9,6 +9,7 @@ import { toPascalCase } from '@webdeveric/utils/toPascalCase';
 
 import { ResultCode, type Result, type ResultName } from '@lib/Result.js';
 import type { JsonStringifySpace } from '@src/types.js';
+import { getJsonRegion } from '@utils/getJsonRegion.js';
 import { stdoutWritableStream } from '@utils/stdoutWritableStream.js';
 
 import type { JsonValue } from '@webdeveric/utils/types';
@@ -194,6 +195,11 @@ export class SarifWritableStream extends WritableStream<Result> {
               // primary location is the `package.json` that declares the entry point.
               const packageJsonUri =
                 entryPoint && relative(srcRoot, entryPoint.packageContext.path).split(sep).join('/');
+              // An empty `itemPath` refers to the whole file, which doesn't need a region.
+              const region =
+                entryPoint && entryPoint.itemPath.length > 0
+                  ? getJsonRegion(entryPoint.packageContext.getSource(), entryPoint.itemPath)
+                  : undefined;
 
               return {
                 ruleId: result.name,
@@ -211,6 +217,7 @@ export class SarifWritableStream extends WritableStream<Result> {
                           uri: packageJsonUri,
                           uriBaseId: 'SRCROOT',
                         },
+                        ...(region && { region }),
                       },
                     },
                   ],
