@@ -42,6 +42,14 @@ export async function getReporterWebStream(options: CliOptions): Promise<Writabl
         space: options.verbose ? 2 : 0,
       });
     }
+    case 'github': {
+      const { GithubWritableStream } = await import('@lib/reporters/web-stream/GithubWritableStream.js');
+
+      return new GithubWritableStream({
+        info: options.info,
+        srcRoot: process.env['GITHUB_WORKSPACE'] ?? process.cwd(),
+      });
+    }
     default:
       assertExhaustive(
         options.reporter,

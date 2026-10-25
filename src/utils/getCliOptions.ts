@@ -30,7 +30,7 @@ export function getCliOptions(args?: NodeJS.Process['argv'], pipingIn = false): 
   const noDebug = values['no-debug'] ?? config.options['no-debug'].default;
   const devCondition = values['dev-condition'] ?? config.options['dev-condition'].default;
 
-  const isReporter = is('text', 'ndjson', 'json', 'sarif');
+  const isReporter = is('text', 'ndjson', 'json', 'sarif', 'github');
 
   return deepFreeze({
     bail: noBail ? false : (values.bail ?? config.options.bail.default),

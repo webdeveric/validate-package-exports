@@ -43,6 +43,7 @@ yarn add validate-package-exports -D
 | `json` | A single JSON array containing all results. |
 | `ndjson` | [Newline-delimited JSON](http://ndjson.org/). Each result is written as its own JSON object as soon as it's available. |
 | `sarif` | [SARIF](https://sarifweb.azurewebsites.net/) 2.1.0 output, useful for integrating with tools like GitHub code scanning. |
+| `github` | [GitHub Actions workflow commands](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands) that annotate the `package.json` lines with errors. Annotations show on PRs without needing code scanning. |
 
 ## Usage
 
