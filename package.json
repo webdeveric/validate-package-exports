@@ -35,13 +35,13 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.15.0",
+      "version": "12.16.1",
       "onFail": "warn"
     },
     "runtime": [
       {
         "name": "node",
-        "version": "^26.12.1",
+        "version": "^26.13.0",
         "onFail": "download"
       }
     ]
