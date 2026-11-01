@@ -82,7 +82,7 @@
     "@webdeveric/prettier-config": "^0.4.0",
     "commitlint": "^21.2.4",
     "commitlint-plugin-cspell": "^0.9.5",
-    "conventional-changelog-conventionalcommits": "^9.3.1",
+    "conventional-changelog-conventionalcommits": "^10.4.1",
     "cross-env": "^10.1.0",
     "cspell": "^10.4.0",
     "esbuild": "^0.28.2",
