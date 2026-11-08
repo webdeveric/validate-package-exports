@@ -63,7 +63,9 @@ export class TextWritableStream extends WritableStream<Result> {
             this.#currentPackage = record.entryPoint.packageContext.name;
             const line = this.getPackageLine(record);
 
-            line && (await writer.write(encoder.encode(line + '\n')));
+            if (line) {
+              await writer.write(encoder.encode(line + '\n'));
+            }
           }
 
           await writer.write(encoder.encode(this.format(record) + '\n'));
