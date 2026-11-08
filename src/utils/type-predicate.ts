@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { anyOf } from '@webdeveric/utils/predicate/factory/anyOf';
 import { everyItem } from '@webdeveric/utils/predicate/factory/everyItem';
 import { fromEnum } from '@webdeveric/utils/predicate/factory/fromEnum';

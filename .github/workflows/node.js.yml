@@ -10,8 +10,39 @@ env:
   HUSKY: 0
 
 jobs:
+  core-checks:
+    name: Core checks
+    permissions:
+      contents: read # for checkout
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup
+        uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
+        with:
+          cache: true
+          install: false # Audit before installing dependencies
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=moderate --prod
+
+      - name: Installing dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type checking
+        run: pnpm typecheck
+
+      - name: Linting
+        run: pnpm lint
+
+      - name: Spell check
+        run: pnpm spellcheck
+
   ci:
     name: Continuous Integration
+    needs: core-checks
     permissions:
       contents: read # for checkout
     strategy:
@@ -25,35 +56,20 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup
-        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+        uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           cache: true
-          install: false # Audit before installing dependencies
+          require-lockfile: true
           runtime: node@${{ matrix.node }}
-
-      - name: Audit dependencies
-        run: pnpm audit --audit-level=moderate --prod
-
-      - name: Installing dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Verify registry signatures for installed packages
         run: pnpm audit signatures
 
-      - name: Linting
-        run: pnpm lint
-
-      - name: Type checking
-        run: pnpm typecheck
-
-      - name: Spell checking
-        run: pnpm spellcheck
+      - name: Building
+        run: pnpm build
 
       - name: Testing
         run: pnpm coverage
-
-      - name: Building
-        run: pnpm build
 
   sarif:
     name: SARIF Report
@@ -67,7 +83,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup
-        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+        uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           cache: true
 
@@ -80,6 +96,6 @@ jobs:
 
       - name: Upload SARIF report
         if: always()
-        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           sarif_file: report.sarif.json
