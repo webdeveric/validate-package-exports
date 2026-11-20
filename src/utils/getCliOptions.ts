@@ -16,7 +16,7 @@ import { parseConcurrency } from './parseConcurrency.js';
  * const options = getCliOptions(process.argv);
  * ```
  */
-export function getCliOptions(args?: NodeJS.Process['argv'], pipingIn = false): Readonly<CliOptions> {
+export function getCliOptions(args?: NodeJS.Process['argv']): Readonly<CliOptions> {
   const config = {
     // Allow passing in `args` for testing.
     args,
@@ -46,6 +46,6 @@ export function getCliOptions(args?: NodeJS.Process['argv'], pipingIn = false): 
     debug: noDebug ? false : (values.debug ?? config.options.debug.default),
     help: values.help ?? config.options.help.default,
     version: values.version ?? config.options.version.default,
-    packages: pipingIn ? [] : positionals.length ? positionals : ['./package.json'],
+    packages: positionals.filter((positional) => positional.trim().length),
   });
 }

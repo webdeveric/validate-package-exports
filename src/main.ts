@@ -10,6 +10,7 @@ import { ResultCode, Result } from '@lib/Result.js';
 import { SignalError } from '@src/errors/SignalError.js';
 import { ExitCode } from '@src/types.js';
 import { createCliContext } from '@utils/createCliContext.js';
+import { fallbackIfEmpty } from '@utils/fallbackIfEmpty.js';
 import { getReporterWebStream } from '@utils/getReporterWebStream.js';
 import { helpScreen } from '@utils/help.js';
 import { readStdinLines } from '@utils/readStdinLines.js';
@@ -47,10 +48,20 @@ try {
     cliContext.controller.abort(error);
   });
 
-  const uniquePackages = unique(cliContext.pipingIn ? readStdinLines() : packages, {
-    filter(item) {
-      return item.trim().length > 0;
-    },
+  // Merge piped in paths with positional paths.
+  async function* getInputPackages(): AsyncGenerator<string> {
+    if (cliContext.pipingIn) {
+      yield* readStdinLines();
+    }
+
+    yield* packages;
+  }
+
+  // Some environments (e.g. GitHub Actions runners) attach a stdin that never receives any data,
+  // so fall back to `./package.json` when neither stdin nor positionals provided any paths.
+  const uniquePackages = unique(fallbackIfEmpty(getInputPackages(), ['./package.json']), {
+    filter: (item) => item.trim().length > 0,
+    identity: (item) => item.trim(),
   });
 
   const readable = ReadableStream.from(uniquePackages);
