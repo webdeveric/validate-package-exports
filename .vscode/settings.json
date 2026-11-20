@@ -6,7 +6,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "js/ts.experimental.useTsgo": true,
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/@typescript/native",
   "js/ts.format.semicolons": "insert",
   "js/ts.updateImportsOnFileMove.enabled": "always",
   "js/ts.suggest.jsdoc.generateReturns": false,
