@@ -57,6 +57,8 @@ validate-package-exports [FILE]... [options]
 
 You can pipe in the list of packages to validate.
 
+Piped in paths are merged with any paths provided as arguments. If neither provides a path, `./package.json` is used.
+
 #### Validate all locally defined packages in your repo
 
 ```sh
