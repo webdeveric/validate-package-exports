@@ -29,7 +29,7 @@ export function createCliContext({
   pipingIn = isPipedInput(),
   pipingOut = isPipedOutput(),
 }: CreateCliContextOptions = {}): CliContext {
-  const options = getCliOptions(args, pipingIn);
+  const options = getCliOptions(args);
 
   const sem = new Semaphore(options.concurrency);
 

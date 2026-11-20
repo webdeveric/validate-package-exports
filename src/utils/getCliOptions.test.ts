@@ -20,7 +20,7 @@ describe('getCliOptions()', () => {
       debug: false,
       help: false,
       version: false,
-      packages: ['./package.json'],
+      packages: [],
     } satisfies CliOptions);
 
     expect(getCliOptions(['./some-path/package.json', '--bail', '--info', '--check', '--concurrency=1'])).toEqual({
@@ -65,7 +65,7 @@ describe('getCliOptions()', () => {
       debug: false,
       help: false,
       version: false,
-      packages: ['./package.json'],
+      packages: [],
     } satisfies CliOptions);
 
     // Multiple values
@@ -83,7 +83,7 @@ describe('getCliOptions()', () => {
       debug: false,
       help: false,
       version: false,
-      packages: ['./package.json'],
+      packages: [],
     } satisfies CliOptions);
 
     // CSV string
@@ -99,7 +99,7 @@ describe('getCliOptions()', () => {
       debug: false,
       help: false,
       version: false,
-      packages: ['./package.json'],
+      packages: [],
     } satisfies CliOptions);
 
     // CSV string with whitespace padding
@@ -115,7 +115,7 @@ describe('getCliOptions()', () => {
       debug: false,
       help: false,
       version: false,
-      packages: ['./package.json'],
+      packages: [],
     } satisfies CliOptions);
   });
 
