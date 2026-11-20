@@ -92,7 +92,7 @@ jobs:
 
       - name: Generate SARIF report
         continue-on-error: true
-        run: pnpm validate --check --info --reporter sarif > report.sarif.json
+        run: pnpm validate --check --reporter sarif > report.sarif.json
 
       - name: Upload SARIF report
         if: always()
